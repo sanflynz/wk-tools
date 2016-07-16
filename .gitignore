@@ -1,5 +1,8 @@
 # ignore old email validator directory and all subdirectories
 Bulk Email Validator/
 
+# ignore conference site directory and all subdirectories
+Conference Site/
+
 # ignore test files
 test*.html
