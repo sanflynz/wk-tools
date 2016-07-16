@@ -1,0 +1,5 @@
+# ignore old email validator directory and all subdirectories
+Bulk Email Validator/
+
+# ignore test files
+test*.html
