@@ -245,7 +245,7 @@ if(isset($_GET['action']) && $_GET['action'] == "clear"){
 		<br>
 		<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#instructionsCST"><i class="fa fa-info"></i></button> -->
 		<a href="viewtable.php?table=all_cst" class="btn btn-default <?php if($totalCST == 0){ echo 'hidden'; } ?> " title="VIEW RECORDS"><i class="fa fa-file-text-o"></i></a>
-		<a href="viewtable.php?table=all_cst&action=duplicates" class="btn btn-default <?php if($totalCST == 0){ echo 'hidden'; } ?> " title="VIEW DUPLICATES"><i class="fa fa-copy"></i></a>
+		<a href="viewtable.php?table=all_cst&action=duplicates&comparisonfield=Email" class="btn btn-default <?php if($totalCST == 0){ echo 'hidden'; } ?> " title="VIEW DUPLICATES"><i class="fa fa-copy"></i></a>
 		<a href="validateemails.php?table=all_cst&emailfield=Email" class="btn btn-default <?php if($totalCST == 0){ echo 'hidden'; } ?> " title="VALIDATE EMAIL ADDRESSES"><i class="fa fa-envelope-o" style="color: #5cb85c"></i></a>
 		<a href="index.php?action=clear&table=all_cst" class="btn btn-default <?php if($totalCST == 0){ echo 'hidden'; } ?> " onClick="return confirm('Clear all records and start again?')" title="CLEAR RECORDS"><i class="fa fa-close" style="color: red;"></i></a>
 		<button type="button" class="btn btn-default" id="upload_cst"><i class="fa fa-cloud-upload" title="SHOW/HIDE UPLOADER" style="color: #428bca"></i></button><br>
@@ -358,13 +358,19 @@ if(isset($_GET['action']) && $_GET['action'] == "clear"){
   			</div>
   			<div class="panel-body">
     			<ol>
-					<li>Upload country extract from SFDC</li>
+					<li>Open Custom list. Insert new column A with the heading: id</li>
 					<li>Upload Custom List</li>
-					<li>Upload Eloqua List (may need to customise to add subscriptions?)</li>
+					<li>Run country extract from SFDC Report and export as CSV: <a href="https://ap4.salesforce.com/00O90000008v9Q1" target="_blank">AU All Contacts</a> or <a href="https://ap4.salesforce.com/00O90000008pbRc" target="_blank">NZ All Contacts</a></li>
+					<li>Open SFDC report.  Remove the bottom few rows with report info.  Insert new column A with the heading: id</li>
+					<li>Upload SFDC</li>
+					<li>Run country extract list from Eloqua (Segment: <a href="https://secure.p01.eloqua.com/Main.aspx#segments&id=3578" target="_blank"> ANZ AU All Contacts</a> or <a href="https://secure.p01.eloqua.com/Main.aspx#segments&id=2089" target="_blank">NZ Contacts</a>) (may need to customise to add subscriptions?)</li>
+					<li>Open ELQ report</li>
+					<li>Upload Eloqua List.  Insert new column A with the heading: id </li>
+					<br>
 					<li>Export then delete duplicates from SFDC</li>
 					<li>Export then delete duplicates from custom list</li>
 					<li>Compare Custom & SFDC where not in SFDC, export then delete</li>
-					<li>Validate email addresses in Custom.  Repair, then export & delete fails</li>`
+					<li>Validate email addresses in Custom.  Repair, then export & delete fails</li>
 					<li>Repaired emails in ELQ and SFDC?</li>
 					<li>Check SFDC Mail Flag, export & delete M, N, X</li>
 					<li>Compare Custom & SFDC & Eloqua where not in Eloqua, export and upload to eloqua through New Contacts program</li>
