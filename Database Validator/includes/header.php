@@ -119,6 +119,7 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
 				<li class="active"><a href="../" target="_blank">TOOLS</a></li>
+				<li><a href="changelog.php" title="Changelog"><i class="fa fa-file-code-o"></i></a> </li>
 			</ul>
         </div><!--/.nav-collapse -->
       </div>

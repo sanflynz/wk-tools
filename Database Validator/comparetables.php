@@ -35,11 +35,13 @@
 					}
 
 					$sqlD .= " WHERE " . $data['conditions'];
-					echo $sqlD;
+					//echo $sqlD;
 					$rD = $conn->query($sqlD);
-					print_r($rD);
+					//print_r($rD);
 					if($rD){
 						$success = "Records deleted from " . $data['t1']['table'];
+						$data['export_results_field'] = "";
+
 					}
 					else{
 						$error = "Unable to delete records from " . $data['t1']['table'] . ": " . $conn->error . "<br><br><span style='font-style: italics'>" . $sqlD . "</span>";
@@ -78,7 +80,7 @@
 			$Pagination  = new Pagination( $conn, $sql );
 			$results    = $Pagination->getData( $limit, $page );
 
-			if($Pagination->errror){
+			if($Pagination->error){
 				$error = "Pagination Error: " . $Pagination->error;
 			}
 			// echo "<pre>";
@@ -109,10 +111,10 @@
 
 			// REPOPULATE THE FORM
 
-			echo "<pre>";
-			print_r($_POST);
-			echo "</pre>";
-		}0800857959
+			// echo "<pre>";
+			// print_r($_POST);
+			// echo "</pre>";
+		}
 
 
 ?>
