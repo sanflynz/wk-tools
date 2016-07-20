@@ -135,6 +135,10 @@
 				if(in_array($_FILES['uploadfile']['type'],$mimes)){
 					$this->file = $_FILES['uploadfile']['tmp_name'];
 				}
+				else{
+					$this->error .= "File type must be .csv";
+					exit();
+				}
 			}		
 		}
 

@@ -40,15 +40,14 @@
 					//print_r($rD);
 					if($rD){
 						$success = "Records deleted from " . $data['t1']['table'];
-						$data['export_results_field'] = "";
+						
 
 					}
 					else{
 						$error = "Unable to delete records from " . $data['t1']['table'] . ": " . $conn->error . "<br><br><span style='font-style: italics'>" . $sqlD . "</span>";
 					}
 				}
-
-				
+				$data['export_results_field'] = "";
 
 			}
 
@@ -89,7 +88,6 @@
 			// // $_GET['action'] = "show";
 
 			if(isset($data['export_results_field']) && $data['export_results_field'] == "true"){
-				echo "in the export!";
 				foreach($data['t1']['fields'] as $f){
 					$cols[] = "t1__" . $f;
 				}
@@ -107,6 +105,8 @@
 				$CsvDown = new DownloadCsvMysql($conn);
 				$CsvDown->filename = "table_comparison.csv";
 				$CsvDown->downloadSQL($sql,implode(",",$cols),implode(",",$cols));
+
+				$data['export_results_field'] = '';
 			}
 
 			// REPOPULATE THE FORM
@@ -118,6 +118,86 @@
 
 
 ?>
+
+<!-- INFO MODAL - INVALID CONTACTS -->
+<div id="info-invalid-contacts" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Remove Invalid Contacts</h4>
+      </div>
+      <div class="modal-body">
+      	<table cellpadding="10" cellspacing="10" width="80%">
+      		<tr>
+      			<td rowspan="3" valign="top"><strong>Table 1: </strong></td>
+      			<td><strong>Table Name</strong></td>
+      			<td>Custom</td>
+      		</tr>
+      		<tr>
+      			<td><strong>Comparison Field</strong></td>
+      			<td>Usually 'Email'</td>
+      		</tr>
+      		<tr>
+      			<td><strong>Fields</strong></td>
+      			<td>ALL</td>
+      		</tr>
+			<tr>
+				<td>&nbsp;</td>				
+			</tr>
+      		<tr>
+      			<td rowspan="3" valign="top"><strong>Table 2: </strong></td>
+      			<td><strong>Table Name</strong></td>
+      			<td>SFDC</td>
+      		</tr>
+      		<tr>
+      			<td><strong>Comparison Field</strong></td>
+      			<td>Email</td>
+      		</tr>
+      		<tr>
+      			<td><strong>Fields</strong></td>
+      			<td>Contact ID, Email, Mail Flag</td>
+      		</tr>
+			<tr>
+				<td>&nbsp;</td>				
+			</tr>
+      		
+      		<tr>
+      			<td rowspan="3" valign="top"><strong>Table 3: </strong></td>
+      			<td><strong>Table Name</strong></td>
+      			<td>Eloqua</td>
+      		</tr>
+      		<tr>
+      			<td><strong>Comparison Field</strong></td>
+      			<td>Email Address, Email Permission</td>
+      		</tr>
+      		<tr>
+      			<td><strong>Fields</strong></td>
+      			<td></td>
+      		</tr>
+      		<tr>
+				<td>&nbsp;</td>				
+			</tr>
+      		<tr>
+      			<td valign="top"><strong>Conditions: </strong></td>
+      			<td colspan="2">`t2`.`Email` IS NULL OR t2.`Mail Flag` = 'N' OR t2.`Mail Flag` = 'M' OR t2.`Mail Flag` = '' OR t3.`Email Permission` = 'FALSE'</td>
+      			
+      		</tr>
+      	</table>
+      	 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
 <div class="row">
 	<div class="col-xs-12">
 		<h1>Compare Tables</h1>
@@ -239,6 +319,13 @@
 		<label>Conditions (Sql WHERE...)</label><br>
 		<textarea class="form-control" rows="2" name="data[conditions]"><?php if(isset($_POST['data'])){ echo $data['conditions']; } ?></textarea>
 	</div>
+	<div class="col-md-4">
+		<br>
+		<br>
+		<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#info-invalid-contacts">
+  			Remove Invalid Contacts
+		</button>
+	</div>
 </div>
 
 <div class="row">
@@ -315,6 +402,10 @@
 
 <script>
 	$(document).ready(function(){
+
+		$('#custom_form').submit(function(){
+			$('#loader').show();
+		});
 
 
 		
@@ -397,6 +488,8 @@
 <?php 	} ?>
 
 <?php	} ?>		
+		
+		
 
 		$("#t1Selector").change(function(){
 

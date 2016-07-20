@@ -6,7 +6,15 @@
 	
 	
 
+<script>
+	$(document).ready(function(){
+		$('#loader').hide();
+	});
 
+	$(window).on('beforeunload',function(){
+		$('#loader').show();
+	});
+</script>
 
 
 

@@ -91,6 +91,18 @@
 			cursor: text !important;
 			color: black;
 		}
+		.loader{
+			position: fixed;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 100%;
+			z-index: 9998;
+			background-color: #FFFFFF;
+			text-align: center;
+			opacity: 0.5;
+    		filter: alpha(opacity=50); /* For IE8 and earlier */
+		}
 
 		
 	</style>
@@ -98,6 +110,9 @@
 	
 </head>
 <body>
+	<div class="loader" id="loader">
+		<div style="z-index: 9999; position: relative; top: 300px; opacity: 1; filter: alpha(opacity=100);"><i class="fa fa-spinner fa-5x fa-spin fa-fw" style="color: red;"></i></div>
+	</div>	
 
 	<nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
@@ -108,7 +123,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="index.php" style="font-family: Bitter; font-size: 28px; color: #FFFFFF;"><i class="fa  fa-stack-overflow"></i>&nbsp;&nbsp;Database Validator</a>
+          <a class="navbar-brand" href="index.php" style="font-family: Bitter; font-size: 28px; color: #FFFFFF;"><i class="fa fa-stack-overflow"></i>&nbsp;&nbsp;Database Validator</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -118,8 +133,16 @@
             
           </ul>
           <ul class="nav navbar-nav navbar-right">
-				<li class="active"><a href="../" target="_blank">TOOLS</a></li>
 				<li><a href="changelog.php" title="Changelog"><i class="fa fa-file-code-o"></i></a> </li>
+				<li class="dropdown">
+					<a href="#" title="Changelog" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bug"></i></a>
+					<ul class="dropdown-menu">
+						<li><a href="mailto:sandie43+xz6uinln8fx5vwibzvzn@boards.trello.com?subject=[BUG%20REPORT]%20<SHORT%20DESC%20HERE>&body=Requestor%20Name:%20%0ADetail:%20%0A">Bug Report</a></li>
+						<li><a href="mailto:sandie43+xz6uinln8fx5vwibzvzn@boards.trello.com?subject=[CHANGE%20REQUEST]%20<SHORT%20DESC%20HERE>&body=Requestor%20Name:%20%0ADetail:%20%0A">Change Request</a></li>
+						
+					</ul>
+				</li>
+				<li class="active"><a href="../" target="_blank">TOOLS</a></li>
 			</ul>
         </div><!--/.nav-collapse -->
       </div>

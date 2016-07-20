@@ -6,12 +6,13 @@
 
 		$mysql = new MySqlFunctions($conn);
 		
+		$error = "";
 
 	if(isset($_GET['table'])){
 
 		$cols = $mysql->getHeaders($_GET['table']);
 		if($mysql->error){
-			$error = $mysql->error;
+			$error .= $mysql->error;
 		}
 		else{
 			$colsA = explode(',',$cols);

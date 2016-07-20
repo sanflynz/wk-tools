@@ -1,5 +1,4 @@
-
-<?php 	include('includes/header.php'); 
+<?php 	include('includes/db.php'); 
 		include('classes/Pagination.php'); 
 		include('classes/ValidateEmails.php');
 		include('classes/MySqlFunctions.php');
@@ -79,7 +78,7 @@
 
 		}
 
-		header("location: validataeemails.php?action=" . $_GET['action'] . "&emailfield=" . $_GET['emailfield']);
+		header("location: validateemails.php?table=" . $_GET['table'] . "&emailfield=" . $_GET['emailfield']);
 		
 	}
 
@@ -139,7 +138,8 @@
 	
 		//echo "<pre>" . print_r($results->data) . "</pre>";
 	
-
+	include('includes/header.php'); 
+		
 ?>
 
 <div class="row">
@@ -196,7 +196,7 @@
 		Total Records: <?php echo $totalRecords; ?>, <?php echo $Pagination->total; ?> validated, <?php echo $numPassed; ?> passed &nbsp;&nbsp;&nbsp;&nbsp;
 		
 	<?php if($totalRecords != $Pagination->total){ ?>
-		<a href="validateemails.php?action=run&table=<?php echo $_GET['table']; if($_GET['table'] == "all_cst"){ echo "&emailfield=". $_GET['emailfield']; } ?>" class="btn btn-success btn-xs">Run</a>&nbsp;&nbsp;
+		<a href="validateemails.php?action=run&table=<?php echo $_GET['table']; if($_GET['table'] == "all_cst"){ echo "&emailfield=". $_GET['emailfield']; } ?>" class="btn btn-success btn-xs" id="button-run">Run</a>&nbsp;&nbsp;
 	<?php }
 	if($numPassed < $totalRecords && $Pagination->total > 0){ ?>
 		<a href="validateemails.php?action=exportFailed&table=<?php echo $_GET['table']; if($_GET['table'] == "all_cst"){ echo "&emailfield=". $_GET['emailfield']; } ?>" class="btn btn-success btn-xs">Export Failed</a>&nbsp;&nbsp;
@@ -265,6 +265,9 @@
 	if(isset($_GET['emailfield'])){ ?>
 		<script type="text/javascript">
 			$(document).ready(function() {
+
+				
+
 			    $("#emails a").editable({
 			    	type: 'text',
         			url: 'ajax.php?action=validateEmail',
