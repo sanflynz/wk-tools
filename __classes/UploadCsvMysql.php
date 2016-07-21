@@ -137,7 +137,6 @@
 				}
 				else{
 					$this->error .= "File type must be .csv";
-					exit();
 				}
 			}		
 		}

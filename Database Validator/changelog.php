@@ -6,7 +6,21 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">20/7/2016-c</h3>
+		<h3 class="panel-title">20160721</h3>
+	</div>
+	<div class="panel-body">
+		<li>Pulled navbar layer above loader layer</li>
+		<li>Increase loader opacity 0.5 to 0.7</li>
+		<li>Hid loading animation: need to do a filedownload fix</li>
+		<li>Added Predefined Queries function to Compare Tables</li>
+		<li>Created "Invalid Contacts" predefined query</li>
+		<li>Fixed Compare Contacts delete records hang - still need to make faster</li>
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">20160720-c</h3>
 	</div>
 	<div class="panel-body">
 		<li>Updated Email Validation workflow on index</li>
@@ -18,7 +32,7 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">20/7/2016-b</h3>
+		<h3 class="panel-title">20160720-b</h3>
 	</div>
 	<div class="panel-body">
 		A small change to test github
@@ -27,7 +41,7 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">20/7/2016</h3>
+		<h3 class="panel-title">20160720</h3>
 	</div>
 	<div class="panel-body">
 		Added Changelog

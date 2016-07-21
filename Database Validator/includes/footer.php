@@ -12,7 +12,7 @@
 	});
 
 	$(window).on('beforeunload',function(){
-		$('#loader').show();
+		//$('#loader').show();
 	});
 </script>
 

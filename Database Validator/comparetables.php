@@ -13,64 +13,141 @@
 		// predefined : customHealth
 
 		if(isset($_POST['data'])){
-
-			// DO SOME VALIDATION eg: not both tables same, selected columns
-
-			
-
 			$data = $_POST['data'];
 
+			// DO SOME VALIDATION eg: not both tables same, selected columns
+			if(isset($_GET['type']) && $_GET['type'] == "predefined"){
+				if($data['querytype'] == "Invalid Contacts"){
 
-			if(isset($data['delete_results_field']) && $data['delete_results_field'] == "true"){
-				if($data['conditions'] == ''){
-					$error = "Can not drop the entire table from this function";
+					// DO SOME VALIDATION ON TABLES AND FIELDS
+					
+					//OPTION 1 
+					// $fields = $mysql->colsToAlias(explode(",", $mysql->getHeaders("all_cst")), 'cst');
+					// $fields .= ", `sfdc`.`Email` AS 'sfdc__Email', `sfdc`.`Contact ID` AS 'sfdc__Contact ID', `sfdc`.`Active Account?` AS 'sfdc__Active Account?'";
+					// $fields .= ", `elq`.`Email Address` AS elq__Email, `elq`.`Email Permission` AS 'elq__Email Permission'";
+					// $sql = "SELECT " . $fields . " FROM all_cst cst LEFT JOIN all_sfdc sfdc ON cst.Email = sfdc.Email LEFT JOIN all_elq elq ON cst.Email = elq.`Email Address` WHERE sfdc.Email IS NULL OR sfdc.`Mail Flag` = 'M' OR sfdc.`Mail Flag` = 'N' OR sfdc.`Mail Flag` = '' OR sfdc.`Active Account?` = '0'";
+					
+					// OPTION 2 - make data array
+					// $fields = $mysql->colsToAlias(explode(",", $mysql->getHeaders("all_cst")), 't1');
+					// $fields .= ", `t2`.`Email` AS 't2__Email', `t2`.`Contact ID` AS 't2__Contact ID', `t2`.`Active Account?` AS 't2__Active Account?'";
+					// $fields .= ", `t3`.`Email Address` AS t3__Email, `t3`.`Email Permission` AS 't3__Email Permission'";
+					
+					$data['t1']['table'] = 'all_cst';
+					$data['t2']['table'] = 'all_sfdc';
+					$data['t3']['table'] = 'all_elq';
+
+					$data['t1']['comparisonfield'] = 'Email';
+					$data['t2']['comparisonfield'] = 'Email';
+					$data['t3']['comparisonfield'] = 'Email Address';
+
+					foreach(explode(",", $mysql->getHeaders("all_cst")) as $h){
+						$data['t1']['fields'][] = $h;
+					}
+
+					$data['t2']['fields'][] = "Contact ID";
+					$data['t2']['fields'][] = "Email";
+					$data['t2']['fields'][] = "Mail Flag";
+					$data['t2']['fields'][] = "Active Account?";
+
+					$data['t3']['fields'][] = "Email Address";
+					$data['t3']['fields'][] = "Email Permission";
+
+					$data['conditions'] = "`t2`.`Email` IS NULL OR t2.`Mail Flag` = 'N' OR t2.`Mail Flag` = 'M' OR t2.`Mail Flag` = '' OR t2.`Active Account?` = '0' OR t3.`Email Permission` = 'FALSE'";
+				
 				}
-				else{
-					$sqlD = "DELETE `t1` FROM `". $data['t1']['table'] . "` t1 ";
-					if($data['t2']['table']){
-						$sqlD .=  " LEFT JOIN `" . $data['t2']['table'] . "` t2 ON `t1`.`" . $data['t1']['comparisonfield'] . "` = `t2`.`" . $data['t2']['comparisonfield'] . "`";
-					}
-					if($data['t3']['table']){
-						$sqlD .= " LEFT JOIN `" . $data['t3']['table'] . "` t3 ON t2.`" . $data['t2']['comparisonfield'] . "` = t3.`" . $data['t3']['comparisonfield'] . "`";
-					}
-
-					$sqlD .= " WHERE " . $data['conditions'];
-					//echo $sqlD;
-					$rD = $conn->query($sqlD);
-					//print_r($rD);
-					if($rD){
-						$success = "Records deleted from " . $data['t1']['table'];
-						
-
-					}
-					else{
-						$error = "Unable to delete records from " . $data['t1']['table'] . ": " . $conn->error . "<br><br><span style='font-style: italics'>" . $sqlD . "</span>";
-					}
-				}
-				$data['export_results_field'] = "";
-
-			}
-
-			// GET FIELDS
-			$fields = $mysql->colsToAlias($data['t1']['fields'], 't1');
-			if($data['t2']['table']){
-				$fields .= "," . $mysql->colsToAlias($data['t2']['fields'], 't2');
-			}
-			if($data['t3']['table']){
-				$fields .= "," . $mysql->colsToAlias($data['t3']['fields'], 't3');	
 			}
 			
-			$sql = "SELECT " . $fields . " FROM `" . $data['t1']['table'] . "` t1";
-			if($data['t2']['table']){
-				$sql .=  " LEFT JOIN `" . $data['t2']['table'] . "` t2 ON `t1`.`" . $data['t1']['comparisonfield'] . "` = `t2`.`" . $data['t2']['comparisonfield'] . "`";
-			}
-			if($data['t3']['table']){
-				$sql .= " LEFT JOIN `" . $data['t3']['table'] . "` t3 ON `t2`.`" . $data['t2']['comparisonfield'] . "` = `t3`.`" . $data['t3']['comparisonfield'] . "`";
-			}
-			if($data['conditions']){
-				$sql .= " WHERE " . $data['conditions'];
-			}
 
+			
+
+				
+
+
+
+				if(isset($data['delete_results_field']) && $data['delete_results_field'] == "true"){
+					if($data['conditions'] == ''){
+						$error = "Can not drop the entire table from this function";
+					}
+					else{
+
+						// GET FIELDS
+						$fields = $mysql->colsToAlias($data['t1']['fields'], 't1');
+						if($data['t2']['table']){
+							$fields .= "," . $mysql->colsToAlias($data['t2']['fields'], 't2');
+						}
+						if($data['t3']['table']){
+							$fields .= "," . $mysql->colsToAlias($data['t3']['fields'], 't3');	
+						}
+						
+						$sql = "SELECT " . $fields . " FROM `" . $data['t1']['table'] . "` t1";
+						if($data['t2']['table']){
+							$sql .=  " LEFT JOIN `" . $data['t2']['table'] . "` t2 ON `t1`.`" . $data['t1']['comparisonfield'] . "` = `t2`.`" . $data['t2']['comparisonfield'] . "`";
+						}
+						if($data['t3']['table']){
+							$sql .= " LEFT JOIN `" . $data['t3']['table'] . "` t3 ON `t2`.`" . $data['t2']['comparisonfield'] . "` = `t3`.`" . $data['t3']['comparisonfield'] . "`";
+						}
+						if($data['conditions']){
+							$sql .= " WHERE " . $data['conditions'];
+						}
+
+						$r = $conn->query($sql);
+						while($row = $r->fetch_assoc()){
+
+							//print_r($row); echo "<br>";
+
+							$r2 = $conn->query("DELETE FROM " . $data['t1']['table'] . " WHERE id = " . $row['t1__id']);
+							if($conn->error){
+								$error .= $conn->error . "<br>";
+							}
+
+						}
+
+
+						// $sqlD = "DELETE `t1` FROM `". $data['t1']['table'] . "` t1 ";
+						// if($data['t2']['table']){
+						// 	$sqlD .=  " LEFT JOIN `" . $data['t2']['table'] . "` t2 ON `t1`.`" . $data['t1']['comparisonfield'] . "` = `t2`.`" . $data['t2']['comparisonfield'] . "`";
+						// }
+						// if($data['t3']['table']){
+						// 	$sqlD .= " LEFT JOIN `" . $data['t3']['table'] . "` t3 ON t2.`" . $data['t2']['comparisonfield'] . "` = t3.`" . $data['t3']['comparisonfield'] . "`";
+						// }
+
+						// $sqlD .= " WHERE " . $data['conditions'];
+						// //echo $sqlD;
+						// $rD = $conn->query($sqlD);
+						// //print_r($rD);
+						// if($rD){
+						// 	$success = "Records deleted from " . $data['t1']['table'];
+							
+
+						// }
+						// else{
+						// 	$error = "Unable to delete records from " . $data['t1']['table'] . ": " . $conn->error . "<br><br><span style='font-style: italics'>" . $sqlD . "</span>";
+						// }
+					}
+					$data['export_results_field'] = "";
+
+				}
+
+				// GET FIELDS
+				$fields = $mysql->colsToAlias($data['t1']['fields'], 't1');
+				if($data['t2']['table']){
+					$fields .= "," . $mysql->colsToAlias($data['t2']['fields'], 't2');
+				}
+				if($data['t3']['table']){
+					$fields .= "," . $mysql->colsToAlias($data['t3']['fields'], 't3');	
+				}
+				
+				$sql = "SELECT " . $fields . " FROM `" . $data['t1']['table'] . "` t1";
+				if($data['t2']['table']){
+					$sql .=  " LEFT JOIN `" . $data['t2']['table'] . "` t2 ON `t1`.`" . $data['t1']['comparisonfield'] . "` = `t2`.`" . $data['t2']['comparisonfield'] . "`";
+				}
+				if($data['t3']['table']){
+					$sql .= " LEFT JOIN `" . $data['t3']['table'] . "` t3 ON `t2`.`" . $data['t2']['comparisonfield'] . "` = `t3`.`" . $data['t3']['comparisonfield'] . "`";
+				}
+				if($data['conditions']){
+					$sql .= " WHERE " . $data['conditions'];
+				}
+				
 			//echo $sql;	
 			
 			$page = ( isset($_GET['page'])) ? $_GET['page'] : 1;
@@ -120,77 +197,45 @@
 ?>
 
 <!-- INFO MODAL - INVALID CONTACTS -->
-<div id="info-invalid-contacts" class="modal fade" role="dialog">
+<div id="info-predefined-query" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Remove Invalid Contacts</h4>
-      </div>
-      <div class="modal-body">
-      	<table cellpadding="10" cellspacing="10" width="80%">
-      		<tr>
-      			<td rowspan="3" valign="top"><strong>Table 1: </strong></td>
-      			<td><strong>Table Name</strong></td>
-      			<td>Custom</td>
-      		</tr>
-      		<tr>
-      			<td><strong>Comparison Field</strong></td>
-      			<td>Usually 'Email'</td>
-      		</tr>
-      		<tr>
-      			<td><strong>Fields</strong></td>
-      			<td>ALL</td>
-      		</tr>
-			<tr>
-				<td>&nbsp;</td>				
-			</tr>
-      		<tr>
-      			<td rowspan="3" valign="top"><strong>Table 2: </strong></td>
-      			<td><strong>Table Name</strong></td>
-      			<td>SFDC</td>
-      		</tr>
-      		<tr>
-      			<td><strong>Comparison Field</strong></td>
-      			<td>Email</td>
-      		</tr>
-      		<tr>
-      			<td><strong>Fields</strong></td>
-      			<td>Contact ID, Email, Mail Flag</td>
-      		</tr>
-			<tr>
-				<td>&nbsp;</td>				
-			</tr>
-      		
-      		<tr>
-      			<td rowspan="3" valign="top"><strong>Table 3: </strong></td>
-      			<td><strong>Table Name</strong></td>
-      			<td>Eloqua</td>
-      		</tr>
-      		<tr>
-      			<td><strong>Comparison Field</strong></td>
-      			<td>Email Address, Email Permission</td>
-      		</tr>
-      		<tr>
-      			<td><strong>Fields</strong></td>
-      			<td></td>
-      		</tr>
-      		<tr>
-				<td>&nbsp;</td>				
-			</tr>
-      		<tr>
-      			<td valign="top"><strong>Conditions: </strong></td>
-      			<td colspan="2">`t2`.`Email` IS NULL OR t2.`Mail Flag` = 'N' OR t2.`Mail Flag` = 'M' OR t2.`Mail Flag` = '' OR t3.`Email Permission` = 'FALSE'</td>
-      			
-      		</tr>
-      	</table>
-      	 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
+	    <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title" id="info-predefined-title">Predefined Query Selector</h4>
+	    </div>
+	    <div class="modal-body">
+	    	<div id="info-predfined-body-default">
+	    		Select a predefined query from the list
+	    	</div>
+	    	<div id="info-predfined-body-invalid" style="display: none;">
+	    		This query will find the following customers from a Custom Database: Contact is not is SFDC, SFDC Mail Flag is Incorrect (must be B or E), SFDC Active Account = False, 
+				ELQ Email Permission = False<br>
+				<br>
+	    		<strong>Requirements:</strong>
+	    		<ol>
+	    			<li>Uploaded table SFDC with Contact ID, Email, Mail Flag and Active Account? columns included</li>
+	    			<li>Uploaded table Eloqua with Email Address & Email Permission columns included</li>
+	    			<li>Uploaded table Custom with Email field named Email</li>
+	    		</ol>
+	    	</div>
+	    	<div id="info-predfined-body-not-eloqua" style="display: none;">
+	    		This query will find the following customers from a Custom Database: Not in Eloqua.  Run only after removing invalid contacts<br>
+				<br>
+	    		<strong>Requirements:</strong>
+	    		<ol>
+	    			<li>Uploaded table SFDC with Contact ID, Email, Mail Flag, Active Account? + MORE columns included</li>
+	    			<li>Uploaded table Eloqua with Email Address & Email Permission columns included</li>
+	    			<li>Uploaded table Custom with Email field named Email</li>
+	    		</ol>
+	    	</div> 	 		
+	      	 
+	    </div>
+	    <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	    </div>
     </div>
 
   </div>
@@ -225,7 +270,27 @@
 </div>	
 <div class="row" id="predefinedSelector">
 	<div class="col-md-4">
-		predefined selector<br>
+		<h3>Predefined Query</h3>
+		<br>
+		<form action="comparetables.php?type=predefined#results" method="POST" class="form-inline" role="form" id="predefined_form">
+			
+			<div class="form-group">
+				<select name="data[querytype]" id="querytype" class="form-control" required="required">
+					<option value="">--- SELECT QUERY ---</option>
+					<option value="Invalid Contacts" <?php if(isset($_POST['data']['querytype']) && $_POST['data']['querytype'] == "Invalid Contacts"){ echo " selected"; } ; ?>>Invalid Contacts</option>
+				</select>
+			</div>
+			
+			<button type="button" name="queryInfo" id="queryInfo" class="btn btn-default" style="width: 45px;"  data-toggle="modal" data-target="#info-predefined-query"><i class="fa fa-info fa-lg" style="color: #428bca;"></i></button>
+			<button type="submit" name="submit" class="btn btn-default" style="width: 45px;"><i class="fa fa-check fa-lg" style="color: #5cb85c;"></i></button>
+		</form>
+		<br>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<hr>
+		<h3>Custom Query</h3>
 		<br>
 	</div>
 </div>
@@ -238,10 +303,10 @@
 	
 			<select class="form-control" name="data[t1][table]" id="t1Selector">
 				<option value="">--- SELECT TABLE 1 ---</option>
-				<option value="all_sfdc" <?php if(isset($_POST['data']) && $_POST['data']['t1']['table'] == "all_sfdc"){ echo " selected"; } ; ?> >SFDC</option>
-				<option value="all_elq" <?php if(isset($_POST['data']) && $_POST['data']['t1']['table'] == "all_elq"){ echo " selected"; } ; ?>>Eloqua</option>
-				<option value="all_gd" <?php if(isset($_POST['data']) && $_POST['data']['t1']['table'] == "all_gd"){ echo " selected"; } ; ?>>GoDirect</option>
-				<option value="all_cst" <?php if(isset($_POST['data']) && $_POST['data']['t1']['table'] == "all_cst"){ echo " selected"; } ; ?>>Custom</option>		  	
+				<option value="all_sfdc" <?php if(isset($_POST['data']) && $data['t1']['table'] == "all_sfdc"){ echo " selected"; } ; ?> >SFDC</option>
+				<option value="all_elq" <?php if(isset($_POST['data']) && $data['t1']['table'] == "all_elq"){ echo " selected"; } ; ?>>Eloqua</option>
+				<option value="all_gd" <?php if(isset($_POST['data']) && $data['t1']['table'] == "all_gd"){ echo " selected"; } ; ?>>GoDirect</option>
+				<option value="all_cst" <?php if(isset($_POST['data']) && $data['t1']['table'] == "all_cst"){ echo " selected"; } ; ?>>Custom</option>		  	
 			</select>
 			<br>				
 					 
@@ -263,10 +328,10 @@
 	<div class="col-md-4">
 			<select class="form-control" id="t2Selector" name="data[t2][table]">
 				<option value="">--- SELECT TABLE 2 ---</option>
-				<option value="all_sfdc" <?php if(isset($_POST['data']) && $_POST['data']['t2']['table'] == "all_sfdc"){ echo " selected"; } ; ?>>SFDC</option>
-				<option value="all_elq"  <?php if(isset($_POST['data']) && $_POST['data']['t2']['table'] == "all_elq"){ echo " selected"; } ; ?>>Eloqua</option>
-				<option value="all_gd"  <?php if(isset($_POST['data']) && $_POST['data']['t2']['table'] == "all_gd"){ echo " selected"; } ; ?>>GoDirect</option>
-				<option value="all_cst"  <?php if(isset($_POST['data']) && $_POST['data']['t2']['table'] == "all_cst"){ echo " selected"; } ; ?>>Custom</option>
+				<option value="all_sfdc" <?php if(isset($_POST['data']) && $data['t2']['table'] == "all_sfdc"){ echo " selected"; } ; ?>>SFDC</option>
+				<option value="all_elq"  <?php if(isset($_POST['data']) && $data['t2']['table'] == "all_elq"){ echo " selected"; } ; ?>>Eloqua</option>
+				<option value="all_gd"  <?php if(isset($_POST['data']) && $data['t2']['table'] == "all_gd"){ echo " selected"; } ; ?>>GoDirect</option>
+				<option value="all_cst"  <?php if(isset($_POST['data']) && $data['t2']['table'] == "all_cst"){ echo " selected"; } ; ?>>Custom</option>
 			</select>
 			
 			<br>
@@ -287,10 +352,10 @@
 	<div class="col-md-4">
 			<select class="form-control" id="t3Selector" name="data[t3][table]">
 				<option value="">--- SELECT TABLE 3 ---</option>
-				<option value="all_sfdc" <?php if(isset($_POST['data']['t3']) && $_POST['data']['t3']['table'] == "all_sfdc"){ echo " selected"; } ; ?>>SFDC</option>
-				<option value="all_elq"  <?php if(isset($_POST['data']['t3']) && $_POST['data']['t3']['table'] == "all_elq"){ echo " selected"; } ; ?>>Eloqua</option>
-				<option value="all_gd"  <?php if(isset($_POST['data']['t3']) && $_POST['data']['t3']['table'] == "all_gd"){ echo " selected"; } ; ?>>GoDirect</option>
-				<option value="all_cst"  <?php if(isset($_POST['data']['t3']) && $_POST['data']['t3']['table'] == "all_cst"){ echo " selected"; } ; ?>>Custom</option>
+				<option value="all_sfdc" <?php if(isset($data['t3']) && $data['t3']['table'] == "all_sfdc"){ echo " selected"; } ; ?>>SFDC</option>
+				<option value="all_elq"  <?php if(isset($data['t3']) && $data['t3']['table'] == "all_elq"){ echo " selected"; } ; ?>>Eloqua</option>
+				<option value="all_gd"  <?php if(isset($data['t3']) && $data['t3']['table'] == "all_gd"){ echo " selected"; } ; ?>>GoDirect</option>
+				<option value="all_cst"  <?php if(isset($data['t3']) && $data['t3']['table'] == "all_cst"){ echo " selected"; } ; ?>>Custom</option>
 			</select>
 			
 			<br>
@@ -320,11 +385,7 @@
 		<textarea class="form-control" rows="2" name="data[conditions]"><?php if(isset($_POST['data'])){ echo $data['conditions']; } ?></textarea>
 	</div>
 	<div class="col-md-4">
-		<br>
-		<br>
-		<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#info-invalid-contacts">
-  			Remove Invalid Contacts
-		</button>
+		
 	</div>
 </div>
 
@@ -403,8 +464,16 @@
 <script>
 	$(document).ready(function(){
 
+		$('#queryInfo').click(function(){
+			if($('#querytype').val() == 'Invalid Contacts'){
+				$('#info-predfined-body-invalid').show();
+				$('#info-predfined-body-default').hide();
+				$('#info-predefined-title').html('Invalid Contacts');
+			}
+		});
+
 		$('#custom_form').submit(function(){
-			$('#loader').show();
+			//$('#loader').show();
 		});
 
 
@@ -445,7 +514,7 @@
 			} 
 		});
 
-<?php	if(isset($_POST['data']['t2']['fields'])){ ?>
+<?php	if(isset($data['t2']['fields'])){ ?>
 
 		$.ajax({
 			type: "GET",
@@ -467,7 +536,7 @@
 <?php 	} ?>
 
 
-<?php	if(isset($_POST['data']['t3']['fields'])){ ?>
+<?php	if(isset($data['t3']['fields'])){ ?>
 		$.ajax({
 			type: "GET",
 			url: "ajax.php?action=tableComparisonOptions&table=<?php echo $data['t3']['table']; ?>",

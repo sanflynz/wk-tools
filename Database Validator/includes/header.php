@@ -92,16 +92,20 @@
 			color: black;
 		}
 		.loader{
+			display: none;
 			position: fixed;
 			left: 0px;
 			top: 0px;
 			width: 100%;
 			height: 100%;
-			z-index: 9998;
+			z-index: 100;
 			background-color: #FFFFFF;
 			text-align: center;
-			opacity: 0.5;
-    		filter: alpha(opacity=50); /* For IE8 and earlier */
+			opacity: 0.7;
+    		filter: alpha(opacity=70); /* For IE8 and earlier */
+		}
+		.navbar{
+			z-index: 200;
 		}
 
 		
@@ -110,8 +114,8 @@
 	
 </head>
 <body>
-	<div class="loader" id="loader">
-		<div style="z-index: 9999; position: relative; top: 300px; opacity: 1; filter: alpha(opacity=100);"><i class="fa fa-spinner fa-5x fa-spin fa-fw" style="color: red;"></i></div>
+	<div class="loader" id="loader" style="display: none">
+		<div style="position: relative; top: 300px;"><i class="fa fa-spinner fa-5x fa-spin fa-fw" style="color: red;"></i></div>
 	</div>	
 
 	<nav class="navbar navbar-inverse navbar-fixed-top">
