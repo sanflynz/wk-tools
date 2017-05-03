@@ -17,20 +17,9 @@
 
 			// DO SOME VALIDATION eg: not both tables same, selected columns
 			if(isset($_GET['type']) && $_GET['type'] == "predefined"){
-				if($data['querytype'] == "Invalid Contacts"){
+				if($data['querytype'] == "Invalid Contacts" || $data['querytype'] == "Invalid Contacts Auto Download Delete"){
 
 					// DO SOME VALIDATION ON TABLES AND FIELDS
-					
-					//OPTION 1 
-					// $fields = $mysql->colsToAlias(explode(",", $mysql->getHeaders("all_cst")), 'cst');
-					// $fields .= ", `sfdc`.`Email` AS 'sfdc__Email', `sfdc`.`Contact ID` AS 'sfdc__Contact ID', `sfdc`.`Active Account?` AS 'sfdc__Active Account?'";
-					// $fields .= ", `elq`.`Email Address` AS elq__Email, `elq`.`Email Permission` AS 'elq__Email Permission'";
-					// $sql = "SELECT " . $fields . " FROM all_cst cst LEFT JOIN all_sfdc sfdc ON cst.Email = sfdc.Email LEFT JOIN all_elq elq ON cst.Email = elq.`Email Address` WHERE sfdc.Email IS NULL OR sfdc.`Mail Flag` = 'M' OR sfdc.`Mail Flag` = 'N' OR sfdc.`Mail Flag` = '' OR sfdc.`Active Account?` = '0'";
-					
-					// OPTION 2 - make data array
-					// $fields = $mysql->colsToAlias(explode(",", $mysql->getHeaders("all_cst")), 't1');
-					// $fields .= ", `t2`.`Email` AS 't2__Email', `t2`.`Contact ID` AS 't2__Contact ID', `t2`.`Active Account?` AS 't2__Active Account?'";
-					// $fields .= ", `t3`.`Email Address` AS t3__Email, `t3`.`Email Permission` AS 't3__Email Permission'";
 					
 					$data['t1']['table'] = 'all_cst';
 					$data['t2']['table'] = 'all_sfdc';
@@ -55,114 +44,41 @@
 					$data['conditions'] = "`t2`.`Email` IS NULL OR t2.`Mail Flag` = 'N' OR t2.`Mail Flag` = 'M' OR t2.`Mail Flag` = '' OR t2.`Active Account?` = '0' OR t3.`Email Permission` = 'FALSE'";
 				
 				}
+
+				
+				if($data['querytype'] == "Invalid Contacts Auto Download Delete"){
+
+					// Auto Download
+					$data['export_results_field'] = "true";
+					
+					// Auto Delete
+					$data['delete_results_field'] = "true";
+
+				}
 			}
 			
 
-			
-
-				
-
-
-
-				if(isset($data['delete_results_field']) && $data['delete_results_field'] == "true"){
-					if($data['conditions'] == ''){
-						$error = "Can not drop the entire table from this function";
-					}
-					else{
-
-						// GET FIELDS
-						$fields = $mysql->colsToAlias($data['t1']['fields'], 't1');
-						if($data['t2']['table']){
-							$fields .= "," . $mysql->colsToAlias($data['t2']['fields'], 't2');
-						}
-						if($data['t3']['table']){
-							$fields .= "," . $mysql->colsToAlias($data['t3']['fields'], 't3');	
-						}
-						
-						$sql = "SELECT " . $fields . " FROM `" . $data['t1']['table'] . "` t1";
-						if($data['t2']['table']){
-							$sql .=  " LEFT JOIN `" . $data['t2']['table'] . "` t2 ON `t1`.`" . $data['t1']['comparisonfield'] . "` = `t2`.`" . $data['t2']['comparisonfield'] . "`";
-						}
-						if($data['t3']['table']){
-							$sql .= " LEFT JOIN `" . $data['t3']['table'] . "` t3 ON `t2`.`" . $data['t2']['comparisonfield'] . "` = `t3`.`" . $data['t3']['comparisonfield'] . "`";
-						}
-						if($data['conditions']){
-							$sql .= " WHERE " . $data['conditions'];
-						}
-
-						$r = $conn->query($sql);
-						while($row = $r->fetch_assoc()){
-
-							//print_r($row); echo "<br>";
-
-							$r2 = $conn->query("DELETE FROM " . $data['t1']['table'] . " WHERE id = " . $row['t1__id']);
-							if($conn->error){
-								$error .= $conn->error . "<br>";
-							}
-
-						}
-
-
-						// $sqlD = "DELETE `t1` FROM `". $data['t1']['table'] . "` t1 ";
-						// if($data['t2']['table']){
-						// 	$sqlD .=  " LEFT JOIN `" . $data['t2']['table'] . "` t2 ON `t1`.`" . $data['t1']['comparisonfield'] . "` = `t2`.`" . $data['t2']['comparisonfield'] . "`";
-						// }
-						// if($data['t3']['table']){
-						// 	$sqlD .= " LEFT JOIN `" . $data['t3']['table'] . "` t3 ON t2.`" . $data['t2']['comparisonfield'] . "` = t3.`" . $data['t3']['comparisonfield'] . "`";
-						// }
-
-						// $sqlD .= " WHERE " . $data['conditions'];
-						// //echo $sqlD;
-						// $rD = $conn->query($sqlD);
-						// //print_r($rD);
-						// if($rD){
-						// 	$success = "Records deleted from " . $data['t1']['table'];
-							
-
-						// }
-						// else{
-						// 	$error = "Unable to delete records from " . $data['t1']['table'] . ": " . $conn->error . "<br><br><span style='font-style: italics'>" . $sqlD . "</span>";
-						// }
-					}
-					$data['export_results_field'] = "";
-
-				}
-
-				// GET FIELDS
-				$fields = $mysql->colsToAlias($data['t1']['fields'], 't1');
-				if($data['t2']['table']){
-					$fields .= "," . $mysql->colsToAlias($data['t2']['fields'], 't2');
-				}
-				if($data['t3']['table']){
-					$fields .= "," . $mysql->colsToAlias($data['t3']['fields'], 't3');	
-				}
-				
-				$sql = "SELECT " . $fields . " FROM `" . $data['t1']['table'] . "` t1";
-				if($data['t2']['table']){
-					$sql .=  " LEFT JOIN `" . $data['t2']['table'] . "` t2 ON `t1`.`" . $data['t1']['comparisonfield'] . "` = `t2`.`" . $data['t2']['comparisonfield'] . "`";
-				}
-				if($data['t3']['table']){
-					$sql .= " LEFT JOIN `" . $data['t3']['table'] . "` t3 ON `t2`.`" . $data['t2']['comparisonfield'] . "` = `t3`.`" . $data['t3']['comparisonfield'] . "`";
-				}
-				if($data['conditions']){
-					$sql .= " WHERE " . $data['conditions'];
-				}
-				
-			//echo $sql;	
-			
-			$page = ( isset($_GET['page'])) ? $_GET['page'] : 1;
-			$limit = (isset($_GET['limit'])) ? $_GET['limit'] : 50;
-
-			$Pagination  = new Pagination( $conn, $sql );
-			$results    = $Pagination->getData( $limit, $page );
-
-			if($Pagination->error){
-				$error = "Pagination Error: " . $Pagination->error;
+			// GET FIELDS
+			$fields = $mysql->colsToAlias($data['t1']['fields'], 't1');
+			if($data['t2']['table']){
+				$fields .= "," . $mysql->colsToAlias($data['t2']['fields'], 't2');
 			}
-			// echo "<pre>";
-			// print_r($results);
-			// echo "</pre>";
-			// // $_GET['action'] = "show";
+			if($data['t3']['table']){
+				$fields .= "," . $mysql->colsToAlias($data['t3']['fields'], 't3');	
+			}
+			
+			$sql = "SELECT " . $fields . " FROM `" . $data['t1']['table'] . "` t1";
+			if($data['t2']['table']){
+				$sql .=  " LEFT JOIN `" . $data['t2']['table'] . "` t2 ON `t1`.`" . $data['t1']['comparisonfield'] . "` = `t2`.`" . $data['t2']['comparisonfield'] . "`";
+			}
+			if($data['t3']['table']){
+				$sql .= " LEFT JOIN `" . $data['t3']['table'] . "` t3 ON `t2`.`" . $data['t2']['comparisonfield'] . "` = `t3`.`" . $data['t3']['comparisonfield'] . "`";
+			}
+			if($data['conditions']){
+				$sql .= " WHERE " . $data['conditions'];
+			}
+
+				
 
 			if(isset($data['export_results_field']) && $data['export_results_field'] == "true"){
 				foreach($data['t1']['fields'] as $f){
@@ -186,11 +102,61 @@
 				$data['export_results_field'] = '';
 			}
 
-			// REPOPULATE THE FORM
 
-			// echo "<pre>";
-			// print_r($_POST);
-			// echo "</pre>";
+			if(isset($data['delete_results_field']) && $data['delete_results_field'] == "true"){
+				if($data['conditions'] == ''){
+					$error = "Can not drop the entire table from this function";
+				}
+				else{
+
+					// GET FIELDS
+					$fields = $mysql->colsToAlias($data['t1']['fields'], 't1');
+					if($data['t2']['table']){
+						$fields .= "," . $mysql->colsToAlias($data['t2']['fields'], 't2');
+					}
+					if($data['t3']['table']){
+						$fields .= "," . $mysql->colsToAlias($data['t3']['fields'], 't3');	
+					}
+					
+					$sql = "SELECT " . $fields . " FROM `" . $data['t1']['table'] . "` t1";
+					if($data['t2']['table']){
+						$sql .=  " LEFT JOIN `" . $data['t2']['table'] . "` t2 ON `t1`.`" . $data['t1']['comparisonfield'] . "` = `t2`.`" . $data['t2']['comparisonfield'] . "`";
+					}
+					if($data['t3']['table']){
+						$sql .= " LEFT JOIN `" . $data['t3']['table'] . "` t3 ON `t2`.`" . $data['t2']['comparisonfield'] . "` = `t3`.`" . $data['t3']['comparisonfield'] . "`";
+					}
+					if($data['conditions']){
+						$sql .= " WHERE " . $data['conditions'];
+					}
+
+					$r = $conn->query($sql);
+					while($row = $r->fetch_assoc()){
+
+						//print_r($row); echo "<br>";
+
+						$r2 = $conn->query("DELETE FROM " . $data['t1']['table'] . " WHERE id = " . $row['t1__id']);
+						if($conn->error){
+							$error .= $conn->error . "<br>";
+						}
+
+					}
+
+				}
+				$data['export_results_field'] = "";
+
+			}
+				
+			// Get Pagination Results
+			$page = ( isset($_GET['page'])) ? $_GET['page'] : 1;
+			$limit = (isset($_GET['limit'])) ? $_GET['limit'] : 50;
+
+			$Pagination  = new Pagination( $conn, $sql );
+			$results    = $Pagination->getData( $limit, $page );
+
+			if($Pagination->error){
+				$error = "Pagination Error: " . $Pagination->error;
+			}
+			
 		}
 
 
@@ -213,6 +179,17 @@
 	    	<div id="info-predfined-body-invalid" style="display: none;">
 	    		This query will find the following customers from a Custom Database: Contact is not is SFDC, SFDC Mail Flag is Incorrect (must be B or E), SFDC Active Account = False, 
 				ELQ Email Permission = False<br>
+				<br>
+	    		<strong>Requirements:</strong>
+	    		<ol>
+	    			<li>Uploaded table SFDC with Contact ID, Email, Mail Flag and Active Account? columns included</li>
+	    			<li>Uploaded table Eloqua with Email Address & Email Permission columns included</li>
+	    			<li>Uploaded table Custom with Email field named Email</li>
+	    		</ol>
+	    	</div>
+	    	<div id="info-predfined-body-invalid-auto-delete" style="display: none;">
+	    		This query will find the following customers from a Custom Database: Contact is not is SFDC, SFDC Mail Flag is Incorrect (must be B or E), SFDC Active Account = False, 
+				ELQ Email Permission = False, automatically induce a file download of the invalid contacts, and delete them<br>
 				<br>
 	    		<strong>Requirements:</strong>
 	    		<ol>
@@ -278,6 +255,7 @@
 				<select name="data[querytype]" id="querytype" class="form-control" required="required">
 					<option value="">--- SELECT QUERY ---</option>
 					<option value="Invalid Contacts" <?php if(isset($_POST['data']['querytype']) && $_POST['data']['querytype'] == "Invalid Contacts"){ echo " selected"; } ; ?>>Invalid Contacts</option>
+					<option value="Invalid Contacts" <?php if(isset($_POST['data']['querytype']) && $_POST['data']['querytype'] == "Invalid Contacts Auto Download Delete"){ echo " selected"; } ; ?>>Invalid Contacts - Auto download & delete</option>
 				</select>
 			</div>
 			

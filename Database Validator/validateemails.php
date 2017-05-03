@@ -4,14 +4,13 @@
 		include('classes/MySqlFunctions.php');
 		include('classes/DownloadCsvMysql.php');
 
-
 		$mysql = new MySqlFunctions($conn);
 
 	if(isset($_GET['table'])){
 		$headers = $mysql->getHeaders($_GET['table']);
 	}
 		
-		
+	
 		
 
 
@@ -40,6 +39,8 @@
 
 				break;			
 		}	
+
+
 
 		// get the pages and stuff later
 		$page = ( isset($_GET['page'])) ? $_GET['page'] : 1;

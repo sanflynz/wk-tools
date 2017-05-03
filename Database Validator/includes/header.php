@@ -1,7 +1,7 @@
 <?php
 
 	//error_reporting (0);
-	//error_reporting(E_ALL);
+	error_reporting(E_ALL);
 	set_time_limit (0);
 
 	$servername = "localhost";

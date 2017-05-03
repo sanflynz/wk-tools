@@ -6,6 +6,16 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
+		<h3 class="panel-title">20160810</h3>
+	</div>
+	<div class="panel-body">
+		<li>No longer required to add ID field to upload CSV Files</li>
+		<li>New Compare Tables Predefined query added - Auto download and delete</li>
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
 		<h3 class="panel-title">20160721</h3>
 	</div>
 	<div class="panel-body">

@@ -4,5 +4,14 @@ Bulk Email Validator/
 # ignore conference site directory and all subdirectories
 Conference Site/
 
+# ignore conference site directory and all subdirectories
+Eloqua Email Status/
+
+# ignore conference site directory and all subdirectories
+Marketing/
+
+# ignore conference site directory and all subdirectories
+Marketing Planning/
+
 # ignore test files
 test*.html
