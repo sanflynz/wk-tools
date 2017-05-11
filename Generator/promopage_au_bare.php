@@ -125,7 +125,7 @@ elseif($p['country'] == "Australia"){
 							}
 
 							if($url != ""){ ?>
-								<a href="<?php echo $url;?>"><?php echo $link; ?></a>
+								<a href="<?php echo $url;?>" <?php if($tab == "new"){ echo "target='_blank'"; } ?>><?php echo $link; ?></a>
 					<?php	}
 							else{
 								echo $v;

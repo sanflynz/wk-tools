@@ -13,5 +13,8 @@ Marketing/
 # ignore conference site directory and all subdirectories
 Marketing Planning/
 
+# ignore Segmenter directory and all subdirectories
+Segmenter/
+
 # ignore test files
 test*.html

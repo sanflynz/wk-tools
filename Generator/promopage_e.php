@@ -1,14 +1,46 @@
 <?php
 	include("includes/db.php");
-
+	//define ('SITE_ROOT', realpath(dirname(__FILE__)));
+	//
+	$error = "";
+	$success = "";
 
 	if($_POST){
 
+		
+
 		$p = $_POST;
-		//print_r($p);
 		$fieldNames = "name,title,image,description,features,post_features,more,items,resources,related,terms,country";
 		$fields = "";
 		$values = "";
+
+		// Image Upload
+		if(isset($_FILES['image'])){
+			$target_dir = "../../../Uploads/image/";
+			if(file_exists($target_dir) === false){
+	
+				$target_file = $target_dir . basename($_FILES['image']['name']);
+				if(getimagesize($_FILES['image']['tmp_name'])){
+					if(move_uploaded_file($_FILES['image']['tmp_name'], $target_file)){
+						$success .= "Image was uploaded<br><br>";
+						$p['image'] = substr($target_file,8);
+
+					}
+					else{
+						$error .= "Image was not uploaded <a href=" . $target_dir . ">" . $target_dir . "</a><br><br>";
+					}
+				}
+				else{
+					$error .= "File is not an image<br><br>";
+				}
+			}
+			else{
+				$error .= "Directory www/Uploads/image does not exist.  Please create it";
+			}
+
+		}
+		//print_r($p);
+		
 
 		if($p['id'] == ""){
 			$i = 1;
@@ -54,7 +86,7 @@
 		}
 
 
-	}
+	 }
 
 	if(isset($_GET['id'])){
 		$sql = "SELECT * FROM `webpromopages` p WHERE p.id = " . $_GET['id'];
@@ -79,13 +111,79 @@
 	//print_r($p);
 ?>
 
+<div class="modal fade" id="info-description" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" type="button" data-dismiss="modal">&times;</button>
+				<h4 style="margin: 0;">Description Instructions</h4>
+			</div>
+			<div class="modal-body">
+				None yet
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="info-features" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" type="button" data-dismiss="modal">&times;</button>
+				<h4 style="margin: 0">Features Instructions</h4>
+			</div>
+			<div class="modal-body">
+				Creates a bullet-point list.  Place each new point on a new line
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="info-items">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" type="button" data-dismiss="modal">&times;</button>
+				<h4 style="margin:0">Items Instructions</h4>
+			</div>
+			<div class="modal-body">
+				Copy from a spreadsheet.  It will automatically recognise the tabs and new lines<br>
+				<br>
+				If you want to link to the Search page on the Item Code and Description ensure the first two column headings are "Item Code" and "Description" exactly<br>
+				<br> 
+				Column Widths...
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="info-resources">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" type="button" data-dismiss="modal">&times;</button>
+				<h4>Resources & Related</h4>
+			</div>
+			<div class="modal-body">
+				Each resource or related item on a new line<br>
+				<br>
+				Structure is:<br>
+				Name of Link|url|tab<br>
+				Where tab = new or parent<br>
+				<br>
+				eg:
+			</div>
+		</div>
+	</div>
+</div>
+
 
 <div class="row">
 	<div class="col-xs-12">
 		<h1>Promo Page Add/Edit</h1>
 
 		<?php
-		if(isset($error)){ ?>
+		if($error != ""){ ?>
 			
 			<div class="alert alert-danger">
 				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -131,16 +229,35 @@
 
 			<tr>
 				<td width="250" align="right"><strong>Image</strong></td>
-				<td><input name="image" type="text" value="<?php if(isset($p) && $p['image'] != "")  { echo $p['image']; } ?>" class="form-control"></td>
+				<td>
+					<div class="form-group row">
+						<div class="col-xs-6">
+							<input name="image" type="text" value="<?php if(isset($p) && $p['image'] != "")  { echo $p['image']; } ?>" class="form-control">
+					
+						</div>
+						<div class="col-xs-6">
+							<input name="image" type="file" value="<?php if(isset($p) && $p['image'] != "")  { echo $p['image']; } ?>" class="form-control">
+						</div>
+					</div>
+						
+				</td>
 			</tr>
 			
 			<tr>
-				<td align="right"><strong>Description</strong></td>
+				<td align="right">
+					<strong>Description</strong><br>
+					<br>
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#info-description"><i class="fa fa-info"></i></button>
+				</td>
 				<td><textarea name="description" class="form-control" rows="15"><?php if(isset($p)) {echo htmlentities($p['description']);} ?></textarea></td>
 			</tr>
 
 			<tr>
-				<td align="right"><strong>Features</strong></td>
+				<td align="right">
+					<strong>Features</strong><br>
+					<br>
+					<button class="btn btn-primary" type="button" data-toggle="modal" data-target="#info-features"><i class="fa fa-info"></i></button>
+				</td>
 				<td><textarea name="features" class="form-control" rows="10"><?php if(isset($p)) {echo htmlentities($p['features']);} ?></textarea></td>
 			</tr>
 
@@ -155,17 +272,29 @@
 			</tr>
 			
 			<tr>
-				<td align="right"><strong>Items</strong></td>
+				<td align="right">
+					<strong>Items</strong><br>
+					<br>
+					<button class="btn btn-primary" data-toggle="modal" data-target="#info-items" type="button"><i class="fa fa-info"></i></button>
+				</td>
 				<td><textarea name="items" class="form-control" rows="6"><?php if(isset($p)) {echo htmlentities($p['items']); } ?></textarea></td>
 			</tr>
 			
 			<tr>
-				<td align="right"><strong>Resources</strong></td>
+				<td align="right">
+					<strong>Resources</strong><br>
+					<br>
+					<button class="btn btn-primary" data-toggle="modal" data-target="#info-resources" type="button"><i class="fa fa-info"></i></button>
+				</td>
 				<td><textarea name="resources" class="form-control" rows="5"><?php if(isset($p)) {echo htmlentities($p['resources']);} ?></textarea></td>
 			</tr>
 			
 			<tr>
-				<td align="right"><strong>Related</strong></td>
+				<td align="right">
+					<strong>Related</strong><br>
+					<br>
+					<button class="btn btn-primary" data-toggle="modal" data-target="#info-resources" type="button"><i class="fa fa-info"></i></button>
+				</td>
 				<td><textarea name="related" class="form-control" rows="5"><?php if(isset($p)) {echo htmlentities($p['related']);} ?></textarea></td>
 			</tr>
 			

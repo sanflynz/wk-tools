@@ -1,14 +1,20 @@
 <!DOCTYPE html>
+<?php
+	
+?>
 <html lang="">
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Conference Resource Builder</title>
+		<title>Generator</title>
+		<link rel="shortcut icon" href="favicon-meh-o.ico">
 
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="../__resources/css/bootstrap.min.css">
 		<link rel="stylesheet" href="../__resources/css/font-awesome.min.css">
+
+		<link rel="stylesheet" href="../__resources/css/pretty_file_upload.css">
 
 		<link href='https://fonts.googleapis.com/css?family=Bitter:700' rel='stylesheet' type='text/css'>
 
@@ -50,6 +56,9 @@
 							<ul class="dropdown-menu">
 								<li><a href="promopage_i.php">Promo Pages</a></li>
 								<li><a href="promopage_e.php">Add Promo Page</a></li>
+								<li class="divider"></li>
+								<li><a href="plainpage_i.php">Plain Pages</a></li>
+								<li><a href="plainpage_e.php">Add Plain Page</a></li>
 							</ul>
 						</li>		
 					</ul>

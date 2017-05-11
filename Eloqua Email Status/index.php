@@ -1,6 +1,8 @@
 <?php
 
-include("classes/UploadCsvMySql.php");
+
+include("../__classes/UploadCsvMySql.php");
+//include("classes/UploadCsvMySql.php");
 include("classes/DownloadCsvMysql.php");
 
 //error_reporting (0);
@@ -74,8 +76,6 @@ function latestStage() {
     return $stage;
 }
 
-echo latestStage() . "<br>";
-if(isset($_GET['action']) ){ echo $_GET['action']; }
 
 $stageError = 0;
 if((!isset($_GET['action']) && (latestStage() != "List")) && (($_GET['action'] != "clearall") ||($_GET['action'] != "campaigndownload") || (isset($_GET['action']) && ($_GET['action'] != latestStage())))){
@@ -87,15 +87,52 @@ if(isset($_POST['submit']) && $stageError == 0) {
 
 	if(latestStage() == 'List'){
 		// Upload List
+		//$upStage = new UploadCsvMysql($conn);
+		//$cols = "anz_sfdc_contact_id,status";
+		//$upStage->upload('status', $cols);
 		$upStage = new UploadCsvMysql($conn);
-		$cols = "anz_sfdc_contact_id,status";
-		$upStage->upload('status', $cols);
+		$upStage->uploadCreateTemp();
+
+		$r = $conn->query("SELECT * FROM tmp_table");
+		$i = 1;
+		while($row = $r->fetch_assoc()){
+			//echo $row['ANZ_SFDC_Contact ID'] . "<br>";
+			if($row['ANZ_SFDC_Contact ID'] != "Total"){
+				//echo $i . "<br>";
+				$r2 = $conn->query("INSERT INTO status (`anz_sfdc_contact_id`, `status`) VALUES ('" . $row['ANZ_SFDC_Contact ID'] . "', 'List')");
+				//if($conn->error){ $error .= "Unable to insert into tmp_table: " . $conn->error . "<br>"; }
+				//$i++;
+			}
+		
+		}
+		$r3 = $conn->query("DROP TABLE tmp_table");
 	}
 	else{
 		// read rows, and update based on $key (not always ID)
+		// $upStage = new UploadCsvMysql($conn);
+		// $cols = "status"; // Columns to update
+		// $upStage->update('status', $cols, "anz_sfdc_contact_id");
+
 		$upStage = new UploadCsvMysql($conn);
-		$cols = "status"; // Columns to update
-		$upStage->update('status', $cols, "anz_sfdc_contact_id");
+		$upStage->uploadCreateTemp();
+
+		if($_GET['action'] == 'Delivered'){
+			$status = "Sent";
+		}
+		else{
+			$status = $_GET['action'];
+		}
+
+		$r = $conn->query("SELECT * FROM tmp_table");
+		while($row = $r->fetch_assoc()){
+			//echo $row['ANZ_SFDC_Contact ID'] . "<br>";
+			//$r2 = $conn->query("INSERT INTO status (`anz_sfdc_contact_id`, `status`) VALUES ('" . $row['ANZ_SFDC_Contact ID'] . "', 'List')");
+			//if($conn->error){ $error = "Unable to insert into tmp_table" . $conn->error; }
+			$r2 = $conn->query("UPDATE status SET `status` = '" . $status . "' WHERE `anz_sfdc_contact_id` = '" . $row['ANZ_SFDC_Contact ID'] . "'");
+		}
+		$r3 = $conn->query("DROP TABLE tmp_table");
+
+
 	}
 
 
@@ -187,71 +224,22 @@ $totalHardbounce = $r->num_rows;
 $r = $conn->query("SELECT * from status WHERE status LIKE '%Unsubscribed%'");
 $totalUnsubscribed = $r->num_rows;
 
+include("includes/header.php");
+
 ?> 
 
-<!DOCTYPE html> 
-<html>
-  <head>
-  
-  	<meta name="viewport" content="width=device-width, initial-scale=1">
-	
-	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-	
-	<style>
-		.btn{
-			width: 110px;
-		}
-		.btn-file {
-		  position: relative;
-		  overflow: hidden;
-		}
-		.btn-file input[type=file] {
-			position: absolute;
-			top: 0;
-			right: 0;
-			min-width: 100%;
-			min-height: 100%;
-			font-size: 100px;
-			text-align: right;
-			filter: alpha(opacity=0);
-			opacity: 0;
-			background: red;
-			cursor: inherit;
-			display: block;
-		}
-		input[readonly] {
-			background-color: white !important;
-			cursor: text !important;
-		}
-	</style>
-
-	<script>
-
-	</script>
-	
-	
-	<title>Eloqua Email Status</title>
-</head>
-
-<body>	
-
-
-<div class="container">
+	<br>
 	<div class="row">
-		<h2>Eloqua Email Status</h2>	
-		<br>
-	</div>
-	
-	<div class="row">
-		<a href="index.php?action=List" class="btn btn-default" id="btn_List">List</a>  
-		<a href="index.php?action=Delivered" class="btn btn-default" id="btn_Delivered">Delivered</a>  
-		<a href="index.php?action=Opened" class="btn btn-default" id="btn_Opened">Opened</a>  
-		<a href="index.php?action=Clicked" class="btn btn-default" id="btn_Clicked">Clicked</a>  
-		<a href="index.php?action=Softbounce" class="btn btn-default" id="btn_Softbounce">Softbounce</a>  
-		<a href="index.php?action=Hardbounce" class="btn btn-default" id="btn_Hardbounce">Hardbounce</a>  
-		<a href="index.php?action=Unsubscribed" class="btn btn-default" id="btn_Unsubscribed">Unsubscribed</a>  
+		<a href="index.php?action=List" class="btn btn-default btn-stage" id="btn_List">List</a>  
+		<a href="index.php?action=Delivered" class="btn btn-default btn-stage" id="btn_Delivered">Delivered</a>  
+		<a href="index.php?action=Opened" class="btn btn-default btn-stage" id="btn_Opened">Opened</a>  
+		<a href="index.php?action=Clicked" class="btn btn-default btn-stage" id="btn_Clicked">Clicked</a>  
+		<a href="index.php?action=Softbounce" class="btn btn-default btn-stage" id="btn_Softbounce">Softbounce</a>  
+		<a href="index.php?action=Hardbounce" class="btn btn-default btn-stage" id="btn_Hardbounce">Hardbounce</a>  
+		<a href="index.php?action=Unsubscribed" class="btn btn-default btn-stage" id="btn_Unsubscribed">Unsubscribed</a>  
 		
-		<a href="index.php?action=clearall" class="btn btn-danger" onClick="return confirm('Clear all records and start again?')">Clear All</a><br>
+		<a href="index.php?action=clearall" class="btn btn-default" onClick="return confirm('Clear all records and start again?')" title="CLEAR ALL RECORDS"><i class="fa fa-close" style="color: red;"></i></a> 
+		<a href="index.php?action=campaigndownload" class="btn btn-default"><i class="fa fa-cloud-download" style="color: green;" title="EXPORT RESULTS"></i></a>  <br>
 		<br>
 		<br>
 	</div>
@@ -282,13 +270,13 @@ $totalUnsubscribed = $r->num_rows;
 		<form class="form-inline" method="post" action="index.php?action=<?php echo latestStage(); ?>" enctype='multipart/form-data'>
 			<div class="input-group">
 				<span class="input-group-btn">
-                    <span class="btn btn-primary btn-file">
-                        Browse&hellip; <input type="file" id="uploadfile" name="uploadfile" multiple>
+                    <span class="btn btn-default btn-file" style="width: 45px;">
+	                        <i class="fa fa-floppy-o fa-lg" style="color: #428bca;"></i> <input type="file" id="uploadfile" name="uploadfile" multiple>
                     </span>
                 </span>
 				<input type="text" class="form-control" readonly>
 			</div>
-			<button type="submit" name="submit" class="btn btn-default">Upload</button>
+			<button type="submit" name="submit" class="btn btn-default" style="width: 45px;"><i class="fa fa-check fa-lg" style="color: #5cb85c;"></i></button>
 		</form>
 		<br>
 		<br>
@@ -324,19 +312,21 @@ $totalUnsubscribed = $r->num_rows;
 				</tr>
 				<tr>
 					<td class="text-center"></td>
-					<td class="text-center"><?php echo ceil(($totalList/$total)*100) . "%"; ?></td>
-						<td class="text-center"><?php echo ceil(($totalDelivered/$total)*100) . "%"; ?></td>
-							<td class="text-center"><?php echo ceil(($totalOpened/$total)*100) . "%"; ?></td>
-								<td class="text-center"><?php echo ceil(($totalClicked/$total)*100) . "%"; ?><br><?php echo ceil(($totalClicked/$totalOpened)*100) . "%"; ?></td>
-									<td class="text-center warning"><?php echo ceil(($totalSoftbounce/$total)*100) . "%"; ?></td>
-										<td class="text-center warning"><?php echo ceil(($totalHardbounce/$total)*100) . "%"; ?></td>
-											<td class="text-center warning"><?php echo ceil(($totalUnsubscribed/$total)*100) . "%"; ?></td>
+					<td class="text-center"><?php if($totalList > 0){ echo ceil(($totalList/$total)*100) . "%"; } ?></td>
+						<td class="text-center"><?php if($totalDelivered > 0){ echo ceil(($totalDelivered/$total)*100) . "%"; } ?></td>
+							<td class="text-center"><?php if($totalOpened > 0){ echo ceil(($totalOpened/$total)*100) . "%"; } ?></td>
+								<td class="text-center"><?php if($totalClicked > 0){ echo ceil(($totalClicked/$total)*100) . "%"; ?><br><?php echo ceil(($totalClicked/$totalOpened)*100) . "%"; } ?></td>
+									<td class="text-center warning"><?php if($totalSoftbounce > 0){ echo ceil(($totalSoftbounce/$total)*100) . "%"; } ?></td>
+										<td class="text-center warning"><?php if($totalHardbounce > 0){ echo ceil(($totalHardbounce/$total)*100) . "%"; } ?></td>
+											<td class="text-center warning"><?php if($totalUnsubscribed > 0){ echo ceil(($totalUnsubscribed/$total)*100) . "%"; } ?></td>
 											
 				</tr>
 			</tbody>
 		</table>
 	</div>
-
+	<div class="row">
+		<div class="col-sm-12"><hR></div>
+	</div>
 	<div class="row">
 		<h4>Update SFDC Campaign</h4>
 		<br>
@@ -346,12 +336,67 @@ $totalUnsubscribed = $r->num_rows;
 		    <input type="text" class="form-control" id="campaignID" placeholder="">
 		  </div>
 		  <button type="button" class="btn btn-default" id="getlink">Get Link</button>  
-		  <a href="index.php?action=campaigndownload" class="btn btn-success" id="btn_complete">Download</a>  <br>
-		
+		  
 		</form>
 		<span id="campaignlink"></span>
 	</div>
-</div>
+
+
+
+	<div class="row">
+		<div class="col-sm-12"><hR></div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="panel panel-default">
+	  			<div class="panel-heading">
+	    			<h3 class="panel-title">Instructions</h3>
+	  			</div>
+	  			<div class="panel-body">
+	    			<ol>
+	    				<li>In Eloqua, create a report for your email: Email Status with Delivery Type.  Run the report</li>
+	    				<li>Download the following lists from this report:
+	    					<ol>
+	    						<li>Total Sends (List)</li>
+	    						<li>Total Delivered (Delivered)</li>
+	    						<li>Unique Opens (Opened)</li>
+	    						<li>Unique Clicks (Clicked)</li>
+	    						<li>Total Softbounces (Softbounce)</li>
+	    						<li>Total Hardbounces (Hardbounce)</li>
+	    						<li><span style="text-decoration: line-through;">Unsubscribed</span> (not properly linked yet)</li>
+	    					</ol>
+	    					Ensure you use the following settings when you download:
+	    					<ul>
+	    						<li>Contact Field ANZ_SFDC_Contact ID is included, and first in the list</li>
+	    						<li>Excel with formatting</li>
+	    						<li>Export Report Title UNCHECKED</li>
+	    					</ul>
+	    				</li>
+	    				<li>You will need to open and save each file as a .csv file in Excel</li>
+	    				<li>Upload each file into the tool in the following sequence
+							<ol>
+								<li>List</li>
+								<li>Delivered</li>
+								<li>Opened</li>
+								<li>Clicked</li>
+								<li>Softbounce</li>
+								<li>Hardbounce</li>
+								<li style="text-decoration: line-through;">Unsubscribes</li>
+							</ol>
+	    				</li>
+	    				<li>Download the compiled list using the <i class="fa fa-cloud-download"></i> button</li>
+						<li>MORE TO COME....</li>
+	    			</ol>
+	  			</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
 
 <script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>
 
@@ -375,10 +420,10 @@ $totalUnsubscribed = $r->num_rows;
 
 		// Get current stage and highlight button
 		if("<?php echo latestStage(); ?>" == "complete"){
-			document.getElementById("btn_complete").className = "btn btn-success";
+			document.getElementById("btn_complete").className = "btn btn-success btn-stage";
 		}
 		else{	
-			document.getElementById("btn_<?php echo latestStage(); ?>").className = "btn btn-info";
+			document.getElementById("btn_<?php echo latestStage(); ?>").className = "btn btn-info btn-stage";
 		}
 		
 		$(document).on('change', '.btn-file :file', function() {
@@ -411,5 +456,4 @@ $totalUnsubscribed = $r->num_rows;
 		});
 	</script>
 
-</body>
-</html>
+<?php 	include("includes/footer.php");

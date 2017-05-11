@@ -7,7 +7,7 @@
  		<script>
  			$(document).ready(function() {
 
- 				
+ 				$('#loader').hide();
  				
  				// CONFERENCE_I PAGE
  				$('.setActiveConference').click(function() {
@@ -117,6 +117,10 @@
 
 
  			});
+			
+			$(window).on('beforeunload',function(){
+				//$('#loader').show();
+			});
 
  			
 

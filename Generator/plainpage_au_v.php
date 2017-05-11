@@ -16,7 +16,7 @@ $p = $r->fetch_assoc();
 // 	$sURL = "http://www.thermofisher.com.au/search.aspx?search=";
 // }
 
-include ("promopage_au_bare.php");
+include ("plainpage_au_bare.php");
 
 ?>
 
@@ -28,9 +28,9 @@ include ("promopage_au_bare.php");
         <tr valign="bottom">
             <td height="20">
             	<br><br><br><br>
-            	<a href="promopage_e.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce">Edit</a>
-            	<a href="promopage_i.php" class="btn btn-commerce">List</a>
-            	<a href="promopage_export.php?id=<?php echo $_GET['id'];?>" target="_blank" class="btn btn-commerce">Export</a>
+            	<a href="plainpage_e.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce">Edit</a>
+            	<a href="plainpage_i.php" class="btn btn-commerce">List</a>
+            	<a href="plainpage_export.php?id=<?php echo $_GET['id'];?>" target="_blank" class="btn btn-commerce">Export</a>
             </td>
         </tr>
   </tbody>
