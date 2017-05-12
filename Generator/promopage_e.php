@@ -10,15 +10,16 @@
 		
 
 		$p = $_POST;
-		$fieldNames = "name,title,image,description,features,post_features,more,items,resources,related,terms,country";
+		$fieldNames = "name,title,image,description,features,post_features,more,items,resources,related,terms,country,last_modified";
 		$fields = "";
 		$values = "";
+
+		$p['last_modified'] = date("Y-m-d H:i:s");
 
 		// Image Upload
 		if(isset($_FILES['image'])){
 			$target_dir = "../../../Uploads/image/";
-			if(file_exists($target_dir) === false){
-	
+			
 				$target_file = $target_dir . basename($_FILES['image']['name']);
 				if(getimagesize($_FILES['image']['tmp_name'])){
 					if(move_uploaded_file($_FILES['image']['tmp_name'], $target_file)){
@@ -33,10 +34,7 @@
 				else{
 					$error .= "File is not an image<br><br>";
 				}
-			}
-			else{
-				$error .= "Directory www/Uploads/image does not exist.  Please create it";
-			}
+			
 
 		}
 		//print_r($p);

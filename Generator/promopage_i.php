@@ -18,7 +18,7 @@
 <div class="row">
 	<br>
 	<div class="col-xs-12">
-	<?php 	$sql = "SELECT * FROM webpromopages";
+	<?php 	$sql = "SELECT * FROM webpromopages ORDER BY last_modified DESC";
 			$r = $conn->query($sql);
 			if($conn->error){
 				echo "Error: " . $conn->error;

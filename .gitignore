@@ -16,5 +16,8 @@ Marketing Planning/
 # ignore Segmenter directory and all subdirectories
 Segmenter/
 
+# ignore files in Generator/pages directory and all subdirectories
+Generator/pages/*
+
 # ignore test files
 test*.html

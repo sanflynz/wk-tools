@@ -39,7 +39,7 @@ elseif($p['country'] == "Australia"){
             
             <td valign="top" colspan="3">
             	<p style="font-size: 14px;">
-            	<img src="<?php echo $p['image']; ?>" alt="<?php echo $p['title']; ?>" style="background-color: #666666; float: left; margin: 0px 20px 20px 0px;" height="200" width="200">
+            	<img src="<?php echo $p['image']; ?>" alt="<?php echo $p['title']; ?>" style="background-color: #666666; float: left; margin: 0px 20px 15px 0px;" width="200">
             	<?php echo nl2br($p['description']); ?></p>
 		<?php if($p['features'] != ""){ ?>	
               <ul style="padding-left:20px; margin-top:10px;">
@@ -89,8 +89,15 @@ elseif($p['country'] == "Australia"){
 		        				$h = preg_replace('/\[([0-9]+%)\]/','',$h);
 		        			}
 
+		        			if(preg_match('/price/i', $h)){
+								$style = "style='padding-right: 20px; text-align: right;'";
+							}
+							else{
+								$style = "";
+							}
+
 		        				?>
-					<td valign="middle" width="<?php echo $width; ?>"><?php echo $h; ?></td>
+					<td valign="middle" width="<?php echo $width; ?>" <?php echo $style; ?>><?php echo $h; ?></td>
 				<?php
 							}	 ?>    
 		        </tr>
@@ -99,8 +106,14 @@ elseif($p['country'] == "Australia"){
 				<tr <?php if($n % 2 == 0){?>style="background-color:#f3f3f3;" <?php } ?>>
 					<td height="47">&nbsp;</td>
 				<?php 	foreach($columns as $k => $v){
-							
-							echo "<td>";
+							if(preg_match('/price/i', $headers[$k])){
+								$style = "style='padding-right: 20px; text-align: right;'";
+							}
+							else{
+								$style = "";
+							}
+
+							echo "<td " . $style . ">";
 							//if(preg_match('/.*price.*$/i', $headers[$k])){ echo "align='right' style='padding-right: 20px' "; }
 							$url = "";
 							$tab = "";
