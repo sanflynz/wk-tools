@@ -9,34 +9,36 @@
 
 		
 
-		$p = $_POST;
 		$fieldNames = "name,title,image,description,features,post_features,more,items,resources,related,terms,country,last_modified";
 		$fields = "";
 		$values = "";
 
-		$p['last_modified'] = date("Y-m-d H:i:s");
+		$_POST['last_modified'] = date("Y-m-d H:i:s");
 
 		// Image Upload
 		if(isset($_FILES['image'])){
 			$target_dir = "../../../Uploads/image/";
 			
-				$target_file = $target_dir . basename($_FILES['image']['name']);
-				if(getimagesize($_FILES['image']['tmp_name'])){
-					if(move_uploaded_file($_FILES['image']['tmp_name'], $target_file)){
-						$success .= "Image was uploaded<br><br>";
-						$p['image'] = substr($target_file,8);
+			$target_file = $target_dir . basename($_FILES['image']['name']);
+			if(getimagesize($_FILES['image']['tmp_name'])){
+				if(move_uploaded_file($_FILES['image']['tmp_name'], $target_file)){
+					$success .= "Image was uploaded<br><br>";
+					$_POST['image'] = substr($target_file,8);
 
-					}
-					else{
-						$error .= "Image was not uploaded <a href=" . $target_dir . ">" . $target_dir . "</a><br><br>";
-					}
 				}
 				else{
-					$error .= "File is not an image<br><br>";
+					$error .= "Image was not uploaded <a href=" . $target_dir . ">" . $target_dir . "</a><br><br>";
 				}
+			}
+			else{
+				$error .= "File is not an image<br><br>";
+			}
 			
 
 		}
+
+		$p = $_POST;
+		
 		//print_r($p);
 		
 

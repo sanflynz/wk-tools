@@ -20,15 +20,18 @@ include("includes/header.php");
 			<div class="row">
 				<div class="col-xs-12">
 					<ul>
-						<li>Change Log</li>
-						<li>Bug Report</li>
+						<li style="text-decoration: line-through;">p['image'] when creating promo page</li>
+						<li>Delete button on promo page list</li>
+						<li style="text-decoration: line-through;">last_modified on create</li>
 						<li style="text-decoration: line-through;">Trademark and Registered Trade Mark Issues on edit</li>
-						<li>Image Uploader</li>
-						<li>Favicon</li>
+						<li style="text-decoration: line-through;">Image Uploader</li>
+						<li style="text-decoration: line-through;">Favicon</li>
+						<li style="text-decoration: line-through;">Promo page tracking on items and resources/related</li>
 						<li>Buttons</li>
 						<li>Sorting list page, and pagination? And search?</li>
 						<li>Download zip with image and files??</li>
-						
+						<li>Change Log</li>
+						<li>Bug Report</li>						
 					</ul>
 				</div>
 				

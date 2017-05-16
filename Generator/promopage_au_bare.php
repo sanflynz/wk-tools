@@ -109,7 +109,7 @@ elseif($p['country'] == "Australia"){
   </tbody>
 </table>
 
-<?php 	if(preg_match('/[GROUP]/', $p['items'])){
+<?php 	if(preg_match('[GROUP]', $p['items'])){
 			$groups = explode("[GROUP]", $p['items']);
 			foreach ($groups as $g){ 
 				if($g != ""){
@@ -120,7 +120,7 @@ elseif($p['country'] == "Australia"){
 					<table padding="6" style="font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#616265; border:solid 1px #C0C0C0; border-collapse: collapse;" width="700" border="0" cellspacing="0">
 					<tbody>
 					
-			<?php	print_r($items);
+			<?php	//print_r($items);
 					echo "<br><br>";
 					$n = 0;
 					foreach ($items as $i) {
@@ -164,7 +164,6 @@ elseif($p['country'] == "Australia"){
 		}
 		else{ ?>
 			  
-
 
 
 

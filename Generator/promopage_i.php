@@ -49,6 +49,7 @@
 						<a href="promopage_au_v.php?id=<?php echo $row['id']; ?>" class="btn btn-default"><i class="fa fa-eye" title="View Page"></i></a>&nbsp;&nbsp;
 						<a href="promopage_export.php?id=<?php echo $row['id']; ?>" class="btn btn-default" target="_blank"><i class="fa fa-code" title="Export Code"></i></a>&nbsp;&nbsp;
 						<a href="promopage_e.php?copy=<?php echo $row['id']; ?>" class="btn btn-default"><i class="fa fa-copy" title="Copy this page"></i></a>&nbsp;&nbsp;
+						<a href="promopage_d.php?id=<?php echo $row['id']; ?>" class="btn btn-default"><i class="fa fa-minus-circle" style="color: red;" title="Delete this page" onclick="return confirm('Are you sure you want to delete this record?')"></i></a>&nbsp;&nbsp;
 					</td>
 				</tr>
 		<?php 	} ?>		
