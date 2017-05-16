@@ -64,7 +64,7 @@ elseif($p['country'] == "Australia"){
 								if(preg_match("[HEADING]", $f)){
 									$f = str_replace("[HEADING]", "", $f);
 									echo "<b>" . $f . "</b><br>";
-									echo "<ul style=\"padding-left:20px; margin-top:10px;\">"; 
+									echo "<ul style=\"padding-left:20px; margin-top:10px; list-style-position: outside\">"; 
 								}
 								elseif(!preg_match("[GROUP]", $f)  && $f != ""){ ?>
 									<li style="color:#616265; line-height:25px; list-style-type: disc !important;"><?php echo $f; ?></li>
@@ -80,7 +80,7 @@ elseif($p['country'] == "Australia"){
 
 				}
 				else { ?>	
-              <ul style="padding-left:20px; margin-top:10px;">
+              <ul style="padding-left:20px; margin-top:10px; list-style-position: outside">
               <?php foreach($features as $f){ ?>
                 <li style="color:#616265; line-height:25px; list-style-type: disc !important;"><?php echo $f; ?></li>
               <?php } ?>  
@@ -117,14 +117,15 @@ elseif($p['country'] == "Australia"){
 					if(preg_match("[HEADING]", $items[0])){	?>
 						<br><b><?php echo str_replace("[HEADING]", "", $items[0]); ?></b><br>
 			<?php 	} ?>
+					<br><br>
 					<table padding="6" style="font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#616265; border:solid 1px #C0C0C0; border-collapse: collapse;" width="700" border="0" cellspacing="0">
 					<tbody>
 					
-			<?php	//print_r($items);
-					echo "<br><br>";
+			<?php	print_r($items);
 					$n = 0;
 					foreach ($items as $i) {
-						if($n == 2){
+						$columns = explode("\t", $i);
+						if($n == 1){
 							$headers = $columns?>
 				<tr style="font-weight:bold; color:#555759; background-color:#e0edf9;">
 					<td valign="middle" width="2%"  height="48" >&nbsp;</td>
@@ -152,6 +153,61 @@ elseif($p['country'] == "Australia"){
 		        </tr>
 	<?php	
 						}
+						else{ ?>
+				<tr <?php if($n % 2 == 0){?>style="background-color:#f3f3f3;" <?php } ?>>
+					<td height="47">&nbsp;</td>
+				<?php 	foreach($columns as $k => $v){
+							$tracking = "";
+							if(preg_match('/price/i', $headers[$k])){
+								$style = "style='padding-right: 20px; text-align: right;'";
+							}
+							elseif(preg_match('/Pack Size/i', $headers[$k])){
+								$style = "style='text-align: center;'";
+							}
+							else{
+								$style = "";
+							}
+
+							echo "<td " . $style . ">";
+							//if(preg_match('/.*price.*$/i', $headers[$k])){ echo "align='right' style='padding-right: 20px' "; }
+							$url = "";
+							$tab = "";
+							// if col[0] = item code, make item code and description links
+							if(preg_match('/Item Code/i', $headers[0])){
+							//if($headers[0] == "Item Code"){
+								if($k == "0" || $k == "1"){
+									$url = $sURL . $columns[0];
+									$link = $v;
+									$tab = "new";
+									$tracking = "onClick=\"_gaq.push(['_trackEvent', 'Promo Page', 'Item', '" . $columns[0] . "']);\"";
+								}
+							}
+
+							if(preg_match('/\[(url=.*)\]/',$v)){
+								str_replace(array("\r", "\n"), '', trim($v));
+								$start = strpos($v, "=") + 1;
+								$end = strpos($v, "]") - $start;
+								$x = explode("|", substr($v, $start, $end));
+								$url =  $x[1];
+								$link = $x[0];
+								$tab = $x[2];
+								
+							}
+
+							if($url != ""){ ?>
+								<a href="<?php echo $url;?>" <?php if($tab == "new"){ echo "target='_blank' "; } echo $tracking; ?>><?php echo $link; ?></a>
+					<?php	}
+							else{
+								echo $v;
+							}
+
+							echo "</td>";
+							
+					} ?> 
+				</tr>	
+
+	<?php	}
+						$n++;
 					}
 				} ?>
 					</tbody>

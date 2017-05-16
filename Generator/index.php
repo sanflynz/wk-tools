@@ -21,7 +21,7 @@ include("includes/header.php");
 				<div class="col-xs-12">
 					<ul>
 						<li style="text-decoration: line-through;">p['image'] when creating promo page</li>
-						<li>Delete button on promo page list</li>
+						<li style="text-decoration: line-through;">Delete button on promo page list</li>
 						<li style="text-decoration: line-through;">last_modified on create</li>
 						<li style="text-decoration: line-through;">Trademark and Registered Trade Mark Issues on edit</li>
 						<li style="text-decoration: line-through;">Image Uploader</li>
