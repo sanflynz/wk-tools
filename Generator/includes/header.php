@@ -64,7 +64,7 @@
 						<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">PROMO PODS <b class="caret"></b></a>
 								<ul class="dropdown-menu">
-									<li><a href="promopods_au_v.php">Promo Pods (BASE)</a></li>
+									<li><a href="promopods_e.php">Promo Pods</a></li>
 								</ul>
 							</li>	
 					</ul>

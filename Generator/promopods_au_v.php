@@ -31,7 +31,7 @@ include ("promopods_au_bare.php");
         <tr valign="bottom">
             <td height="20">
             	<br><br><br><br>
-            	<a href="promopods_e.php" class="btn btn-commerce">Edit</a>
+            	<a href="promopods_e.php?title=<?php echo $_GET['title']; ?>&site=<?php echo $_GET['site']; ?>" class="btn btn-commerce">Edit</a>
             	<a href="promopods_export.php?title=<?=$_GET['title']; ?>" target="_blank" class="btn btn-commerce">Export</a>
             </td>
         </tr>

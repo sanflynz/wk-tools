@@ -53,7 +53,7 @@ while($row = $r->fetch_assoc()){
 		                            <?php echo $row['offer']; ?>
 		                        <td width="10">&nbsp;</td>
 		                        <td width="200">
-		                            <h3><a onClick="_gaq.push(['_trackEvent', 'Promotions', '<?php echo $row['promo_name']; ?>', '<?php echo $row['item_name']; ?>']);" href="<?php echo $row['url']; ?>" style="font-size: 18px; line-height: 21px;" <?php echo $target; ?>><?php echo $row['offer_detail']; ?></a></h3>
+		                            <h3><a onClick="_gaq.push(['_trackEvent', 'Promotions', '<?php echo $row['promo_name']; ?>', '<?php echo $row['item_name']; ?>']);" href="<?php echo $site . $row['url']; ?>" style="font-size: 18px; line-height: 21px;" <?php echo $target; ?>><?php echo $row['offer_detail']; ?></a></h3>
 		                        </td>
 		                    </tr>
 
@@ -73,7 +73,7 @@ while($row = $r->fetch_assoc()){
 
 		                    <tr>
 		                        <td colspan="3" valign="top" height="50"><?php echo $row['tagline']; ?><br>
-		                            <a href="<?php echo $row['url']; ?>" <?php echo $target; ?>><?php echo $row['call_to_action']; ?></a>
+		                            <a href="<?php echo $site . $row['url']; ?>" <?php echo $target; ?> onClick="_gaq.push(['_trackEvent', 'Promotions', '<?php echo $row['promo_name']; ?>', '<?php echo $row['item_name']; ?>']);" ><?php echo $row['call_to_action']; ?></a>
 		                        </td>
 		                    </tr>
 		                </table>
