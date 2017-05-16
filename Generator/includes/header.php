@@ -56,11 +56,17 @@
 							<ul class="dropdown-menu">
 								<li><a href="promopage_i.php">Promo Pages</a></li>
 								<li><a href="promopage_e.php">Add Promo Page</a></li>
-								<li class="divider"></li>
+							<!--	<li class="divider"></li>
 								<li><a href="plainpage_i.php">Plain Pages</a></li>
-								<li><a href="plainpage_e.php">Add Plain Page</a></li>
+								<li><a href="plainpage_e.php">Add Plain Page</a></li> -->
 							</ul>
-						</li>		
+						</li>
+						<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">PROMO PODS <b class="caret"></b></a>
+								<ul class="dropdown-menu">
+									<li><a href="promopods_au_v.php">Promo Pods (BASE)</a></li>
+								</ul>
+							</li>	
 					</ul>
 					<!--
 					<form class="navbar-form navbar-left" role="search">

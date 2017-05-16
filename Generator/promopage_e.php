@@ -131,7 +131,18 @@
 				<h4 style="margin: 0">Features Instructions</h4>
 			</div>
 			<div class="modal-body">
-				Creates a bullet-point list.  Place each new point on a new line
+				Creates a bullet-point list.  Place each new point on a new line.<br>
+				<br>
+				Groups...<br>
+				[GROUP]<br>
+				[HEADING]Heading Here<br>
+				Items<br>
+				Items<br>
+				[GROUP]<br>
+				[HEADING]Heading Here<br>
+				Items<br>
+				Items<br>
+				<br>
 			</div>
 		</div>
 	</div>
@@ -149,7 +160,8 @@
 				<br>
 				If you want to link to the Search page on the Item Code and Description ensure the first two column headings are "Item Code" and "Description" exactly<br>
 				<br> 
-				Column Widths...
+				Column Widths...  add eg: [25%] directly after the column heading name to widen eg: Item Code[25%]<br>
+				<br>
 			</div>
 		</div>
 	</div>
@@ -163,13 +175,18 @@
 				<h4>Resources & Related</h4>
 			</div>
 			<div class="modal-body">
-				Each resource or related item on a new line<br>
+				Each resource or related item on a new line (press enter, wordwrap does not count)<br>
 				<br>
 				Structure is:<br>
-				Name of Link|url|tab<br>
-				Where tab = new or parent<br>
+				text<strong>|</strong>url<strong>|</strong>tab<strong>|</strong>action<strong>|</strong>label<br>
 				<br>
-				eg:
+				tab = new or parent<br>
+				<br>
+				action & label are optional, used for tracking.  If you use action, you must use label<br>
+				Use the following actions only: PDF, Related Product, Request Quote, Request Information, Video<br>
+				<br>
+				eg: Brochure: Thermo Scientific MaxQ Shakers|https://tools.thermofisher.com/content/sfs/brochures/D11049~.pdf|new|PDF|MaxQ Shakers Brochure<br>
+				<br>			
 			</div>
 		</div>
 	</div>
