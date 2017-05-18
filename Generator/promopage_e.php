@@ -7,8 +7,6 @@
 
 	if($_POST){
 
-		
-
 		$fieldNames = "name,title,image,description,features,post_features,more,items,resources,related,terms,country,last_modified";
 		$fields = "";
 		$values = "";
@@ -136,12 +134,10 @@
 				Creates a bullet-point list.  Place each new point on a new line.<br>
 				<br>
 				Groups...<br>
-				[GROUP]<br>
-				[HEADING]Heading Here<br>
+				[GROUP][HEADING]Heading Here<br>
 				Items<br>
 				Items<br>
-				[GROUP]<br>
-				[HEADING]Heading Here<br>
+				[GROUP][HEADING]Heading Here<br>
 				Items<br>
 				Items<br>
 				<br>
@@ -188,6 +184,21 @@
 				Use the following actions only: PDF, Related Product, Request Quote, Request Information, Video<br>
 				<br>
 				eg: Brochure: Thermo Scientific MaxQ Shakers|https://tools.thermofisher.com/content/sfs/brochures/D11049~.pdf|new|PDF|MaxQ Shakers Brochure<br>
+				<br>			
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="info-terms">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" type="button" data-dismiss="modal">&times;</button>
+				<h4>Terms & Conditions</h4>
+			</div>
+			<div class="modal-body">
+				Offer valid [START DATE] to [END DATE] to customers in [COUNTRY] only. Discount is off list price only, no further discounts apply. All pricing excludes GST
 				<br>			
 			</div>
 		</div>
@@ -316,7 +327,10 @@
 			</tr>
 			
 			<tr>
-				<td align="right"><strong>Terms</strong></td>
+				<td align="right">
+					<strong>Terms</strong><br>
+					<br>
+					<button class="btn btn-primary" data-toggle="modal" data-target="#info-terms" type="button"><i class="fa fa-info"></i></button></td>
 				<td><textarea name="terms" class="form-control" rows="3"><?php if(isset($p)) {echo htmlentities($p['terms']);} ?></textarea></td>
 			</tr>
 			

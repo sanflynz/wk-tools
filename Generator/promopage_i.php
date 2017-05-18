@@ -1,6 +1,20 @@
 <?php
 	include("includes/db.php");
+	include("../__classes/pagination.php");
 	include("includes/header.php");
+
+	$sql = "SELECT * FROM webpromopages ORDER BY last_modified DESC";
+	// $r = $conn->query($sql);
+	// if($conn->error){
+	// 	echo "Error: " . $conn->error;
+	// }
+
+	// get the pages and stuff later
+	$page = ( isset($_GET['page'])) ? $_GET['page'] : 1;
+	$limit = (isset($_GET['limit'])) ? $_GET['limit'] : 10;
+
+	$Pagination  = new Pagination( $conn, $sql );
+	$r = $Pagination->getData( $limit, $page );
 
 ?>
 
@@ -12,18 +26,18 @@
 </div>
 <div class="row">
 	<div class="col-md-4">
-		buttons
+		<br>
+		<a href="promopage_e.php" class="btn btn-primary">New Promo Page</a>
 	</div>
 </div>
+
+
+
 <div class="row">
 	<br>
 	<div class="col-xs-12">
-	<?php 	$sql = "SELECT * FROM webpromopages ORDER BY last_modified DESC";
-			$r = $conn->query($sql);
-			if($conn->error){
-				echo "Error: " . $conn->error;
-			}
-			if($r->num_rows > 0){ ?>
+	<?php 	
+			if($Pagination->total > 0){ ?>
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -37,7 +51,10 @@
 				</tr>
 			</thead>
 			<tbody>
-		<?php 	while($row = $r->fetch_assoc()){ ?>		
+		<?php 	//while($row = $r->fetch_assoc()){ 
+				foreach($r->data as $row){
+
+			?>		
 				<tr>
 					<td><?php echo $row['name']; ?></td>
 					<td><?php echo $row['title']; ?></td>
@@ -63,9 +80,16 @@
 	</div>
 </div>
 
-
+<?php if($Pagination->total > $limit){ ?>
+<div class="row">
+	<div class="col-xs-6"></div>
+	<div class="col-xs-6 text-right">
+		<?php echo $Pagination->buildLinks(); ?>
+	</div>
+</div>
 
 <?php
+}
 
 	include("includes/footer.php");
 

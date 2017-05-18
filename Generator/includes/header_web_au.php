@@ -5,6 +5,8 @@
 	Thermo Scientific™ S1 Pipette Filler
 </title>
   <!-- CSS -->
+  <link rel="shortcut icon" href="favicon-meh-o.ico">
+
   <link rel="stylesheet" type="text/css" href="http://www.thermofisher.com.au/css/site_global.css" /><link rel="stylesheet" type="text/css" href="http://www.thermofisher.com.au/css/master_a-master.css" /><link id="pagesheet" rel="stylesheet" type="text/css" href="http://www.thermofisher.com.au/css/index.css" /><link rel="stylesheet" type="text/css" href="http://www.thermofisher.com.au/css/display.css" /><link rel="stylesheet" type="text/css" href="http://www.thermofisher.com.au/css/jquery-ui-DatePicker.css" />
   
   <style type="text/css">

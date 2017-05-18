@@ -5,8 +5,34 @@
   			</div> <!-- main -->
   			
             <!--side--> 
-            
+            <div id="side"> 
+                
+
+              
+                    <div class="quicklinks">
+                  <h3>Resources</h3>
+                    <ul id="bl_QuickLinks">
+    <li><a href="/ContentAUS/Environmental-Industrial/Useful-Quick-Links.html">Useful associations and other links</a></li><li><a href="/content/Top-Menu/MSDS-CofA-TGA.html">SDS, CoA &amp; TGA Search/Request</a></li>
+  </ul>
+                </div>
+                
+                
+                
+                
+
+                
+                <div class="news">
+                  <h3>Literature</h3>
+                    <ul id="bl_News">
+    <li><a href="/Uploads/file/Environmental-Industrial/Industry-Focus_Environmental_low-res.pdf">Environmental Capabilities Brochure</a></li><li><a href="/Uploads/file/Environmental-Industrial/1426563641-EIP-Product-PortfolioCR-2.pdf">Environmental &amp; Industrial Process Product Portfolio</a></li>
+  </ul>
+                </div>
+                    
+                    
+          
+            </div>
             <!--side-->
+
             
         </div>
         <!--Content-->

@@ -64,7 +64,7 @@
 						<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">PROMO PODS <b class="caret"></b></a>
 								<ul class="dropdown-menu">
-									<li><a href="promopods_e.php">Promo Pods</a></li>
+									<li><a href="promopods_e.php">Promo Pods <i class="fa fa-flask" style="color: #FF0000" title="EXPERIMENTAL"></i></a></li>
 								</ul>
 							</li>	
 					</ul>
@@ -76,7 +76,15 @@
 						<button type="submit" class="btn btn-default">Submit</button>
 					</form> -->
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="../">TOOLS</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-question-circle-o"></i></a>
+							<ul class="dropdown-menu">
+								<li><a href="help_html.php" target="_blank">Basic HTML</a></li>
+								<li><a href="https://dev.w3.org/html5/html-author/charref" target="_blank">HTML Entities Reference</a></li>
+							</ul>
+						</li>
+						<li><a href="changelog.php" title="Changelog"><i class="fa fa-file-code-o"></i></a> </li>
+						<li><a href="/">TOOLS</a></li>
 					<!--	<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools <b class="caret"></b></a>
 							<ul class="dropdown-menu">
