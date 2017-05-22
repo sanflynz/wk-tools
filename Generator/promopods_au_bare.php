@@ -2,7 +2,8 @@
 
 $sql = "SELECT * FROM `webpromopods` ORDER BY `order`";
 $r = $conn->query($sql);
-$p = $r->fetch_assoc();
+
+
 
 $target = "";
 
@@ -39,6 +40,7 @@ if(!isset($_GET['site'])){
 <?php
 $i = 1;
 while($row = $r->fetch_assoc()){
+
 		if(substr($row['url'],-4) == ".pdf"){
 			$target = "target='_blank'";
 		}
@@ -98,8 +100,8 @@ while($row = $r->fetch_assoc()){
 		}
 }
 
-if($i != 3){
-	while($i <= 3){ ?>
+if($i > 1){
+	while($i > 1){ ?>
 					<td width="315" valign="top">
 		                <table border="0" cellspacing="0" cellpadding="0" width="310">
 		                    <tr>
@@ -120,14 +122,14 @@ if($i != 3){
 			        </tr>
 			    </tbody>
 			</table>
-<?php		
+<?php		$i = 1;
 		}
 		else{ ?>
 					<td width="15">&nbsp;</td>            
 			
-<?php		
+<?php		$i++;	
 		}
-		$i++;
+		
 	}
 
 }

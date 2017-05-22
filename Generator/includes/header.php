@@ -62,11 +62,17 @@
 							</ul>
 						</li>
 						<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">PROMO PODS <b class="caret"></b></a>
-								<ul class="dropdown-menu">
-									<li><a href="promopods_e.php">Promo Pods <i class="fa fa-flask" style="color: #FF0000" title="EXPERIMENTAL"></i></a></li>
-								</ul>
-							</li>	
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">PROMO PODS <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="promopods_e.php">Promo Pods <i class="fa fa-flask" style="color: #FF0000" title="EXPERIMENTAL"></i></a></li>
+							</ul>
+						</li>	
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">LINKS <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="requestlinkgen.php">Request Link Generator</a></li>
+							</ul>
+						</li>
 					</ul>
 					<!--
 					<form class="navbar-form navbar-left" role="search">

@@ -36,6 +36,12 @@ include ("promopage_au_bare.php");
   </tbody>
 </table>
 
+<script>
+document.addEventListener("DOMContentLoaded", hideSide);
+function hideSide(){
+    $("#side").hide();
+}    
+</script>
 
 <?php
 
