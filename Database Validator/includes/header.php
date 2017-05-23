@@ -139,10 +139,10 @@
           <ul class="nav navbar-nav navbar-right">
 				<li><a href="changelog.php" title="Changelog"><i class="fa fa-file-code-o"></i></a> </li>
 				<li class="dropdown">
-					<a href="#" title="Changelog" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bug"></i></a>
+					<a href="#" title="Bug Report" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bug"></i></a>
 					<ul class="dropdown-menu">
-						<li><a href="mailto:sandie43+xz6uinln8fx5vwibzvzn@boards.trello.com?subject=[BUG%20REPORT]%20<SHORT%20DESC%20HERE>&body=Requestor%20Name:%20%0ADetail:%20%0A">Bug Report</a></li>
-						<li><a href="mailto:sandie43+xz6uinln8fx5vwibzvzn@boards.trello.com?subject=[CHANGE%20REQUEST]%20<SHORT%20DESC%20HERE>&body=Requestor%20Name:%20%0ADetail:%20%0A">Change Request</a></li>
+						<li><a href="mailto:sandie43+xz6uinln8fx5vwibzvzn@boards.trello.com?subject=[BUG%20REPORT][Database%20Validator]%20<SHORT%20DESC%20HERE>&body=Requestor%20Name:%20%0ADetail:%20%0A">Bug Report</a></li>
+						<li><a href="mailto:sandie43+xz6uinln8fx5vwibzvzn@boards.trello.com?subject=[CHANGE%20REQUEST][Database%20Validator]%20<SHORT%20DESC%20HERE>&body=Requestor%20Name:%20%0ADetail:%20%0A">Change Request</a></li>
 						
 					</ul>
 				</li>

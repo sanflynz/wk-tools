@@ -55,18 +55,12 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">WEBPAGES <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<li><a href="promopage_i.php">Promo Pages</a></li>
-								<li><a href="promopage_e.php">Add Promo Page</a></li>
+								<li><a href="promopods_e.php">Promo Pods &nbsp;&nbsp;<i class="fa fa-flask" style="color: #00FF00" title="EXPERIMENTAL"></i></a></li>
 							<!--	<li class="divider"></li>
 								<li><a href="plainpage_i.php">Plain Pages</a></li>
 								<li><a href="plainpage_e.php">Add Plain Page</a></li> -->
 							</ul>
 						</li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">PROMO PODS <b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li><a href="promopods_e.php">Promo Pods <i class="fa fa-flask" style="color: #FF0000" title="EXPERIMENTAL"></i></a></li>
-							</ul>
-						</li>	
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">LINKS <b class="caret"></b></a>
 							<ul class="dropdown-menu">
@@ -90,6 +84,14 @@
 							</ul>
 						</li>
 						<li><a href="changelog.php" title="Changelog"><i class="fa fa-file-code-o"></i></a> </li>
+						<li class="dropdown">
+							<a href="#" title="Bug Report/Change Request" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bug"></i></a>
+							<ul class="dropdown-menu">
+								<li><a href="mailto:sandie43+xz6uinln8fx5vwibzvzn@boards.trello.com?subject=[BUG%20REPORT][Generator]%20<SHORT%20DESC%20HERE>&body=Requestor%20Name:%20%0ADetail:%20%0A">Bug Report</a></li>
+								<li><a href="mailto:sandie43+xz6uinln8fx5vwibzvzn@boards.trello.com?subject=[CHANGE%20REQUEST][Generator]%20<SHORT%20DESC%20HERE>&body=Requestor%20Name:%20%0ADetail:%20%0A">Change Request</a></li>
+								
+							</ul>
+						</li>
 						<li><a href="/">TOOLS</a></li>
 					<!--	<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools <b class="caret"></b></a>

@@ -18,7 +18,6 @@ include("includes/header.php");
 	<div class="row">
 		<div class="col-xs-12">
 			<ul>
-				<li>Promo pods uploader/downloader</li>
 				<li>Level 3 page generator. How to import/edit?</li>
 				<li>Sorting list page. And search?</li>
 				<li>Download zip with image and files??</li>

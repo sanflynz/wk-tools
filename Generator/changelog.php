@@ -4,6 +4,22 @@
 <br>
 <div class="panel panel-default">
 	<div class="panel-heading">
+		<h3 class="panel-title">20170524</h3>
+	</div>
+	<div class="panel-body">
+		<li>Fixed Save on Promo Pods</li>
+		<li>Added Clear All button to Promo Pods</li>
+		<li>Added Upload and Download features to Promo Pods</li>
+		<li>Added some instructions to Promo Pods</li>
+		<li>Updated Promo Pods from EXPERIMENTAL - DONT USE (<i class="fa fa-flask" style="color: #FF0000;" title="EXPERIMENTAL"></i>) to EXPERIMENTAL - HAVE A PLAY! (<i class="fa fa-flask" style="color: #00FF00;" title="EXPERIMENTAL"></i>)</li>
+		<li>Moved Promo Pods menu item to Webpages</li>
+		<li>Removed "Add Promo Page" from menu</li>
+		<li>Added Bug Report/Change Request</li>
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
 		<h3 class="panel-title">20170522</h3>
 	</div>
 	<div class="panel-body">
