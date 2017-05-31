@@ -70,11 +70,11 @@
 
 			// if page= not in the url (ie: first page), add it
 			if(!preg_match('~(page=\d+&?|page=\d+)~i', $thisURI)){
-				if(strpos('?', $thisURI) == false){
-					$thisURI = $_SERVER['REQUEST_URI'] . '&page=' . $this->page;
+				if(strpos($thisURI,'?') == false){
+					$thisURI = $_SERVER['REQUEST_URI'] . '?page=' . $this->page;
 				}
 				else{
-					$thisURI = $_SERVER['REQUEST_URI'] . '?page=' . $this->page;
+					$thisURI = $_SERVER['REQUEST_URI'] . '&page=' . $this->page;
 				}
 			}
 

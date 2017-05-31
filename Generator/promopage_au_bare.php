@@ -182,7 +182,6 @@ elseif($p['country'] == "Australia"){
 									if($k == "0" || $k == "1"){
 										$url = $sURL . $columns[0];
 										$link = $v;
-										$tab = "new";
 										$tracking = "onClick=\"_gaq.push(['_trackEvent', 'Promo Page', 'Item', '" . $columns[0] . "']);\"";
 									}
 								}
@@ -399,7 +398,3 @@ elseif($p['country'] == "Australia"){
 	
 
 <!-- ############ CODE ENDS ############# -->
-
-
-
-

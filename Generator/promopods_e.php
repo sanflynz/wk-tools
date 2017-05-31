@@ -100,7 +100,8 @@ include("includes/header.php"); ?>
 				<br>
 				<strong>Images</strong><br>
 				Should be 294 x 150px.<br>
-				Image naming convention: promo_pod_<i>product_name</i>.jpg
+				Image naming convention: promo_pod_<i>product_name</i>.jpg<br>
+				Should be uploaded to /Uploads/image on the website<br>
 				<br>
 			</div>
 		</div>
@@ -117,10 +118,10 @@ include("includes/header.php"); ?>
 	<div class="col-xs-12">
 		<br>
 		<a href="promopods_e.php?action=truncate" class="btn btn-danger">Clear All</a>&nbsp;
-		<span class="btn btn-primary" id="upload-toggle">Upload</span>&nbsp;
-		<a href="<?php echo basename($_SERVER['REQUEST_URI']) . '&action=download'; ?>" class="btn btn-primary">Download</a>&nbsp;
-		<a href="supplementary/promo_pods_template_anz.csv" target="_blank" class="btn btn-primary">Template</a>&nbsp; 
-		<a href="" class="btn btn-primary" style="width: 40px;" data-toggle="modal" data-target="#info-promopods"><i class="fa fa-info"></i></a><br>
+		<span class="btn btn-primary" id="upload-toggle" title="Import CSV"><i class="fa fa-file-excel-o"></i> <i class="fa fa-arrow-circle-o-up"></i></span>&nbsp;
+		<a href="<?php echo basename($_SERVER['REQUEST_URI']) . '&action=download'; ?>" class="btn btn-primary" title="Export CSV"><i class="fa fa-file-excel-o"></i> <i class="fa fa-arrow-circle-o-down"></i></a>&nbsp;
+		<a href="supplementary/promo_pods_template_anz.csv" target="_blank" class="btn btn-default" title="CSV template" style="width: 40px;"><i class="fa fa-file-excel-o"></i></a>&nbsp; 
+		<a href="" class="btn btn-default" style="width: 40px;" data-toggle="modal" data-target="#info-promopods"><i class="fa fa-info"></i></a><br>
 		<div id="uploadwindow" style="display: none;">
 			<p>
 				<form action="promopods_e.php?action=upload" method="post" enctype="multipart/form-data">

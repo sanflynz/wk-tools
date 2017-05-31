@@ -2,6 +2,22 @@
 
 <h1>Changelog</h1>
 <br>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">20170530</h3>
+	</div>
+	<div class="panel-body">
+		<li>Fixed Promo Pods tabs for PDF vs Non-PDF</li>
+		<li>Fixed missing &lt;/td&gt; on promo pods</li>
+		<li>Fixed Promo Pages items open in same tab</li>
+		<li>Fixed Promo Pages List pagination</li>
+		<li>Added optional hidden header code to Promo Pods</li>
+
+		
+	</div>
+</div>
+
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title">20170524</h3>

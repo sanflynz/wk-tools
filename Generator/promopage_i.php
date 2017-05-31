@@ -10,7 +10,7 @@
 	// }
 
 	// get the pages and stuff later
-	$page = ( isset($_GET['page'])) ? $_GET['page'] : 1;
+	$page = (isset($_GET['page'])) ? $_GET['page'] : 1;
 	$limit = (isset($_GET['limit'])) ? $_GET['limit'] : 10;
 
 	$Pagination  = new Pagination( $conn, $sql );
