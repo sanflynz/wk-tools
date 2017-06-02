@@ -64,7 +64,7 @@ elseif($p['country'] == "Australia"){
 								if(preg_match("[HEADING]", $f)){
 									$f = str_replace("[HEADING]", "", $f);
 									echo "<b>" . $f . "</b><br>";
-									echo "<ul style=\"padding-left:20px; margin-top:10px; list-style-position: outside\">"; 
+									echo "<ul style=\"padding-left:20px; margin-top:10px; list-style-position: outside; overflow: hidden;\">"; 
 								}
 								elseif(!preg_match("[GROUP]", $f)  && $f != ""){ ?>
 									<li style="color:#616265; line-height:25px; list-style-type: disc !important;"><?php echo $f; ?></li>

@@ -5,6 +5,15 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
+		<h3 class="panel-title">20170602</h3>
+	</div>
+	<div class="panel-body">
+		<li>Fix for floating bullet points</li>		
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
 		<h3 class="panel-title">20170530</h3>
 	</div>
 	<div class="panel-body">
