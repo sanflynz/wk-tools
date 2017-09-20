@@ -55,6 +55,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">WEBPAGES <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<li><a href="promopage_i.php">Promo Pages</a></li>
+								<li><a href="l3page_i.php">Level 3 Pages &nbsp;&nbsp;<i class="fa fa-flask" style="color: #00FF00" title="EXPERIMENTAL"></i></a></li>
 								<li><a href="promopods_e.php">Promo Pods &nbsp;&nbsp;<i class="fa fa-flask" style="color: #00FF00" title="EXPERIMENTAL"></i></a></li>
 							<!--	<li class="divider"></li>
 								<li><a href="plainpage_i.php">Plain Pages</a></li>
@@ -81,6 +82,7 @@
 							<ul class="dropdown-menu">
 								<li><a href="help_html.php" target="_blank">Basic HTML</a></li>
 								<li><a href="https://dev.w3.org/html5/html-author/charref" target="_blank">HTML Entities Reference</a></li>
+								<li><a href="http://www.thermofisher.com.au/show.aspx?page=/ContentAUS/StyleGuide/StyleGuide.html" target="_blank">ANZ Website StyleGuide</a></li>
 							</ul>
 						</li>
 						<li><a href="changelog.php" title="Changelog"><i class="fa fa-file-code-o"></i></a> </li>

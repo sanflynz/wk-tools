@@ -152,7 +152,7 @@
 
 <!-- START SCRIPT ContactUS tab -->
 
-<script src="../scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
+<script src="http://www.thermofisher.com.au/scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
 
 
  
@@ -433,17 +433,17 @@ $(document).ready(function(){
   <script type="text/javascript">
       window.jQuery || document.write('\x3Cscript src="scripts/jquery-1.8.3.min.js" type="text/javascript">\x3C/script>');
 </script>
-  <script src="../scripts/museutils.js" type="text/javascript"></script>
-  <script src="../scripts/jquery.tobrowserwidth.js" type="text/javascript"></script>
-  <script src="../scripts/jquery.musemenu.js" type="text/javascript"></script>
-  <script src="../scripts/webpro.js" type="text/javascript"></script>
-  <script src="../scripts/musewpslideshow.js" type="text/javascript"></script>
-  <script src="../scripts/jquery.museoverlay.js" type="text/javascript"></script>
-  <script src="../scripts/touchswipe.js" type="text/javascript"></script>
-  <script src="../scripts/jquery.musepolyfill.bgsize.js" type="text/javascript"></script>
-  <script src="../scripts/jquery.watch.js" type="text/javascript"></script>
-  <script src="../scripts/jquery.tobrowserwidth.js" type="text/javascript"></script>
-  <script src="../scripts/musewpdisclosure.js" type="text/javascript"></script>
+  <script src="http://www.thermofisher.com.au/scripts/museutils.js" type="text/javascript"></script>
+  <script src="http://www.thermofisher.com.au/scripts/jquery.tobrowserwidth.js" type="text/javascript"></script>
+  <script src="http://www.thermofisher.com.au/scripts/jquery.musemenu.js" type="text/javascript"></script>
+  <script src="http://www.thermofisher.com.au/scripts/webpro.js" type="text/javascript"></script>
+  <script src="http://www.thermofisher.com.au/scripts/musewpslideshow.js" type="text/javascript"></script>
+  <script src="http://www.thermofisher.com.au/scripts/jquery.museoverlay.js" type="text/javascript"></script>
+  <script src="http://www.thermofisher.com.au/scripts/touchswipe.js" type="text/javascript"></script>
+  <script src="http://www.thermofisher.com.au/scripts/jquery.musepolyfill.bgsize.js" type="text/javascript"></script>
+  <script src="http://www.thermofisher.com.au/scripts/jquery.watch.js" type="text/javascript"></script>
+  <script src="http://www.thermofisher.com.au/scripts/jquery.tobrowserwidth.js" type="text/javascript"></script>
+  <script src="http://www.thermofisher.com.au/scripts/musewpdisclosure.js" type="text/javascript"></script>
   
   <!-- Other scripts -->
   <script type="text/javascript">
@@ -497,7 +497,7 @@ $('.clickme').each(function() {
 
    
  
-<script src="../scripts/jquery-ui-DatePicker.js"></script>
+<script src="http://www.thermofisher.com.au/scripts/jquery-ui-DatePicker.js"></script>
 
     <script type="text/javascript">
         $(function () {

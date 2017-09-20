@@ -5,6 +5,18 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
+		<h3 class="panel-title">TBC</h3>
+	</div>
+	<div class="panel-body">
+		<li>Added link to StyleGuide</li>
+		<li>Updated <i>Export</i> to display code that can be copy/pasted into CRM</li>
+		<li>Added feature to show all images from Exported code for easy download/packaging</li>	
+		<li>Level 3 Page Editor added <i class="fa fa-flask" style="color: #00FF00" title="EXPERIMENTAL BUT REASONABLY FUNCTIONAL"></i> </li>	
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
 		<h3 class="panel-title">20170602</h3>
 	</div>
 	<div class="panel-body">

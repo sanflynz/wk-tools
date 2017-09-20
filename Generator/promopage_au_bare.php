@@ -162,6 +162,9 @@ elseif($p['country'] == "Australia"){
 						<td height="47">&nbsp;</td>
 					<?php 	foreach($columns as $k => $v){
 								$tracking = "";
+								$url = "";
+								$tab = "";
+
 								if(preg_match('/price/i', $headers[$k])){
 									$style = "style='padding-right: 20px; text-align: right;'";
 								}
@@ -174,13 +177,11 @@ elseif($p['country'] == "Australia"){
 
 								echo "<td " . $style . ">";
 								//if(preg_match('/.*price.*$/i', $headers[$k])){ echo "align='right' style='padding-right: 20px' "; }
-								$url = "";
-								$tab = "";
 								// if col[0] = item code, make item code and description links
 								if(preg_match('/Item Code/i', $headers[0])){
 								//if($headers[0] == "Item Code"){
 									if($k == "0" || $k == "1"){
-										$url = $sURL . $columns[0];
+										$url = $sURL . $columns[0] . "#gsc.tab=0&gsc.q=" . $columns[0];
 										$link = $v;
 										$tracking = "onClick=\"_gaq.push(['_trackEvent', 'Promo Page', 'Item', '" . $columns[0] . "']);\"";
 									}
@@ -284,9 +285,9 @@ elseif($p['country'] == "Australia"){
 							if(preg_match('/Item Code/i', $headers[0])){
 							//if($headers[0] == "Item Code"){
 								if($k == "0" || $k == "1"){
-									$url = $sURL . $columns[0];
+									$url = $sURL . $columns[0] . "#gsc.tab=0&gsc.q=" . $columns[0];
 									$link = $v;
-									$tab = "new";
+									//$tab = "new";
 									$tracking = "onClick=\"_gaq.push(['_trackEvent', 'Promo Page', 'Item', '" . $columns[0] . "']);\"";
 								}
 							}
