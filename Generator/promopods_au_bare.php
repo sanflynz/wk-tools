@@ -48,7 +48,7 @@ if(!isset($_GET['site'])){
 			            <p style="margin-top:25px;"><a href="#" class="btn btn-primary">A button can go here</a></p>
 			            </td>
 			            <td width="640">
-			            	<a href="#" target="_blank"><img src="/Uploads/image/landing-page-banner-image.jpg" width="640" height="480" alt=""></a>
+			            	<a href="#" target="_blank"><img src="/Uploads/image/landing-page-banner-image.jpg" style="border: 1px solid grey; width: 640px; height: 300px;"></a>
 			            </td>
 			        </tr>
 			    </tbody>
@@ -61,8 +61,8 @@ if(!isset($_GET['site'])){
 			        </tr>
 			    </tbody>
 			</table>
+	
 	-->
-
 
 <?php
 $i = 1;

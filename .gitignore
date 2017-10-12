@@ -19,5 +19,8 @@ Segmenter/
 # ignore files in Generator/pages directory and all subdirectories
 Generator/pages/*
 
+# ignore files in Generator/pages directory and all subdirectories
+Access/
+
 # ignore test files
 test*.html

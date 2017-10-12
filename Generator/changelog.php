@@ -8,6 +8,16 @@
 		<h3 class="panel-title">TBC</h3>
 	</div>
 	<div class="panel-body">
+		<li>In promo page generator, hide Items table(s) if no items listed</li>
+		<li>In promo pods export, change to show exported code in box</li>	
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">20170905</h3>
+	</div>
+	<div class="panel-body">
 		<li>Added link to StyleGuide</li>
 		<li>Updated <i>Export</i> to display code that can be copy/pasted into CRM</li>
 		<li>Added feature to show all images from Exported code for easy download/packaging</li>	

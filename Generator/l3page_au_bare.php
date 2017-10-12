@@ -97,6 +97,7 @@ foreach($sides as $s){
     </tbody>
 </table>
 
+<?php if($p['popular-heading'] || $p['popular-1'] || $p['popular-2'] || $p['popular-3']) { ?>
 <br>
 <table width="700" border="0" cellspacing="0" cellpadding="0" bgcolor="#EEEEED" id="popular">
     <tbody>
@@ -128,8 +129,8 @@ foreach($sides as $s){
         </tr>
     </tbody>
 </table>
+<?php } ?>
 
-<br>
 <table width="700" border="0" cellspacing="0" cellpadding="0" id="featured">
   <tbody>
     <tr>
