@@ -15,7 +15,7 @@
  			// ###### PROMO PODS PAGE ######
  				// Toggle upload window to show/hide (promopods)
  				$("#upload-toggle").click(function(){
-					//$("#uploadwindow").toggle();
+					$("#uploadwindow").toggle();
 				});
 
 

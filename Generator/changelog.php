@@ -5,7 +5,17 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">TBC</h3>
+		<h3 class="panel-title">20171013</h3>
+	</div>
+	<div class="panel-body">
+		<li>In promo pod editor page fixed import button</li>
+		
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">20171012</h3>
 	</div>
 	<div class="panel-body">
 		<li>In promo page generator, hide Items table(s) if no items listed</li>
