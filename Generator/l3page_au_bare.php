@@ -249,7 +249,7 @@ if(isset($p['resources-left']['heading']) || isset($p['resources-right']['headin
 			<ul>
 <?php			foreach ($p['resources-' . $s]['items'] as $i){ 
 					$b = explode("|",$i); ?>
-				<li style="margin-bottom:10px;"><?php if(isset($b[5])){ echo "<i class='" . $b[5] . "'></i>"; } ?>
+				<li style="margin-bottom:10px;"><?php if(isset($b[5])){ echo "<i class='" . $b[5] . "'></i>&nbsp;&nbsp;"; } ?>
 					<a href="<?php echo $b[1]; ?>" <?php if($b[2] == "new"){ echo "target='_blank'"; } ?> <?php if(isset($b[3])){ echo "onClick=\"_gaq.push(['_trackEvent', 'Level 3 Page', '" . $b[3] . "', '" . $b[4] . "']);\""; } ?>><?php echo $b[0]; ?></a></li>
 <?php				
 				} ?>

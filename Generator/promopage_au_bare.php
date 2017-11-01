@@ -20,7 +20,7 @@ elseif($p['country'] == "Australia"){
 
 ?>
 
-<!-- ############ CODE STARTS ############# -->
+
 
 <table width="700" border="0" cellspacing="0" cellpadding="0">
     <tbody>
@@ -34,21 +34,20 @@ elseif($p['country'] == "Australia"){
 <table width="700" border="0" cellspacing="0" cellpadding="0">
     <tbody>
         <tr>
-            <td colspan="3" style="font-family: Arial, Helvetica, sans-serif; Line-height: 39.8px; font-size: 29px; color: #333;" height="48">
-            	<?php echo $p['title']; ?></td>
+            <td colspan="3"  height="48">
+            	<h1 style="font-family: Arial, Helvetica, sans-serif; Line-height: 39.8px; font-size: 29px; color: #333;"><?php echo $p['title']; ?></h1>
+            </td>
         </tr>
     </tbody>
     <tbody>
         <tr>
-            <td width="177">&nbsp;</td>
-            <td width="13">&nbsp;</td>
-            <td width="510">&nbsp;</td>
+            <td colspan="3">&nbsp;</td>
         </tr>
         <tr>
             
             <td valign="top" colspan="3">
             	<p style="font-size: 14px;">
-            	<img src="<?php echo $p['image']; ?>" alt="<?php echo $p['title']; ?>" style="background-color: #666666; float: left; margin: 0px 20px 15px 0px;" width="200">
+            	<img src="<?php echo $p['image']; ?>" alt="" style="background-color: #666666; float: left; margin: 0px 20px 15px 0px;" width="200">
             	<?php echo nl2br($p['description']); ?></p>
 		
 		<?php if($p['features'] != ""){
@@ -294,6 +293,17 @@ elseif($p['country'] == "Australia"){
 								}
 							}
 
+							if(preg_match('/\[ITEMLINK\].*/', $v)){
+							//if($headers[0] == "Item Code"){
+								
+								$code = substr($v, strpos($v,']') + 1);
+								$url = $sURL . $code . "#gsc.tab=0&gsc.q=" . $code;
+								$link = $code;
+								//$tab = "new";
+								$tracking = "onClick=\"_gaq.push(['_trackEvent', 'Promo Page', 'Item', '" . $code . "']);\"";
+								
+							}
+
 							if(preg_match('/\[(url=.*)\]/',$v)){
 								str_replace(array("\r", "\n"), '', trim($v));
 								$start = strpos($v, "=") + 1;
@@ -342,6 +352,7 @@ elseif($p['country'] == "Australia"){
 <?php 	if($p['resources'] != "" || $p['related'] != ""){ ?>
 	<table width="700" border="0" cellspacing="0" cellpadding="0" style="background-color: #f3f3f3;">
 	  <tr>
+<?php 	if($p['resources'] != ""){ ?>	  	
 	    <td width="10">&nbsp;</td>
 	    <td width="300" valign="top" <?php if($p['related'] == ""){ echo 'colspan="3"'; } ?>>
 	    	<h2>Resources and Support</h2>
@@ -349,10 +360,11 @@ elseif($p['country'] == "Australia"){
 			<?php foreach($resources as $res){
 				$parts = explode("|",$res);
 				// 0 = text, 1 = URL, 2 = tab (new or parent), OPTIONAL{ 3 = Event Action, 4 = Event Label } ?>
-			<li style="margin-bottom:10px;"><a href="<?php echo $parts[1]; ?>" <?php if(preg_match('/new/',$parts[2])){ echo "target='_blank' "; } if(isset($parts[3])){ echo "onClick=\"_gaq.push(['_trackEvent', 'Promo Page', '" . $parts[3] . "', '" . $parts[4] . "']);\""; }?> ><?php echo $parts[0]; ?></a></li>
+			<li style="margin-bottom:10px;"><?php if(isset($parts[5])){ echo "<i class='" . $parts[5] . "'></i>&nbsp;&nbsp;"; } ?><a href="<?php echo $parts[1]; ?>" <?php if(preg_match('/new/',$parts[2])){ echo "target='_blank' "; } if(isset($parts[3])){ echo "onClick=\"_gaq.push(['_trackEvent', 'Promo Page', '" . $parts[3] . "', '" . $parts[4] . "']);\""; }?> ><?php echo $parts[0]; ?></a></li>
 	<?php		} ?>
 	    	</ul>
 	    </td>
+<?php 	} ?>	    
 <?php if($p['related'] != ""){ ?>	    
 	    <td width="20">&nbsp;</td>
 	    <td width="300" valign="top">
@@ -361,7 +373,7 @@ elseif($p['country'] == "Australia"){
 	    	<ul>
 			<?php foreach($related as $rel){
 				$parts = explode("|",$rel); ?>
-			<li style="margin-bottom:10px;"><a href="<?php echo $parts[1]; ?>" <?php if(preg_match('/new/',$parts[2])){ echo "target='_blank'"; } if(isset($parts[3])){ echo "onClick=\"_gaq.push(['_trackEvent', 'Promo Page', '" . $parts[3] . "', '" . $parts[4] . "']);\""; } ?> ><?php echo $parts[0]; ?></a></li>
+			<li style="margin-bottom:10px;"><?php if(isset($parts[5])){ echo "<i class='" . $parts[5] . "'></i>&nbsp;&nbsp;"; } ?><a href="<?php echo $parts[1]; ?>" <?php if(preg_match('/new/',$parts[2])){ echo "target='_blank'"; } if(isset($parts[3])){ echo "onClick=\"_gaq.push(['_trackEvent', 'Promo Page', '" . $parts[3] . "', '" . $parts[4] . "']);\""; } ?> ><?php echo $parts[0]; ?></a></li>
 	<?php		} ?>
 	    	</ul>
 	    	
@@ -401,4 +413,3 @@ elseif($p['country'] == "Australia"){
 <?php } ?>
 	
 
-<!-- ############ CODE ENDS ############# -->

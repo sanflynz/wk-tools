@@ -7,7 +7,14 @@ include("includes/header.php");
 
 
 // get the pages and stuff later
-	
+
+if(!extension_loaded('zip')){ ?>
+	<div class="alert alert-danger">
+		<strong>ERROR: </strong>The PHP Zip extension is not installed. Please see administrator for assistance in setting up
+	</div>
+<?php
+}
+
 
 ?>
 	<h3>Note!</h3>

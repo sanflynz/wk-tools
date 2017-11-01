@@ -5,6 +5,18 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
+		<h3 class="panel-title">20171102</h3>
+	</div>
+	<div class="panel-body">
+		<li>Updated instructions for Items in Promo Page Generator</li>
+		<li>Changed Promo Page to have H1 rather than a div for the page header</li>
+		<li>Changed image lister to PHP from jQuery (using SimpleHTMLDOM in __vendors folder)</li>
+		<li>Export "Get File" now downloads zip file with html + images</li>
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
 		<h3 class="panel-title">20171013</h3>
 	</div>
 	<div class="panel-body">

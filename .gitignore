@@ -22,5 +22,11 @@ Generator/pages/*
 # ignore files in Generator/pages directory and all subdirectories
 Access/
 
+# ignore files in Generator/pages directory and all subdirectories
+HTML Validator/
+
+# ignore files in Generator/pages directory and all subdirectories
+Crawler/
+
 # ignore test files
 test*.html

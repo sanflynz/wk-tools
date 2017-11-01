@@ -60,19 +60,19 @@
 
 
 				// FIND IMAGES IN FILE FOR EXPORT
-				$('#listImages').click(function(){
-					//$('#imagelist').html("");
-					$('#imagelist').html( $( "#hiddenCode img" ).map(function() {
-				    return "<div class='col-xs-3'><a href='" + $( this ).attr('src') +"' download><img src='" + $( this ).attr('src') +"' class='img-resonsive img-thumbnail' style='margin-bottom: 10px;' ></a></div>";
-				  })
-				  .get()
-				  .join( "" )
-						//$('#hiddenCode').children('img').map(function(){
-				 //    	return $(this).attr('src')
-					// }).get() 
-					);
-					//alert("were in");
-				});
+				// $('#listImages').click(function(){
+				// 	//$('#imagelist').html("");
+				// 	$('#imagelist').html( $( "#hiddenCode img" ).map(function() {
+				//     return "<div class='col-xs-3'><a href='" + $( this ).attr('src') +"' download><img src='" + $( this ).attr('src') +"' class='img-resonsive img-thumbnail' style='margin-bottom: 10px;' ></a></div>";
+				//   })
+				//   .get()
+				//   .join( "" )
+				// 		//$('#hiddenCode').children('img').map(function(){
+				//  //    	return $(this).attr('src')
+				// 	// }).get() 
+				// 	);
+				// 	//alert("were in");
+				// });
 				
 				
 

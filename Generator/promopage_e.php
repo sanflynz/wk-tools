@@ -160,6 +160,17 @@
 				<br> 
 				Column Widths...  add eg: [25%] directly after the column heading name to widen eg: Item Code[25%]<br>
 				<br>
+				If you want to break out the table into groups:<br>
+				Groups...<br>
+				[GROUP][HEADING]Heading/Title Here<br>
+				Table header row<br>
+				Items<br>
+				Items<br>
+				[GROUP][HEADING]Heading/Title Here<br>				
+				Table header row<br>
+				Items<br>
+				Items<br>
+				<br>
 			</div>
 		</div>
 	</div>
