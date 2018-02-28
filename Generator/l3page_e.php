@@ -4,8 +4,6 @@
 	//
 	$error = "";
 	$success = "";
-	$sides = array("left", "right");
-
 	$x = 1;
 
 	if($_POST){
@@ -15,7 +13,7 @@
 		 $fields = "";
 		 $values = "";
 
-		$fFieldNames = "l3_id,heading,description,image,url,tab,order";
+		$fFieldNames = "l3_id,heading,description,image,url,tab";
 		$fFields = "";
 		$fValues = "";	
 
@@ -23,7 +21,7 @@
 		$p['last_modified'] = date("Y-m-d H:i:s");
 
 		
-		// IMAGES   ### Should this go out into an image upload class?
+		// IMAGES
 		function upImage($file,$location){
 			$error = "";
 			$success = "";
@@ -60,7 +58,7 @@
 		}
 
 
-		// upload dumb arrays ones   ### Should these just be done as we work through these sections?
+		// upload dumb arrays ones
 		$dumbOnes = array("popular-1","popular-2","popular-3","pod-left","pod-right");
 		foreach($dumbOnes as $d){
 			$file = "";
@@ -85,7 +83,7 @@
 			}
 		}
 
-		// upload the dumb features images
+		// upload the dumb features
 		$fc = count($_FILES['featured']['name']);
 
 		for($i = 0; $i < $fc; $i++){
@@ -118,77 +116,66 @@
 		// print_r($_FILES);
 		// print '</pre>';
 
-		// print '<pre>'; 
-		// print_r($p);
-		// print '</pre>';
+
 		
 		
 			
 
-		// Prepare for saving...
-		
-		$p['description'] = addslashes($p['description']);
-
-		for($i = 1; $i <= 3; $i++){
-			if($p['popular-' . $i]['text'] || $p['popular-' . $i]['image'] || $p['popular-' . $i]['url']){
-				$p['popular-' . $i] = serialize($p['popular-' . $i]);
+		// CONCATENATE POPULAR
+		for($i = 1; $i < 4; $i++){
+			if($p['popular-'. $i]['text'] || $p['popular-'. $i]['image'] || $p['popular-'. $i]['url']){
+				$p['popular-' . $i] = $p['popular-'. $i]['text'] . "|" . $p['popular-'. $i]['image'] . "|" . $p['popular-'. $i]['url'] . "|" . $p['popular-'. $i]['tab'];
 			}
 			else{
 				$p['popular-' . $i] = "";
-			}
-			
+			}			
 		}
 
-
+		//CONCATENATE VIDEOS
 		if($p['videos']['heading'] || $p['videos']['left'] || $p['videos']['right']){
-			$p['videos'] = serialize($p['videos']);
+			$p['videos'] = "[HEADING]" . $p['videos']['heading'] . "[ITEMS]" . $p['videos']['left'] . "|" . $p['videos']['right'];
 		}
 		else{
 			$p['videos'] = "";
 		}
+		
+		
 
-		foreach($sides as $s){
-			if($p['pod-' . $s]['name'] || $p['pod-' . $s]['image'] || $p['pod-' . $s]['url']){
-				$p['pod-' . $s] = serialize($p['pod-' . $s]);
-			}
-			else{
-				$p['pod-' . $s] = "";
-			}
+		// CONCATENATE PODS
+		if($p['pod-left']['name'] || $p['pod-left']['image'] || $p['pod-left']['url']){
+			$p['pod-left'] = $p['pod-left']['name'] . "|" . $p['pod-left']['image'] . "|" . $p['pod-left']['url'] . "|" . $p['pod-left']['tab'];
+		}
+		else{
+			$p['pod-left'] = "";
+
+		}	
+
+		if($p['pod-right']['name'] || $p['pod-right']['image'] || $p['pod-right']['url']){
+			$p['pod-right'] = $p['pod-right']['name'] . "|" . $p['pod-right']['image'] . "|" . $p['pod-right']['url'] . "|" . $p['pod-right']['tab'];
+		}
+		else{
+			$p['pod-right'] = "";
 		}
 
 		// CONCATENATE RESOURCES/SUPPORT/RELATED
-		foreach($sides as $s){
-			if($p['resources-' . $s]['heading'] || $p['resources-' . $s]['items']){
-				if($p['resources-' . $s]['items']){
-
-					$items = explode("\n",$p['resources-' . $s]['items']);
-					$p['resources-' . $s]['items'] = "";
-					for($i = 0; $i < count($items); $i++){
-						$p['resources-' . $s]['items'][$i] = $items[$i];
-					}
-				}
-				$p['resources-' . $s] = serialize($p['resources-' . $s]);
-			}
-			else{
-				$p['resources-' . $s] = "";
-			}
+		if($p['resources-left']['heading'] || $p['resources-left']['item']){
+			$p['resources-left'] = "[HEADING]" . $p['resources-left']['heading'] . "[ITEMS]" . $p['resources-left']['items'];
 		}
-		// else{
-		// 	$p['resources-left'] = "";
-		// }
-		// if($p['resources-right']['heading'] || $p['resources-right']['item']){
-		// 	$p['resources-right'] = "[HEADING]" . $p['resources-right']['heading'] . "[ITEMS]" . $p['resources-right']['items'];
-		// }
-		// else{
-		// 	$p['resources-right'] = "";
-		// }
+		else{
+			$p['resources-left'] = "";
+		}
+		if($p['resources-right']['heading'] || $p['resources-right']['item']){
+			$p['resources-right'] = "[HEADING]" . $p['resources-right']['heading'] . "[ITEMS]" . $p['resources-right']['items'];
+		}
+		else{
+			$p['resources-right'] = "";
+		}
 
 
 
 		if($p['id'] == ""){  // CREATE NEW PAGE
 
 			$i = 1;
-			$o = 1;
 			foreach(explode(",", $fieldNames) as $fn){
 				$fields .= "`" . $fn . "`"; if($i < count(explode(",", $fieldNames))){ $fields .= ","; }
 				$values .= "'" . addslashes($p[$fn]) . "'"; if($i < count(explode(",", $fieldNames))){ $values .= ","; }
@@ -221,7 +208,7 @@
 					}
 				}
 				// redirect
-				header("location: l3page_au_v.php?id=" . $id);
+				//header("location: l3page_au_v.php?id=" . $id);
 				
 			}
 			
@@ -234,11 +221,8 @@
 			$fValues = "";
 			$i = 1;
 			foreach(explode(",", $fieldNames) as $fn){
-				//$values .= "`" . $fn . "`" . "='" . addslashes($p[$fn]) . "'";
-				$values .= "`" . $fn . "`" . "='" . $p[$fn] . "'";
-				//echo "<br>" . $valuess;
-					
-
+				$values .= "`" . $fn . "`" . "='" . addslashes($p[$fn]) . "'";
+								
 				if($i < count(explode(",",$fieldNames))){
 					$values .= ",";
 				}
@@ -259,10 +243,8 @@
 				// print '<pre>'; 
 				// print_r($p['featured']);
 				// print '</pre>';
-				
 				foreach($p['featured'] as $f){
 					$f['l3_id'] = $p['id'];
-					$f['order'] = '0';
 					if($f['id'] == ""){
 						// CREATE
 						$i = 1;
@@ -293,37 +275,26 @@
 					else{
 
 						// DELETE
-						if(isset($f['delete']) && $f['delete'] == "1"){
-							$sql = "DELETE FROM webl3featured WHERE id = '" . $f['id'] . "'";
-							$r = $conn->query($sql);
-							if($conn->error){
-								$error .= "Unable to delete feature " . $f['id'] . ": " . $f['heading'] . ": " . $conn->error . "<br><br>" . $sql . "<br><br>";
-							}	
-							else{
-								$success .= "Feature " . $f['id'] . ": " . $f['heading'] . " deleted successfully<br><br>";
-							}
-						}
-						else{
 						
-							// UPDATE
-							$i = 1;
-							$fFields = "";
-							$fValues = "";
-							foreach(explode(",", $fFieldNames) as $fn){
-								$fValues .= "`" . addslashes($fn) . "`" . "='" . addslashes($f[$fn]) . "'";
-								if($i < count(explode(",",$fFieldNames))){
-									$fValues .= ",";
-								}
-								$i++;
+
+						// UPDATE
+						$i = 1;
+						$fFields = "";
+						$fValues = "";
+						foreach(explode(",", $fFieldNames) as $fn){
+							$fValues .= "`" . addslashes($fn) . "`" . "='" . addslashes($f[$fn]) . "'";
+							if($i < count(explode(",",$fFieldNames))){
+								$fValues .= ",";
 							}
-							$sql = "UPDATE webl3featured SET " . $fValues . " WHERE id = " . $f['id'];
-							$r = $conn->query($sql);
-							if($conn->error){
-								$error .= "Unable to update feature " . $f['id'] . ": " . $f['heading'] . ": " . $conn->error . "<br><br>" . $sql . "<br><br>";
-							}	
-							else{
-								$success .= "Feature " . $f['id'] . ": " . $f['heading'] . " updated successfully<br><br>";
-							}
+							$i++;
+						}
+						$sql = "UPDATE webl3featured SET " . $fValues . " WHERE id = " . $f['id'];
+						$r = $conn->query($sql);
+						if($conn->error){
+							$error .= "Unable to update feature " . $f['id'] . ": " . $f['heading'] . ": " . $conn->error . "<br><br>" . $sql . "<br><br>";
+						}	
+						else{
+							$success .= "Feature " . $f['id'] . ": " . $f['heading'] . " updated successfully<br><br>";
 						}
 					}
 					$x++;
@@ -373,39 +344,52 @@
   	}
 
 	if(isset($p)){
-		// SPLIT POPULAR	
-	 	for($i = 1; $i <= 3; $i++){
-	 		
+		// SPLIT POPULAR	 	
+	 	for($i = 1; $i < 4; $i++){
 	 		if($p['popular-' . $i]){
-	 			$p['popular-' . $i] = @unserialize($p['popular-' . $i]);
+		 		$p['popular-' . $i] = explode("|",$p['popular-' . $i]);
+			 	$p['popular-' . $i]['text'] = $p['popular-' . $i][0];
+			 	$p['popular-' . $i]['image'] = $p['popular-' . $i][1];
+			 	$p['popular-' . $i]['url'] = $p['popular-' . $i][2];
+			 	$p['popular-' . $i]['tab'] = $p['popular-' . $i][3];
 			}
 	 	}	 	
 	 	
 	 	// SPLIT VIDEOS
 	 	if($p['videos']){ 
-	 		$p['videos'] = @unserialize($p['videos']);
+	 		$parts = explode("[ITEMS]",$p['videos']);
+	 		$items = explode("|", $parts[1]);
+	 		$p['videos'] = "";
+	 		$p['videos']['heading'] = substr($parts[0],9);
+	 		$p['videos']['left'] = $items[0];
+	 		$p['vidoes']['right'] = $items[1];
 	 	}
 
-	 	// SPLIT PODS & RESOURCES
+	 	// SPLIT PODS
+	 	$sides = array("left", "right");
 	 	foreach($sides as $s){
-	 		if($p['pod-' . $s]){
-	 			$p['pod-' . $s] = @unserialize($p['pod-' . $s]);
-	 		}
-
-	 		if($p['resources-' . $s]){
-	 			$p['resources-' . $s] = @unserialize($p['resources-' . $s]);
-	 			if(!is_array($p['resources-' . $s])){
-	 				$p['resources-' . $s] = @unserialize($p['resources-' . $s]);
-	 			}
-	 			
-	 			
+	 	if($p['pod-' . $s]){
+	 			$p['pod-' . $s] = explode("|",$p['pod-' . $s]);
+	 			$p['pod-' . $s]['name'] = $p['pod-' . $s][0];
+	 			$p['pod-' . $s]['image'] = $p['pod-' . $s][1];
+	 			$p['pod-' . $s]['url'] = $p['pod-' . $s][2];
+	 			$p['pod-' . $s]['tab'] = $p['pod-' . $s][3];
 	 		}
 	 	}
 	 	
 	 	
-	 	
+	 	// SPLIT RESOURCES
+	 	foreach($sides as $s){
+	 		if($p['resources-' . $s]){
+	 			$parts = explode("[ITEMS]",$p['resources-' . $s]);
+	 			$p['resources-' . $s] = ""; // resets the array?
+	 			$p['resources-' . $s]['heading'] = substr($parts[0],9);
+	 			$p['resources-' . $s]['items'] = $parts[1];
+	 			
+	 		}
+	 	}	
   	}
-  	//$p['resources-right'] = @unserialize($p['resources-right']);
+
   // 	print '<pre>'; 
 		// print_r($p);
 		// print '</pre>';
@@ -624,39 +608,93 @@
 						<div class="col-xs-2">Heading</div>
 						<div class="col-xs-10"><input name="popular-heading" type="text" class="form-control" placeholder="Popular XXXXXX products" value="<?php if(isset($p['popular-heading'])) { echo htmlentities($p['popular-heading']); } ?>"></div>
 					</div>
-			
-			<?php 	for($i = 1; $i <= 3; $i++){ ?> 
+					
 					<div class="row">
 						<div class="col-xs-12"><hr></div>
 					</div>
 					<div class="row">
-						<div class="col-xs-2">P<?php echo $i ?> Name</div>
-						<div class="col-xs-10"><input type="text" class="form-control" name="popular-<?php echo $i ?>[text]" value="<?php if(isset($p['popular-'. $i]['text'])) { echo htmlentities($p['popular-' . $i]['text']); } ?>"></div>
+						<div class="col-xs-2">P1 Name</div>
+						<div class="col-xs-10"><input type="text" class="form-control" name="popular-1[text]" value="<?php if(isset($p['popular-1']['text'])) { echo htmlentities($p['popular-1']['text']); } ?>"></div>
 					</div>
-					<div class="row" id="p<?php echo $i ?>-img-row" style="display: none;">
-						<div class="col-xs-2">P<?php echo $i ?> Image</div>
-						<div class="col-xs-5"><input type="text" class="form-control" name="popular-<?php echo $i ?>[image]" value="<?php if(isset($p['popular-' . $i]['image'])) { echo htmlentities($p['popular-' . $i]['image']); } ?>"></div>
-						<div class="col-xs-5"><input type="file" class="form-control" name="popular-<?php echo $i ?>[image]"></div>
+					<div class="row" id="p1-img-row" style="display: none;">
+						<div class="col-xs-2">P1 Image</div>
+						<div class="col-xs-5"><input type="text" class="form-control" name="popular-1[image]" value="<?php if(isset($p['popular-1']['image'])) { echo htmlentities($p['popular-1']['image']); } ?>"></div>
+						<div class="col-xs-5"><input type="file" class="form-control" name="popular-1[image]"></div>
 					</div>
 					<div class="row" id="p1-url-row" style="display: none;">
-						<div class="col-xs-2">P<?php echo $i ?> URL</div>
-						<div class="col-xs-8"><input type="text" class="form-control" name="popular-<?php echo $i ?>[url]" placeholder="http://" value="<?php if(isset($p['popular-' .$i]['url'])) { echo htmlentities($p['popular-' . $i]['url']); } ?>"></div>
+						<div class="col-xs-2">P1 URL</div>
+						<div class="col-xs-8"><input type="text" class="form-control" name="popular-1[url]" placeholder="http://" value="<?php if(isset($p['popular-1']['url'])) { echo htmlentities($p['popular-1']['url']); } ?>"></div>
 						<div class="col-xs-2">
-							<select name="popular-<?php echo $i ?>[tab]" id="" class="form-control">
-								<option value="parent" <?php if(isset($p['popular-' . $i]['tab']) && $p['popular-' . $i]['tab'] == "parent") { echo 
+							<select name="popular-1[tab]" id="" class="form-control">
+								<option value="parent" <?php if(isset($p['popular-1']['tab']) && $p['popular-1']['tab'] == "parent") { echo 
 									"selected"; } ?>>Parent</parent>
-								<option value="new" <?php if(isset($p['popular-' . $i]['tab']) && $p['popular-' . $i]['tab'] == "new") { echo 
+								<option value="new" <?php if(isset($p['popular-1']['tab']) && $p['popular-1']['tab'] == "new") { echo 
 									"selected"; } ?>>New</parent>
 							</select>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-xs-2"></div>
-						<div class="col-xs-10"><button class="btn btn-xs btn-primary" id="p<?php echo $i ?>-toggle" type="button">Show/Hide</button></div>
+						<div class="col-xs-10"><button class="btn btn-xs btn-primary" id="p1-toggle" type="button">Show/Hide</button></div>
 					</div>
-			<?php 	} ?>
 
+					<div class="row">
+						<div class="col-xs-12"><hr></div>
+					</div>
+					<div class="row">
+						<div class="col-xs-2">P2 Name</div>
+						<div class="col-xs-10"><input type="text" class="form-control" name="popular-2[text]" value="<?php if(isset($p['popular-2']['text'])) { echo htmlentities($p['popular-2']['text']); } ?>"></div>
+					</div>
+					<div class="row" id="p2-img-row" style="display: none;">
+						<div class="col-xs-2">P2 Image</div>
+						<div class="col-xs-5"><input type="text" class="form-control" name="popular-2[image]" value="<?php if(isset($p['popular-2']['image'])) { echo htmlentities($p['popular-2']['image']); } ?>"></div>
+						<div class="col-xs-5"><input type="file" class="form-control" name="popular-2[image]"></div>
+					</div>
+					<div class="row" id="p2-url-row" style="display: none;">
+						<div class="col-xs-2">P2 URL</div>
+						<div class="col-xs-8"><input type="text" class="form-control" name="popular-2[url]" placeholder="http://" value="<?php if(isset($p['popular-2']['url'])) { echo htmlentities($p['popular-2']['url']); } ?>"></div>
+						<div class="col-xs-2">
+							<select name="popular-2[tab]" id="" class="form-control">
+								<option value="parent" <?php if(isset($p['popular-2']['tab']) && $p['popular-2']['tab'] == "parent") { echo 
+									"selected"; } ?>>Parent</parent>
+								<option value="new" <?php if(isset($p['popular-2']['tab']) && $p['popular-2']['tab'] == "new") { echo 
+									"selected"; } ?>>New</parent>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-2"></div>
+						<div class="col-xs-10"><button class="btn btn-xs btn-primary" id="p2-toggle" type="button">Show/Hide</button></div>
+					</div>
 					
+					<div class="row">
+						<div class="col-xs-12"><hr></div>
+					</div>
+					<div class="row">
+						<div class="col-xs-2">P3 Name</div>
+						<div class="col-xs-10"><input type="text" class="form-control" name="popular-3[text]" value="<?php if(isset($p['popular-3']['text'])) { echo htmlentities($p['popular-3']['text']); } ?>"></div>
+					</div>
+					<div class="row" id="p3-img-row" style="display: none;">
+						<div class="col-xs-2">P3 Image</div>
+						<div class="col-xs-5"><input type="text" class="form-control" name="popular-3[image]" value="<?php if(isset($p['popular-3']['image'])) { echo htmlentities($p['popular-3']['image']); } ?>"></div>
+						<div class="col-xs-5"><input type="file" class="form-control" name="popular-3[image]"></div>
+					</div>
+					<div class="row" id="p3-url-row" style="display: none;">
+						<div class="col-xs-2">P3 URL</div>
+						<div class="col-xs-8"><input type="text" class="form-control" name="popular-3[url]" placeholder="http://" value="<?php if(isset($p['popular-3']['url'])) { echo htmlentities($p['popular-3']['url']); } ?>"></div>
+						<div class="col-xs-2">
+							<select name="popular-3[tab]" id="" class="form-control">
+								<option value="parent" <?php if(isset($p['popular-3']['tab']) && $p['popular-3']['tab'] == "parent") { echo 
+									"selected"; } ?>>Parent</parent>
+								<option value="new" <?php if(isset($p['popular-3']['tab']) && $p['popular-3']['tab'] == "new") { echo 
+									"selected"; } ?>>New</parent>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-2"></div>
+						<div class="col-xs-10"><button class="btn btn-xs btn-primary" id="p3-toggle" type="button">Show/Hide</button></div>
+					</div>
 				</td>
 			</tr>
 			
@@ -717,8 +755,7 @@
 							<div class="col-xs-2"></div>
 							<div class="col-xs-10">
 								<div class="alert alert-warning">
-									<label><input type="checkbox" style="font-weight: normal;" name="featured[<?php echo $y - 1; ?>][delete]" value="1"> Delete Feature</label>
-									<input type="hidden" name="featured[<?php echo $y - 1; ?>][order]" value="">  |  Move Up  |  Move Down
+									<label><input type="checkbox" style="font-weight: normal;"  name="featured[<?php echo $y - 1; ?>][delete]" value="1"> Delete Feature</label>  |  Move Up  |  Move Down
 								</div>
 								
 							</div>
@@ -767,45 +804,72 @@
 			<tr>
 				<td align="right"><strong>Pods</strong></td>
 				<td>
-			<?php 	foreach($sides as $s){ ?>
-
 					<div class="row">
-						<div class="col-xs-2"><?php echo ucfirst($s); ?> Name</div>
-						<div class="col-xs-5"><input name="pod-<?php echo $s ?>[name]" type="text" value="<?php if(isset($p['pod-' . $s]['name']))  { echo $p['pod-' . $s]['name']; } ?>" class="form-control"></div>
+						<div class="col-xs-2">Left Name</div>
+						<div class="col-xs-5"><input name="pod-left[name]" type="text" value="<?php if(isset($p['pod-left']['name']))  { echo $p['pod-left']['name']; } ?>" class="form-control"></div>
 					</div>
 					<div class="row">
-						<div class="col-xs-2"><?php echo ucfirst($s); ?> Image</div>
+						<div class="col-xs-2">Left Image</div>
 						<div class="col-xs-10">
 							<div class="row">
 								<div class="col-xs-6">
-									<input name="pod-<?php echo $s ?>[image]" type="text" value="<?php if(isset($p['pod-' . $s]['image']))  { echo $p['pod-' . $s]['image']; } ?>" class="form-control">
+									<input name="pod-left[image]" type="text" value="<?php if(isset($p['pod-left']['image']))  { echo $p['pod-left']['image']; } ?>" class="form-control">
 								</div>
 								<div class="col-xs-6">
-									<input name="pod-<?php echo $s ?>[image]" type="file" value="" class="form-control">
+									<input name="pod-left[image]" type="file" value="" class="form-control">
 								</div>
 							</div>
 						</div>
 
 					</div>
 					<div class="row">
-						<div class="col-xs-2"><?php echo ucfirst($s); ?> URL</div>
+						<div class="col-xs-2">Left URL</div>
 						<div class="col-xs-8">
-							<input name="pod-<?php echo $s ?>[url]" type="text" class="form-control" value="<?php if(isset($p['pod-' . $s]['url'])) { echo htmlentities($p['pod-' . $s]['url']); } ?>" placeholder="http://">
+							<input name="pod-left[url]" type="text" class="form-control" value="<?php if(isset($p['pod-left']['url'])) { echo htmlentities($p['pod-left']['url']); } ?>" placeholder="http://">
 						</div>
 						<div class="col-xs-2">
-							<select name="pod-<?php echo $s ?>[tab]" id="" class="form-control">
-								<option value="parent" <?php if(isset($p['pod-' . $s]['tab']) && $p['pod-' . $s]['tab'] == "parent") { echo 
+							<select name="pod-left[tab]" id="" class="form-control">
+								<option value="parent" <?php if(isset($p['pod-left']['tab']) && $p['pod-left']['tab'] == "parent") { echo 
 									"selected"; } ?>>Parent</parent>
-								<option value="new" <?php if(isset($p['pod-' . $s]['tab']) && $p['pod-' . $s]['tab'] == "new") { echo 
+								<option value="new" <?php if(isset($p['pod-left']['tab']) && $p['pod-left']['tab'] == "new") { echo 
 									"selected"; } ?>>New</parent>
 							</select>
 						</div>						
 					</div>
 					
-					
-			<?php 		if($s == "left"){ echo "<hr>"; }
-					}	 ?>	
-					
+					<hr>
+					<div class="row">
+						<div class="col-xs-2">Right Name</div>
+						<div class="col-xs-5"><input name="pod-right[name]" type="text" value="<?php if(isset($p['pod-right']['name']))  { echo $p['pod-right']['name']; } ?>" class="form-control"></div>
+					</div>
+					<div class="row">
+						<div class="col-xs-2">Right Image</div>
+						<div class="col-xs-10">
+							<div class="row">
+								<div class="col-xs-6">
+									<input name="pod-right[image]" type="text"  value="<?php if(isset($p['pod-right']['image']))  { echo $p['pod-right']['image']; } ?>" class="form-control">
+								</div>
+								<div class="col-xs-6">
+									<input name="pod-right[image]" type="file" value="" class="form-control">
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="row">
+						<div class="col-xs-2">Right URL</div>
+						<div class="col-xs-8">
+							<input name="pod-right[url]" type="text" class="form-control" value="<?php if(isset($p['pod-right']['url'])) { echo htmlentities($p['pod-right']['url']); } ?>" placeholder="http://">
+						</div>
+						<div class="col-xs-2">
+							<select name="pod-right[tab]" id="" class="form-control">
+								<option value="parent" <?php if(isset($p['pod-right']['tab']) && $p['pod-right']['tab'] == "parent") { echo 
+									"selected"; } ?>>Parent</parent>
+								<option value="new" <?php if(isset($p['pod-right']['tab']) && $p['pod-right']['tab'] == "new") { echo 
+									"selected"; } ?>>New</parent>
+							</select>
+						</div>						
+					</div>
 				</td>
 			</tr>
 
@@ -829,13 +893,7 @@
 							Left - Items
 						</div>
 						<div class="col-xs-10">
-							<textarea  name="resources-left[items]" class="form-control" rows="5">
-					<?php 	if(isset($p['resources-left']['items'])) {
-								foreach($p['resources-left']['items'] as $item){
-									echo trim(htmlentities($item));
-								}
-							} ?>
-							</textarea>
+							<textarea  name="resources-left[items]" class="form-control" rows="5"><?php if(isset($p['resources-left']['items'])) {echo htmlentities($p['resources-left']['items']);} ?></textarea>
 						</div>
 					</div>
 					<br>
@@ -852,13 +910,7 @@
 							Right - Items
 						</div>
 						<div class="col-xs-10">
-							<textarea  name="resources-right[items]" class="form-control" rows="5">
-							<?php 	if(isset($p['resources-right']['items'])) {
-								foreach($p['resources-right']['items'] as $item){
-									echo trim(htmlentities($item));
-								}
-							} ?>
-						</textarea>
+							<textarea  name="resources-right[items]" class="form-control" rows="5"><?php if(isset($p['resources-right']['items'])) {echo htmlentities($p['resources-right']['items']);} ?></textarea>
 						</div>
 					</div>
 					
