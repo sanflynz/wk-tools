@@ -20,6 +20,9 @@ Segmenter/
 Generator/pages/*
 
 # ignore files in Generator/pages directory and all subdirectories
+Generator/pdf-cover/*
+
+# ignore files in Generator/pages directory and all subdirectories
 Access/
 
 # ignore files in Generator/pages directory and all subdirectories
@@ -27,6 +30,12 @@ HTML Validator/
 
 # ignore files in Generator/pages directory and all subdirectories
 Crawler/
+
+# ignore files in Generator/pages directory and all subdirectories
+sitescan/
+
+# ignore files in Generator/pages directory and all subdirectories
+Spec Table Builder/
 
 # ignore test files
 test*.html

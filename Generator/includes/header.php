@@ -63,9 +63,10 @@
 							</ul>
 						</li>
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">LINKS <b class="caret"></b></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">TOOLS <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<li><a href="requestlinkgen.php">Request Link Generator</a></li>
+								<li><a href="pdfcoverimage.php">PDF Cover Images</a></li>
 							</ul>
 						</li>
 					</ul>

@@ -5,6 +5,16 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
+		<h3 class="panel-title">TBC</h3>
+	</div>
+	<div class="panel-body">
+		<li>Dependencies checked on index page</li>
+		<li>Require/Create folder 'files' -> for zip, html, txt, sql files</li>
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
 		<h3 class="panel-title">20171102</h3>
 	</div>
 	<div class="panel-body">
