@@ -76,18 +76,20 @@ foreach($sides as $s){
 	}
 }	?>
 
+
+
 <!-- #### PAGE CONTENT ####  -->
 <span id="version" data-type="Level 3" data-version="2" style="display: none;"></span>
 <br>
 <br>
-<table width="700" border="0" cellspacing="0" cellpadding="0" id="intro">
+<table width="700" border="0" cellspacing="0" cellpadding="0" id="intro" class="table-hdi">
     <tbody>
         <tr>
           <td width="230" valign="top">
             <img src="<?php if(isset($p['main-image'])){ echo $p['main-image']; } else { echo "/Uploads/image/level-3-main.jpg"; } ?>" width="230" alt="" style="margin-bottom: 20px;" />
           </td>
           <td width="17">&nbsp;</td>
-          <td width="453" valign="top">
+          <td width="453">
             <h2 style="padding-top: 0px; line-height: 110%"><?php echo $p['page-heading']; ?></h2>
             <p><?php echo nl2br($p['description']); ?></p>
             <br>
@@ -129,9 +131,12 @@ foreach($sides as $s){
         </tr>
     </tbody>
 </table>
-<?php } ?>
+<?php }
+else{
+  //echo "<hr style=\"border: 0; height: 1px; background-color: #ddd;\">";
+} ?>
 
-<table width="700" border="0" cellspacing="0" cellpadding="0" id="featured">
+<table width="700" border="0" cellspacing="0" cellpadding="0" id="featured" class="table-hdi-alternating">
   <tbody>
     <tr>
         <td colspan="5">
@@ -153,7 +158,7 @@ foreach($sides as $s){
       <td width="17" valign="top">&nbsp;</td>
       
     <?php 	} ?>  
-      <td colspan="3" align="left" valign="top">
+      <td colspan="3" align="left">
         <h3><a href="<?php if(isset($f['url']) && $f['url'] != ""){ echo $f['url']; } else { echo "#"; } ?>" <?php if(isset($f['url']) && $f['url'] != "" && $f['tab'] == "new"){ echo "target='_blank'"; } ?>><?php if(isset($f['image']) && $f['heading'] != ""){ echo $f['heading']; } else { echo "Featured Product Name"; } ?></a></h3>
         <p><?php if(isset($f['description']) && $f['description'] != ""){ echo nl2br($f['description']); } else { echo "Featured Product description"; } ?></p>
       </td>

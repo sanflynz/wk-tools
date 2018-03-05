@@ -8,10 +8,14 @@
 		elseif($_POST['country'] == "au"){
 			$link = "http://info.thermofisher.com.au/productrequest?";
 		}
-		$link .= "EnquiryType=" . rawurlencode($_POST['EnquiryType']);
-		$link .= "&ProductCode=" . rawurlencode($_POST['ProductCode']);
-		if(isset($_POST['email'])){
-			$link .= "&email=" . $_POST['email'];
+		$link .= "lt=" . rawurlencode($_POST['LeadType']);
+		$link .= "&pn=" . rawurlencode($_POST['ProductName']);
+		$link .= "&bu=" . rawurlencode($_POST['BusinessUnit']);
+		$link .= "&pt=" . rawurlencode($_POST['ProductType']);
+		
+
+		if(isset($_POST['CampaignId']) && $_POST['CampaignId'] != ""){
+			$link .= "&cid=" . $_POST['CampaignId'];
 		}
 
 		
@@ -22,9 +26,17 @@
 <h1>Request Link Generator</h1>
 <br>
 Generates the link to the AU or NZ basic "Request" form.  Anything more complex will require a custom form.<br>
-Unless otherwise specified will send request to NZinfo@thermofisher.com or AUinfo@thermofisher.com.<br>
-<a href="https://ap4.salesforce.com/00O6F00000B3nTF" target="_blank">See submissions to Case Queue email addresses here</a><br>
+Requests are sent to Salesforce via the leads module.  If no campaign is selected they will be added to campaign "MKT-WEB-Dynamic Lead Form"<br>
+<a href="https://ap4.salesforce.com/00O6F00000B3nTF" target="_blank">See submissions to leads module here</a><br>
 <br>
+<?php 	if(isset($link)){ ?>
+<div class="alert alert-success">
+	<h4>Generated Link:</h4>
+	<a href="<?php echo $link; ?>" target="_blank"><?php echo $link; ?></a>
+</div>
+<br>			
+<?php	} ?>
+
 <form method="post" role="form">
 	
 <table class="table" style="width: 50%">
@@ -39,34 +51,60 @@ Unless otherwise specified will send request to NZinfo@thermofisher.com or AUinf
 		</td>
 	</tr>
 	<tr>
-		<td align="right"><strong>Enquiry Type</strong></td>
+		<td align="right"><strong>Campaign ID</strong></td>
+		<td><input type="text" name="CampaignId" class="form-control" value="<?php if(isset($link)){ echo $_POST['CampaignId']; }  ?>"></td>
+	</tr>
+	<tr>
+		<td align="right"><strong>Product Type</strong></td>
 		<td>
-			<select name="EnquiryType" id="" class="form-control" required>
+			<select name="ProductType" id="ProductType" class="form-control" required>
 				<option value=""></option>
-				<option value="Request Information" <?php if(isset($link) && $_POST['EnquiryType'] == "Request Information"){ echo "selected"; }  ?>>Request Information</option>
-				<option value="Request Quote" <?php if(isset($link) && $_POST['EnquiryType'] == "Request Quote"){ echo "selected"; }  ?>>Request Quote</option>
-				<option value="Request Demo" <?php if(isset($link) && $_POST['EnquiryType'] == "Request Demo"){ echo "selected"; }  ?>>Request Demo</option>
+				<option value="Consumable" <?php if(isset($link) && $_POST['ProductType'] == "Consumable"){ echo "selected"; }  ?>>Consumable</option>
+				<option value="Reagent" <?php if(isset($link) && $_POST['ProductType'] == "Reagent"){ echo "selected"; }  ?>>Reagent</option>
+				<option value="Equipment" <?php if(isset($link) && $_POST['ProductType'] == "Equipment"){ echo "selected"; }  ?>>Equipment</option>
 			</select>
 		</td>
 	</tr>
 	<tr>
-		<td align="right"><strong>Product Code</strong></td>
-		<td><input type="text" name="ProductCode" class="form-control" required value="<?php if(isset($link)){ echo $_POST['ProductCode']; }  ?>"></td>
+		<td align="right"><strong>Business Unit</strong></td>
+		<td>
+			<select name="BusinessUnit" id="BusinessUnit" class="form-control">
+				<option value=""></option>
+				<option value="SCI" <?php if(isset($link) && $_POST['BusinessUnit'] == "SCI"){ echo "selected"; }  ?>>SCI</option>
+				<option value="HTC" <?php if(isset($link) && $_POST['BusinessUnit'] == "HTC"){ echo "selected"; }  ?>>HTC</option>
+				<option value="EIP" <?php if(isset($link) && $_POST['BusinessUnit'] == "EIP"){ echo "selected"; }  ?>>EIP</option>
+				<option value="LSG" <?php if(isset($link) && $_POST['BusinessUnit'] == "LSG"){ echo "selected"; }  ?>>LSG</option>
+			</select>
+		</td>
 	</tr>
 	<tr>
-		<td align="right"><strong>Email To<br></strong><span class="font-size: 8px;">(optional)</span></td>
-		<td><input type="email" name="email" class="form-control" id="" value="<?php if(isset($_POST['email'])){ echo $_POST['email']; }  ?>"></td>
+		<td align="right"><strong>Lead Type</strong></td>
+		<td>
+			<select name="LeadType" id="" class="form-control" required>
+				<option value=""></option>
+				<option value="Sales Request" <?php if(isset($link) && $_POST['LeadType'] == "Sales Request"){ echo "selected"; }  ?>>Request Information</option>
+				<option value="Quote Request" <?php if(isset($link) && $_POST['LeadType'] == "Quote Request"){ echo "selected"; }  ?>>Request Quote</option>
+				<option value="Demo Request" <?php if(isset($link) && $_POST['LeadType'] == "Demo Request"){ echo "selected"; }  ?>>Request Demo</option>
+				<option value="Sample Request" <?php if(isset($link) && $_POST['LeadType'] == "Sample Request"){ echo "selected"; }  ?>>Request Demo</option>
+			</select>
+		</td>
 	</tr>
+	<tr>
+		<td align="right"><strong>Product Name</strong></td>
+		<td><input type="text" name="ProductName" class="form-control" required value="<?php if(isset($link)){ echo $_POST['ProductName']; }  ?>"></td>
+	</tr>
+	
+	
+	
 	<tr>
 		<td></td>
 		<td><input type="submit" name="submit" value="Generate Link" class="btn btn-success"></td>
 	</tr>
 </table>
 </form>
-<?php 	if(isset($link)){ ?>
-			<h4>Generated Link:</h4>
-			<a href="<?php echo $link; ?>" target="_blank"><?php echo $link; ?></a>
-<?php	} ?>
+
+<br>
+<br>
 
 
 

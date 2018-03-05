@@ -96,7 +96,8 @@
 				$file['type'] = $_FILES['featured']['type'][$i]['image'];
 				$file['error'] = $_FILES['featured']['error'][$i]['image'];
 				$file['size'] = $_FILES['featured']['size'][$i]['image'];
-
+				$file['order'] = $i;
+ 
 				$msg = upImage($file, $target_dir);
 				$fileName = substr($target_dir,8) . $file['name'];
 				
@@ -158,13 +159,13 @@
 		}
 
 		// CONCATENATE RESOURCES/SUPPORT/RELATED
-		if($p['resources-left']['heading'] || $p['resources-left']['item']){
+		if((isset($p['resources-left']['heading']) && $p['resources-left']['heading']) || (isset($p['resources-left']['item']) && $p['resources-left']['item'])){
 			$p['resources-left'] = "[HEADING]" . $p['resources-left']['heading'] . "[ITEMS]" . $p['resources-left']['items'];
 		}
 		else{
 			$p['resources-left'] = "";
 		}
-		if($p['resources-right']['heading'] || $p['resources-right']['item']){
+		if((isset($p['resources-right']['heading']) && $p['resources-right']['heading']) || (isset($p['resources-right']['item']) && $p['resources-right']['item'])){
 			$p['resources-right'] = "[HEADING]" . $p['resources-right']['heading'] . "[ITEMS]" . $p['resources-right']['items'];
 		}
 		else{

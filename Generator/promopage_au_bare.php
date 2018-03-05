@@ -99,6 +99,7 @@ div.nav-width {
 .resources div {
 	box-sizing: content-box;
 	display: inline-block;
+	vertical-align: top;
 }
 .resources-1-col div {
 	width: 100%;
@@ -279,10 +280,10 @@ div.nav-width {
 					foreach($cells as $c){	
 						$style = "";				
 						if(trim($h[0]) == "Item Code" && $i == "0"){
-							$c = "<a href=\"" . $sURL . $c . "#gsc.tab=0&gsc.q=" . $c . "\">" . trim($c) . "</a>";
+							$c = "<a href=\"" . $sURL . $c . "#gsc.tab=0&gsc.q=" . trim($c) . "\" onClick=\"_gaq.push(['_trackEvent', 'Product Search Link', 'Item Code', '" . $c . "']);\">" . trim($c) . "</a>";
 						}
 						if(trim($h[0]) == "Item Code" && trim($h[1]) == "Description" && $i == "1"){
-							$c = "<a href=\"" . $sURL . $cells[0] . "#gsc.tab=0&gsc.q=" . $cells[0] . "\">" . trim($c) . "</a>";
+							$c = "<a href=\"" . $sURL . $cells[0] . "#gsc.tab=0&gsc.q=" . $cells[0] . "\"  onClick=\"_gaq.push(['_trackEvent', 'Product Search Link', 'Item Code', '" . trim($cells[0]) . "']);\">" . trim($c) . "</a>";
 						}
 						if((preg_match('/Unit/i', $h[$i]) || preg_match('/Size/i', $h[$i])) && $cells[$i] == $c){
 							$style .= "text-align: center;";
@@ -293,7 +294,7 @@ div.nav-width {
 						}
 						if(preg_match('/BUY./', $c)){
 							$buy = explode('|',$c);
-							$c = "<a href='" . $gURL . $buy[1] . "' class='btn btn-commerce btn-mini' target='_blank'>Login to buy</a>";
+							$c = "<a href=\"" . $gURL . $buy[1] . "\" class=\"btn btn-commerce btn-mini\" target=\"_blank\" onClick=\"_gaq.push(['_trackEvent', 'Product Buy Link', 'Item Code', '" . trim($c) . "']);\">Login to buy</a>";
 							$style .= "text-align: center;";
 							
 						}
@@ -332,7 +333,7 @@ div.nav-width {
 			foreach($resources as $res){
 				$parts = explode("|",$res);
 				// 0 = text, 1 = URL, 2 = tab (new or parent), OPTIONAL{ 3 = Event Action, 4 = Event Label } ?>
-		<li ><?php if(isset($parts[5])){ echo "<i class='" . $parts[5] . "'></i>&nbsp;&nbsp;"; } ?><a href="<?php echo $parts[1]; ?>" <?php if(preg_match('/new/',$parts[2])){ echo "target='_blank' "; } if(isset($parts[3])){ echo "onClick=\"_gaq.push(['_trackEvent', 'Promo Page', '" . $parts[3] . "', '" . $parts[4] . "']);\""; }?> ><?php echo $parts[0]; ?></a></li>
+		<li ><?php if(isset($parts[5])){ echo "<i class='" . $parts[5] . "'></i>&nbsp;&nbsp;"; } ?><a href="<?php echo $parts[1]; ?>" <?php if(preg_match('/new/',$parts[2])){ echo "target='_blank' "; } if(isset($parts[3])){ echo "onClick=\"_gaq.push(['_trackEvent', 'Request Link', '" . $parts[3] . "', '" . $parts[4] . "']);\""; }?> ><?php echo $parts[0]; ?></a></li>
 <?php		} 
 			echo "\t</ul>\n";
 			echo "\t</div>\n";
@@ -343,7 +344,7 @@ div.nav-width {
 			echo "\t<ul>\n";
 			foreach($related as $rel){
 				$parts = explode("|",$rel); ?>
-			<li style="margin-bottom:10px;"><?php if(isset($parts[5])){ echo "<i class='" . $parts[5] . "'></i>&nbsp;&nbsp;"; } ?><a href="<?php echo $parts[1]; ?>" <?php if(preg_match('/new/',$parts[2])){ echo "target='_blank'"; } if(isset($parts[3])){ echo "onClick=\"_gaq.push(['_trackEvent', 'Promo Page', '" . $parts[3] . "', '" . $parts[4] . "']);\""; } ?> ><?php echo $parts[0]; ?></a></li>
+			<li style="margin-bottom:10px;"><?php if(isset($parts[5])){ echo "<i class='" . $parts[5] . "'></i>&nbsp;&nbsp;"; } ?><a href="<?php echo $parts[1]; ?>" <?php if(preg_match('/new/',$parts[2])){ echo "target='_blank'"; } if(isset($parts[3])){ echo "onClick=\"_gaq.push(['_trackEvent', 'Request Link', '" . $parts[3] . "', '" . $parts[4] . "']);\""; } ?> ><?php echo $parts[0]; ?></a></li>
 <?php		}  
 			echo "\t</ul>\n";
 			echo "\t</div>\n";
