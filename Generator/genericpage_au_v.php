@@ -28,9 +28,9 @@ include ("genericpage_au_bare.php");
         <tr valign="bottom">
             <td height="20">
             	<br><br><br><br>
-            	<a href="genericpage_e.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce">Edit</a>
-            	<a href="genericpage_i.php" class="btn btn-commerce">List</a>
-            	<a href="genericpage_export.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce">Export</a>
+            	<a href="genericpage_e.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce local">Edit</a>
+            	<a href="genericpage_i.php" class="btn btn-commerce local">List</a>
+            	<a href="genericpage_export.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce local">Export</a>
             </td>
         </tr>
   </tbody>

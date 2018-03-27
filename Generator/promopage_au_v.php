@@ -28,10 +28,9 @@ include ("promopage_au_bare.php");
         <tr valign="bottom">
             <td height="20">
             	<br><br><br><br>
-            	<a href="promopage_e.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce">Edit</a>
-            	<a href="promopage_i.php" class="btn btn-commerce">List</a>
-            	<a href="promopage_export.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce">Export</a>
-                <a href="genericpage_au_v.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce">View as generic child</a>
+            	<a href="promopage_e.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce local">Edit</a>
+            	<a href="promopage_i.php" class="btn btn-commerce local">List</a>
+            	<a href="promopage_export.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce local">Export</a>
             </td>
         </tr>
   </tbody>
