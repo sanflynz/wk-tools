@@ -25,9 +25,66 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-4">
+	<div class="col-md-12">
 		<br>
-		<a href="l3page_e.php" class="btn btn-primary">New L3 Page</a>
+		<a href="l3page_e.php" class="btn btn-primary">New L3 Page</a>&nbsp;
+		<button class="btn btn-warning" type="button" id="import-old-toggle">Import from old style page</button> <br>
+		<div id="import-old-container" style="display: none;">
+			
+			<form action="l3page_e.php?import=old" method="post" accept-charset="utf-8">
+				<br>
+				<div class="input-group">
+			      	<input type="text" name="url" class="form-control" placeholder="Page URL..." id="import-old-url">
+			      		<span class="input-group-btn">
+			        		<button class="btn btn-success" type="submit" name="import-old" id="import-old-button">Go!</button>
+			      		</span>
+			    </div>
+			    <br>
+			    <div class="import-settings">
+			    	<h4>Settings</h4>
+			    	<div class="row">
+			    		<div class="col-md-2">
+			    			<strong>HDI</strong>
+			    			<input type="text" name="hdi" class="form-control" id="" placeholder="0" value="0">
+			    		</div>
+			    		<div class="col-md-2">
+			    			<strong>Featured / Gateway</strong>
+							<input type="text" name="featured-gateway" class="form-control" placeholder="1" value="1">
+							
+			    		</div>
+			    		<div class="col-md-2">
+			    			<div class="form-group">
+							    <label for="">Category lists</label>
+							    <input type="text" name="category-lists" class="form-control" placeholder="3" value="3">
+							 </div>
+			    		</div>
+			    	
+			    		<div class="col-md-2">
+			    			<div class="form-group">
+							    <label for="">Videos</label>
+							    <input type="text" name="videos" class="form-control" id="" placeholder="4" value="4">
+							 </div>
+			    		</div>
+			    	
+			    		<div class="col-md-2">
+			    			<div class="form-group">
+							    <label for="">Embedded promos</label>
+							    <input type="text" name="embedded-promos" class="form-control" id="5" placeholder="5" value="5">
+							 </div>
+			    		</div>
+			    		<div class="col-md-2">
+			    			<div class="form-group">
+							    <label for="">Resources</label>
+							    <input type="text" name="resources" class="form-control" id="" placeholder="6" value="6">
+							 </div>
+			    		</div>
+			    	</div>
+			    	<div class="row">
+			    		<div class="col-md-12">(NA = not included, update following valued)</div>
+			    	</div>
+			    </div>
+		    </form>
+		</div>
 	</div>
 </div>
 

@@ -1,54 +1,41 @@
 </span></div>
+<?php
+
+// Try to add relative links to full path.
 
 
-<script src="http://www.thermofisher.com.au/scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
-<script>
-  // make relative links full path (except when image exists locally)
-  $(document).ready(function(){
-    var country = $('#country').val();
-    var baseURL;
-    var img;
-    if(country == "Australia"){
-      baseURL = "http://www.thermofisher.com.au";
-    }
-    else if(country == "New Zealand"){
-      baseURL = "http://www.thermofisher.co.nz";
-    }
-    function imageExists(url, callback) {
-      var img = new Image();
-      img.onload = function() { callback(true); };
-      img.onerror = function() { callback(false); };
-      img.src = url;
-    }
-    $("#PageContent img").each(function(){
-      var img = $(this);
-      var img_src = img.attr('src');
-      
-      imageExists(img_src, function(exists) {
-        
-        if(exists == false){
-          
-          if (img_src && !img_src.match(/^http([s]?):\/\/.*/)) {
-            img.attr('src', baseURL + img_src);
-            console.log(img.attr('src'));
-          }
-        }
-     
-      });
-      
-    });
 
-    $("#PageContent a").each(function(){
-      var link = $(this).attr('href');
-      if (link && !link.match(/^http([s]?):\/\/.*/)) {
-        if(!$(this).hasClass('local')){
-          $(this).attr('href', baseURL + link);
-        }
-        
-      }
-    });
-  });
-</script>
+
+
+
+
+
+
+// include_once('../__vendor/simple_html_dom.php');
+// $html = new simple_html_dom();
+// $html->load_file($url);
+
+// if($html->find('#PageContent',0)){
+//   $country = $p['country'];
+//   if($country == "Australia"){
+//     $preURL = "http://www.thermofisher.com.au";
+//   }
+//   if($country == "New Zealand"){
+//     $preURL = "http://www.thermofisher.co.nz";
+//   }
+//   echo $preURL;
+//   $c = $html->find('#PageContent',0);
+
+//   // find all images
+//   $imgs = $c->find('img');
+
+// }
+
+
+
+
+
+?>
 
 
 
@@ -206,7 +193,14 @@
 
 <script src="http://www.thermofisher.com.au/scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
 
-
+<script type="text/javascript">
+$(document).ready(function(){
+  alert("Stuff");
+    console.log("IMAGE: doing stuff");
+    $("#PageContent").find('img', function(){
+      console.log("IMAGE: " . $(this).attr('src');
+    });
+</script>
  
 	
 <script type="text/javascript">

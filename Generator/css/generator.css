@@ -1,0 +1,38 @@
+.table-edit-components tr td {
+	border-top: 0px !important;
+}
+.table-edit-components tr td:first-child {
+	text-align: right;
+	width: 150px;
+	font-weight: bold;
+}
+.row {
+	margin: 5px 0px;
+}
+
+.section-heading {
+	box-sizing: border-box;
+	display: block;
+	width: 100%;
+	
+	background-color: #f3f3f3;
+	border-top: 1px solid red;
+	margin: 10px 0px;
+
+}
+.section-heading h4 {
+	display: inline-block;
+	margin: 0;
+	padding: 10px 10px 10px 10px;
+}
+.section-heading div {
+	box-sizing: border-box;
+	display: inline-block;
+	float: right;
+	padding-top: 2px;
+	padding-right: 10px;
+}
+
+.input-group {
+	margin-bottom: 5px; !important;
+}

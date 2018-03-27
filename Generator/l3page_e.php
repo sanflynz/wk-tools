@@ -1,63 +1,61 @@
 <?php
 	include("includes/db.php");
+	include("includes/sitefunctions.php");
+	include('../__classes/UploadFile.php');
+
+	$images = "../../../Uploads/image/";
+	$imagesRelative = "/Uploads/image/";
 	//define ('SITE_ROOT', realpath(dirname(__FILE__)));
-	//
-	$error = "";
-	$success = "";
+	
+	$error = false;
+	//$success = "";
 	$x = 1;
 
-	if($_POST){
+	if(isset($_POST['import-old'])){
+		
+		$import = $_POST;
+		include("includes/l3-import-old.php");
+
+		$settings = array(
+						"hdi" => $import['hdi'],
+						"featured-gateway" => $import['featured-gateway'],
+						"category-lists" => $import['category-lists'],
+						"videos" => $import['videos'],
+						"embedded-promos" => $import['embedded-promos'],
+						"resources" => $import['resources']
+					);
+		
+		$p = import_old_page($import['url'], $settings);
+
+		// print '<pre>'; 
+		// print_r($p);
+		// print '</pre>';
+
+		// number of Features
+		$x = count($p['featured']);
+
+		setFlash("info", "Page imported from:<br><a href='" . $import['url'] . "' target='_blank'>" . $import['url'] . "</a>");
+	}
+
+	if($_POST && !isset($_POST['import-old'])){
 
 		 $fieldNames = "country,name,main-image,page-heading,description,popular-heading,popular-1,popular-2,popular-3,featured-heading,videos,pod-left,pod-right,resources-left,resources-right,last_modified";
 
 		 $fields = "";
 		 $values = "";
 
-		$fFieldNames = "l3_id,heading,description,image,url,tab";
+		$fFieldNames = "l3_id,heading,description,image,url,tab,order";
 		$fFields = "";
 		$fValues = "";	
 
 		$p = $_POST;
 		$p['last_modified'] = date("Y-m-d H:i:s");
 
-		
-		// IMAGES
-		function upImage($file,$location){
-			$error = "";
-			$success = "";
-		 	$target_file = $location . basename($file['name']);
-		 	if(getimagesize($file['tmp_name'])){
-		 		if(move_uploaded_file($file['tmp_name'], $target_file)){
-		 			$success .= "Image " . $file['name'] . " was uploaded<br><br>";
-		 			//$_POST['image'] = substr($target_file,8);
-
-		 		}
-		 		else{
-		 			$error .= "Image was not uploaded <a href=" . $location . ">" . $locations . "</a><br><br>";
-		 		}
-		 	}
-		 	else{
-		 		$error .= "File is not an image<br><br>";
-		 	}
-			return array("error" => $error, "success" => $success);
-		}
-
-		$target_dir = "../../../Uploads/image/";				
-		
-		// Upload the main image		
-		if($_FILES['main-image']['error'] == 0){
-			$msg = upImage($_FILES['main-image'], $target_dir);
-			$fileName = substr($target_dir,8) . $_FILES['main-image']['name'];
-			if($msg['success']){
-				$p['main-image'] = $fileName;
-				$success .= "Main Image " . $fileName . " uploaded successfully<br><br>";
-			}
-			elseif($msg['error']){
-				$error .= "Unable to upload image " . $fileName . ". " . $msg['error'] . "<br><br>";
-			}
-		}
-
-
+		// UPLOAD IMAGES
+		$up = new UploadFile($conn,$images);
+		if(!$up->upload($_FILES['main-image'])) { $error = true; } 
+		elseif($_FILES['main-image']['error'] != 4){ $p['main-image'] = $imagesRelative . $_FILES['main-image']['name']; }
+	
 		// upload dumb arrays ones
 		$dumbOnes = array("popular-1","popular-2","popular-3","pod-left","pod-right");
 		foreach($dumbOnes as $d){
@@ -69,18 +67,9 @@
 			$file['error'] = $_FILES[$d]['error']['image']; 	
 			$file['size'] = $_FILES[$d]['size']['image'];	
 
-			if($file['error'] == 0){
-				$msg = upImage($file, $target_dir);
-				$fileName = substr($target_dir,8) . $file['name'];
-				
-				if($msg['success']){
-					$p[$d]['image'] = $fileName;
-					$success .= $d . " image " . $fileName . " uploaded successfully<br><br>";
-				}
-				elseif($msg['error']){
-					$error .= "Unable to upload image " . $fileName . ". " . $msg['error'] . "<br><br>";
-				}
-			}
+			$up = new UploadFile($conn,$images);
+			if(!$up->upload($file)) { $error = true; } 
+			elseif($file['error'] != 4) { $p[$d]['image'] = $imagesRelative . $file['name']; }
 		}
 
 		// upload the dumb features
@@ -88,39 +77,22 @@
 
 		for($i = 0; $i < $fc; $i++){
 			$file = "";
+				
+			$file['name'] = $_FILES['featured']['name'][$i]['image'];
+			$file['tmp_name'] = $_FILES['featured']['tmp_name'][$i]['image'];
+			$file['type'] = $_FILES['featured']['type'][$i]['image'];
+			$file['error'] = $_FILES['featured']['error'][$i]['image'];
+			$file['size'] = $_FILES['featured']['size'][$i]['image'];
+			$file['order'] = $i;
 
-			if(isset($_FILES['featured']['name'][$i]['image']) && $_FILES['featured']['error'][$i]['image'] == 0){ // EDITED THIS LINE TO TRY AND SUPPRESS ERRORS ON CREATION
-				
-				$file['name'] = $_FILES['featured']['name'][$i]['image'];
-				$file['tmp_name'] = $_FILES['featured']['tmp_name'][$i]['image'];
-				$file['type'] = $_FILES['featured']['type'][$i]['image'];
-				$file['error'] = $_FILES['featured']['error'][$i]['image'];
-				$file['size'] = $_FILES['featured']['size'][$i]['image'];
-				$file['order'] = $i;
- 
-				$msg = upImage($file, $target_dir);
-				$fileName = substr($target_dir,8) . $file['name'];
-				
-				if($msg['success']){
-					$p['featured'][$i]['image'] = $fileName;
-					$success .= "Feature Image " . $fileName . " uploaded successfully<br><br>";
-				}
-				elseif($msg['error']){
-					$error .= "Unable to upload image " . $fileName . ". " . $msg['error'] . "<br><br>";
-				}
+			$up = new UploadFile($conn,$images);
+			if(!$up->upload($file)) { $error = true; } 
+			elseif($file['error'] != 4) {
+				$p['featured'][$i]['image'] = $imagesRelative . $file['name'];
 			}
 
 		}
 
-		
-		// print '<pre>'; 
-		// print_r($_FILES);
-		// print '</pre>';
-
-
-		
-		
-			
 
 		// CONCATENATE POPULAR
 		for($i = 1; $i < 4; $i++){
@@ -143,36 +115,28 @@
 		
 
 		// CONCATENATE PODS
-		if($p['pod-left']['name'] || $p['pod-left']['image'] || $p['pod-left']['url']){
-			$p['pod-left'] = $p['pod-left']['name'] . "|" . $p['pod-left']['image'] . "|" . $p['pod-left']['url'] . "|" . $p['pod-left']['tab'];
-		}
-		else{
-			$p['pod-left'] = "";
+		$sides = array("left", "right");
+	 	foreach($sides as $s){
+			if($p['pod-' . $s]['name'] || $p['pod-' . $s]['image'] || $p['pod-' . $s]['url']){
+				$p['pod-' . $s] = $p['pod-' . $s]['name'] . "|" . $p['pod-' . $s]['image'] . "|" . $p['pod-' . $s]['url'] . "|" . $p['pod-' . $s]['tab'];
+			}
+			else{
+				$p['pod-' . $s] = "";
 
-		}	
-
-		if($p['pod-right']['name'] || $p['pod-right']['image'] || $p['pod-right']['url']){
-			$p['pod-right'] = $p['pod-right']['name'] . "|" . $p['pod-right']['image'] . "|" . $p['pod-right']['url'] . "|" . $p['pod-right']['tab'];
-		}
-		else{
-			$p['pod-right'] = "";
+			}
 		}
 
 		// CONCATENATE RESOURCES/SUPPORT/RELATED
-		if((isset($p['resources-left']['heading']) && $p['resources-left']['heading']) || (isset($p['resources-left']['item']) && $p['resources-left']['item'])){
-			$p['resources-left'] = "[HEADING]" . $p['resources-left']['heading'] . "[ITEMS]" . $p['resources-left']['items'];
+		$sides = array("left", "right");
+	 	foreach($sides as $s){
+			if(!empty($p['resources-' . $s]['heading']) || !empty($p['resources-' . $s]['item'])){
+				$p['resources-' . $s] = "[HEADING]" . $p['resources-' . $s]['heading'] . "[ITEMS]" . $p['resources-' . $s]['items'];
+			}
+			else{
+				$p['resources-' . $s] = "";
+			}
 		}
-		else{
-			$p['resources-left'] = "";
-		}
-		if((isset($p['resources-right']['heading']) && $p['resources-right']['heading']) || (isset($p['resources-right']['item']) && $p['resources-right']['item'])){
-			$p['resources-right'] = "[HEADING]" . $p['resources-right']['heading'] . "[ITEMS]" . $p['resources-right']['items'];
-		}
-		else{
-			$p['resources-right'] = "";
-		}
-
-
+		
 
 		if($p['id'] == ""){  // CREATE NEW PAGE
 
@@ -187,10 +151,13 @@
 			//echo $sql;
 			$r = $conn->query($sql);
 			if($conn->error){
-				$error .= "Unable to add Level 3 Page: " . $conn->error . "<br><br>" . $sql . "<br><br>";
+				setFlash("danger", "Unable to add Level 3 Page: " . $conn->error . "<br><br>" . $sql);
+				$error = true;
+				//$error .= "Unable to add Level 3 Page: " . $conn->error . "<br><br>" . $sql . "<br><br>";
 			}
 			else{
 				$id = mysqli_insert_id($conn);
+				$p['id'] = $id;  // then will at least update rather than create new page if error further down... should also update all the id's to p['id']???
 				foreach($p['featured'] as $f){
 					$f['l3_id'] = $id;
 					$fFields = "";
@@ -202,14 +169,13 @@
 						$i++;						
 					}
 					$sql = "INSERT INTO webl3featured (" . $fFields . ") VALUES (" . $fValues . ")";
-					//echo $sql;
 					$r = $conn->query($sql);
 					if($conn->error){
-						$error .= "Unable to add feature " . $f['heading'] . ": " . $conn->error . "<br><br>" . $sql . "<br><br>";
+						setFlash("danger", "Unable to add feature " . $f['heading'] . ": " . $conn->error . "<br><br>" . $sql);
+						$error = true;
+						
 					}
 				}
-				// redirect
-				//header("location: l3page_au_v.php?id=" . $id);
 				
 			}
 			
@@ -230,20 +196,14 @@
 				$i++;
 			}
 			$sql = "UPDATE webl3pages SET $values WHERE id = " . $p['id'];
-			//echo $sql;
 			$r = $conn->query($sql);
 			if($conn->error){
-				$error .= "Unable to update Level 3 page: " . $conn->error . "<br><br>";
+				setFlash("danger", "Unable to update Level 3 page: " . $conn->error);
 			}	
 			else{
 
-				$success .= "Level 3 Page updated<br><br>";
-
 				// FEATURED ITEMS
 				$x = 0;
-				// print '<pre>'; 
-				// print_r($p['featured']);
-				// print '</pre>';
 				foreach($p['featured'] as $f){
 					$f['l3_id'] = $p['id'];
 					if($f['id'] == ""){
@@ -264,19 +224,13 @@
 						//echo $sql;
 						$r = $conn->query($sql);
 						if($conn->error){
-							$error .= "Unable to add feature " . $f['heading'] . ": " . $conn->error . "<br><br>" . $sql . "<br><br>";
-						}
-						else{
-							$success .= "Feature " . $f['heading'] . " added succesfully";
-
+							setFlash("danger", "Unable to add feature " . $f['heading'] . ": " . $conn->error . "<br><br>" . $sql);
+							$error = true;
 						}
 						$i++;
 
 					}
 					else{
-
-						// DELETE
-						
 
 						// UPDATE
 						$i = 1;
@@ -292,18 +246,16 @@
 						$sql = "UPDATE webl3featured SET " . $fValues . " WHERE id = " . $f['id'];
 						$r = $conn->query($sql);
 						if($conn->error){
-							$error .= "Unable to update feature " . $f['id'] . ": " . $f['heading'] . ": " . $conn->error . "<br><br>" . $sql . "<br><br>";
+							setFlash("danger", "Unable to update feature " . $f['id'] . ": " . $f['heading'] . ": " . $conn->error . "<br><br>" . $sql);
+							$error = "true";
 						}	
-						else{
-							$success .= "Feature " . $f['id'] . ": " . $f['heading'] . " updated successfully<br><br>";
-						}
 					}
 					$x++;
 				}
 			}
 		}
 		//echo "this is the end!";
-		if($error == ""){
+		if(!$error){
 			// redirect
 			header("location: l3page_au_v.php?id=" . $id);
 		}
@@ -322,7 +274,7 @@
 		 	$r = $conn->query($sql);
 		 	$p = $r->fetch_assoc();
 
-		 	$sql2 = "SELECT * FROM `webl3featured` f WHERE f.l3_id = " . $thisId . " ORDER BY f.id";
+		 	$sql2 = "SELECT * FROM `webl3featured` f WHERE f.l3_id = " . $thisId . " ORDER BY f.order,f.id";
 		 	$r2 = $conn->query($sql2);
 		 	
 		 	$x = 0;
@@ -357,13 +309,13 @@
 	 	}	 	
 	 	
 	 	// SPLIT VIDEOS
-	 	if($p['videos']){ 
+	 	if(isset($p['videos']) && $p['videos'] != ""){ 
 	 		$parts = explode("[ITEMS]",$p['videos']);
 	 		$items = explode("|", $parts[1]);
 	 		$p['videos'] = "";
 	 		$p['videos']['heading'] = substr($parts[0],9);
 	 		$p['videos']['left'] = $items[0];
-	 		$p['vidoes']['right'] = $items[1];
+	 		$p['videos']['right'] = $items[1];
 	 	}
 
 	 	// SPLIT PODS
@@ -381,7 +333,7 @@
 	 	
 	 	// SPLIT RESOURCES
 	 	foreach($sides as $s){
-	 		if($p['resources-' . $s]){
+	 		if(isset($p['resources-' . $s]) && $p['resources-' . $s] != ""){
 	 			$parts = explode("[ITEMS]",$p['resources-' . $s]);
 	 			$p['resources-' . $s] = ""; // resets the array?
 	 			$p['resources-' . $s]['heading'] = substr($parts[0],9);
@@ -391,15 +343,8 @@
 	 	}	
   	}
 
-  // 	print '<pre>'; 
-		// print_r($p);
-		// print '</pre>';
-
-	
-
 	include("includes/header.php");
 
-	//print_r($p);
 ?>
 
 <style>
@@ -509,23 +454,11 @@
 <div class="row">
 	<div class="col-xs-12">
 		<h1>Level 3 Page Add/Edit</h1>
-
-		<?php
-		if($error != ""){ ?>
-			
-			<div class="alert alert-danger">
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-				<strong>ERROR:</strong> <?php echo $error; ?>
-			</div>
-<?php	}
-		if($success != ""){ ?>
-			
-			<div class="alert alert-success">
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-				<strong>Success:</strong> <?php echo $success; ?>
-			</div>
-<?php	}
-	?>	
+		<br>
+		<div id="notifications">		
+			<?php flash(); 	?>	
+		</div>
+		
 	</div>
 </div>
 	
@@ -533,11 +466,11 @@
 
 <div class="row">
 	<div class="col-md-4">
-		<a href="https://www.thermofisher.com.au/show.aspx?page=/ContentAUS/Environmental-Industrial/Environmental-Monitoring-Safety/Gas-Monitoring/Ultra-Toxic/Ultra-Toxic-Gas-Monitors_Test.html" class="btn btn-default" target="_blank">Example</a><br>
+		<a href="http://www.thermofisher.com.au/show.aspx?page=/ContentAUS/StyleGuide/page-layouts.html#sub-category" class="btn btn-default" target="_blank">Example</a><br>
 		<br>
 	</div>
 </div>
-<form method="post" role="form" enctype="multipart/form-data">
+<form method="post" method="l3page_e.php" role="form" enctype="multipart/form-data">
 	<input type="hidden" name="id" value="<?php if(isset($p['id'])) {echo $p['id'];} ?>">
 	<div class="row">
 		<div class="col-xs-sm">
@@ -545,7 +478,7 @@
 			<tr>
 				<td width="250" align="right"><strong>Country</strong></td>
 				<td>
-					<select name="country" id="" class="form-control" required>
+					<select name="country" id="" class="form-control" required autocomplete="foo">
 						<option></option>
 						<option value="Australia" <?php if(isset($p['country']) && $p['country'] == "Australia") {echo " selected"; } ?> >Australia</option>
 						<option value="New Zealand" <?php if(isset($p['country']) && $p['country'] == "New Zealand") {echo " selected"; } ?>>New Zealand</option>
@@ -560,7 +493,9 @@
 			
 			<tr>
 				<td colspan="2">
-					<div></div>
+					<div class="section-heading">
+						<h4>hdi</h4>
+					</div>
 				</td>
 			</tr>
 			
@@ -598,7 +533,9 @@
 
 			<tr>
 				<td colspan="2">
-					<div></div>
+					<div class="section-heading">
+						<h4>featured-gateway</h4>
+					</div>
 				</td>
 			</tr>
 
@@ -613,92 +550,43 @@
 					<div class="row">
 						<div class="col-xs-12"><hr></div>
 					</div>
+		<?php	for($i = 1; $i <= 3; $i++){ ?>		
 					<div class="row">
-						<div class="col-xs-2">P1 Name</div>
-						<div class="col-xs-10"><input type="text" class="form-control" name="popular-1[text]" value="<?php if(isset($p['popular-1']['text'])) { echo htmlentities($p['popular-1']['text']); } ?>"></div>
+						<div class="col-xs-2">P<?=$i?> Name</div>
+						<div class="col-xs-10"><input type="text" class="form-control" name="popular-<?=$i?>[text]" value="<?php if(isset($p['popular-' . $i]['text'])) { echo htmlentities($p['popular-' . $i]['text']); } ?>"></div>
 					</div>
-					<div class="row" id="p1-img-row" style="display: none;">
-						<div class="col-xs-2">P1 Image</div>
-						<div class="col-xs-5"><input type="text" class="form-control" name="popular-1[image]" value="<?php if(isset($p['popular-1']['image'])) { echo htmlentities($p['popular-1']['image']); } ?>"></div>
-						<div class="col-xs-5"><input type="file" class="form-control" name="popular-1[image]"></div>
+					<div class="row" id="p<?=$i?>-img-row" style="display: none;">
+						<div class="col-xs-2">P<?=$i?> Image</div>
+						<div class="col-xs-5"><input type="text" class="form-control" name="popular-<?=$i?>[image]" value="<?php if(isset($p['popular-' . $i]['image'])) { echo htmlentities($p['popular-' . $i]['image']); } ?>"></div>
+						<div class="col-xs-5"><input type="file" class="form-control" name="popular-<?=$i?>[image]"></div>
 					</div>
-					<div class="row" id="p1-url-row" style="display: none;">
-						<div class="col-xs-2">P1 URL</div>
-						<div class="col-xs-8"><input type="text" class="form-control" name="popular-1[url]" placeholder="http://" value="<?php if(isset($p['popular-1']['url'])) { echo htmlentities($p['popular-1']['url']); } ?>"></div>
+					<div class="row" id="p<?=$i?>-url-row" style="display: none;">
+						<div class="col-xs-2">P<?=$i?> URL</div>
+						<div class="col-xs-8"><input type="text" class="form-control" name="popular-<?=$i?>[url]" placeholder="http://" value="<?php if(isset($p['popular-' . $i]['url'])) { echo htmlentities($p['popular-' . $i]['url']); } ?>"></div>
 						<div class="col-xs-2">
-							<select name="popular-1[tab]" id="" class="form-control">
-								<option value="parent" <?php if(isset($p['popular-1']['tab']) && $p['popular-1']['tab'] == "parent") { echo 
+							<select name="popular-<?=$i?>[tab]" id="" class="form-control">
+								<option value="parent" <?php if(isset($p['popular-' . $i]['tab']) && $p['popular-' .$i]['tab'] == "parent") { echo 
 									"selected"; } ?>>Parent</parent>
-								<option value="new" <?php if(isset($p['popular-1']['tab']) && $p['popular-1']['tab'] == "new") { echo 
+								<option value="new" <?php if(isset($p['popular-' . $i]['tab']) && $p['popular-' . $i]['tab'] == "new") { echo 
 									"selected"; } ?>>New</parent>
 							</select>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-xs-2"></div>
-						<div class="col-xs-10"><button class="btn btn-xs btn-primary" id="p1-toggle" type="button">Show/Hide</button></div>
+						<div class="col-xs-10"><button class="btn btn-xs btn-primary" id="p<?=$i?>-toggle" type="button">Show/Hide</button></div>
 					</div>
-
-					<div class="row">
-						<div class="col-xs-12"><hr></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-2">P2 Name</div>
-						<div class="col-xs-10"><input type="text" class="form-control" name="popular-2[text]" value="<?php if(isset($p['popular-2']['text'])) { echo htmlentities($p['popular-2']['text']); } ?>"></div>
-					</div>
-					<div class="row" id="p2-img-row" style="display: none;">
-						<div class="col-xs-2">P2 Image</div>
-						<div class="col-xs-5"><input type="text" class="form-control" name="popular-2[image]" value="<?php if(isset($p['popular-2']['image'])) { echo htmlentities($p['popular-2']['image']); } ?>"></div>
-						<div class="col-xs-5"><input type="file" class="form-control" name="popular-2[image]"></div>
-					</div>
-					<div class="row" id="p2-url-row" style="display: none;">
-						<div class="col-xs-2">P2 URL</div>
-						<div class="col-xs-8"><input type="text" class="form-control" name="popular-2[url]" placeholder="http://" value="<?php if(isset($p['popular-2']['url'])) { echo htmlentities($p['popular-2']['url']); } ?>"></div>
-						<div class="col-xs-2">
-							<select name="popular-2[tab]" id="" class="form-control">
-								<option value="parent" <?php if(isset($p['popular-2']['tab']) && $p['popular-2']['tab'] == "parent") { echo 
-									"selected"; } ?>>Parent</parent>
-								<option value="new" <?php if(isset($p['popular-2']['tab']) && $p['popular-2']['tab'] == "new") { echo 
-									"selected"; } ?>>New</parent>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-2"></div>
-						<div class="col-xs-10"><button class="btn btn-xs btn-primary" id="p2-toggle" type="button">Show/Hide</button></div>
-					</div>
+		<?php 	} ?>			
 					
-					<div class="row">
-						<div class="col-xs-12"><hr></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-2">P3 Name</div>
-						<div class="col-xs-10"><input type="text" class="form-control" name="popular-3[text]" value="<?php if(isset($p['popular-3']['text'])) { echo htmlentities($p['popular-3']['text']); } ?>"></div>
-					</div>
-					<div class="row" id="p3-img-row" style="display: none;">
-						<div class="col-xs-2">P3 Image</div>
-						<div class="col-xs-5"><input type="text" class="form-control" name="popular-3[image]" value="<?php if(isset($p['popular-3']['image'])) { echo htmlentities($p['popular-3']['image']); } ?>"></div>
-						<div class="col-xs-5"><input type="file" class="form-control" name="popular-3[image]"></div>
-					</div>
-					<div class="row" id="p3-url-row" style="display: none;">
-						<div class="col-xs-2">P3 URL</div>
-						<div class="col-xs-8"><input type="text" class="form-control" name="popular-3[url]" placeholder="http://" value="<?php if(isset($p['popular-3']['url'])) { echo htmlentities($p['popular-3']['url']); } ?>"></div>
-						<div class="col-xs-2">
-							<select name="popular-3[tab]" id="" class="form-control">
-								<option value="parent" <?php if(isset($p['popular-3']['tab']) && $p['popular-3']['tab'] == "parent") { echo 
-									"selected"; } ?>>Parent</parent>
-								<option value="new" <?php if(isset($p['popular-3']['tab']) && $p['popular-3']['tab'] == "new") { echo 
-									"selected"; } ?>>New</parent>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-2"></div>
-						<div class="col-xs-10"><button class="btn btn-xs btn-primary" id="p3-toggle" type="button">Show/Hide</button></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<div class="section-heading">
+						<h4>category-lists</h4>
 					</div>
 				</td>
 			</tr>
-			
 			<tr>
 				<td align="right">
 					<strong>Featured Products</strong><br>
@@ -708,61 +596,65 @@
 				<td>
 					<div id="features">
 						
-					
-						<div class="row">
-							<div class="col-xs-2">Heading</div>
-							<div class="col-xs-10"><input name="featured-heading" type="text" class="form-control"  placeholder="Featured XXXXXX products" value="<?php if(isset($p['featured-heading'])) { echo htmlentities($p['featured-heading']); } ?>"></div>
-						</div>
-						<span id="fCount" data-count="<?php echo $x + 1; ?>" style="display: none;"></span>
 						
-
-			<?php 		for($y = 1; $y <= $x; $y++){ ?>
-
-			
-
-						<div class="row">
-							<div class="col-xs-12"><hr></div>
-						</div>
-						
-						<div class="row">
-							<div class="col-xs-2">F<?php echo $y; ?> Heading</div>
-							<div class="col-xs-10">
-								<input type="hidden" name="featured[<?php echo $y - 1; ?>][id]" value="<?php if(isset($p['featured'][$y - 1]['id'])) { echo $p['featured'][$y - 1]['id']; } ?>">
-								<input type="text" class="form-control" name="featured[<?php echo $y - 1; ?>][heading]" value="<?php if(isset($p['featured'][$y - 1]['heading'])) { echo htmlentities($p['featured'][$y - 1]['heading']); } ?>"></div>
-						</div>
-						<div class="row">
-							<div class="col-xs-2">F<?php echo $y; ?> URL</div>
-							<div class="col-xs-8"><input type="text" class="form-control" name="featured[<?php echo $y - 1; ?>][url]" value="<?php if(isset($p['featured'][$y - 1]['url'])) { echo $p['featured'][$y - 1]['url']; } ?>">
+							<div class="row">
+								<div class="col-xs-2">Heading</div>
+								<div class="col-xs-10"><input name="featured-heading" type="text" class="form-control"  placeholder="Featured XXXXXX products" value="<?php if(isset($p['featured-heading'])) { echo htmlentities($p['featured-heading']); } ?>"></div>
 							</div>
-							<div class="col-xs-2">
-								<select id="" class="form-control" name="featured[<?php echo $y - 1; ?>][tab]">
-									<option value="parent" <?php if(isset($p['featured'][$y - 1]['tab']) && $p['featured'][$y - 1]['tab'] == "parent") { echo 
-									"selected"; } ?>>Parent</parent>
-								<option value="new" <?php if(isset($p['featured'][$y - 1]['tab']) && $p['featured'][$y - 1]['tab'] == "new") { echo 
-									"selected"; } ?>>New</parent>
-								</select>
+							<span id="fCount" data-count="<?php echo $x + 1; ?>" style="display: none;"></span>
+							
+
+				<?php 		for($y = 1; $y <= $x; $y++){ ?>
+
+						<div class="featured-category">
+							<div class="row">
+								<div class="col-xs-12"><hr></div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-2">F<?php echo $y; ?> Image</div>
-							<div class="col-xs-5"><input type="text" class="form-control" name="featured[<?php echo $y - 1; ?>][image]" value="<?php if(isset($p['featured'][$y - 1]['image'])) { echo $p['featured'][$y - 1]['image']; } ?>"></div>
-							<div class="col-xs-5"><input type="file" class="form-control" name="featured[<?php echo $y - 1; ?>][image]"></div>
-						</div>
-						<div class="row">
-							<div class="col-xs-2">F<?php echo $y; ?> Description</div>
-							<div class="col-xs-10"><textarea name="featured[<?php echo $y - 1; ?>][description]" id="" rows="5" class="form-control"><?php if(isset($p['featured'][$y - 1]['description'])) { echo htmlentities($p['featured'][$y - 1]['description']); } ?></textarea></div>
-						</div>
-						<div class="row">
-							<div class="col-xs-2"></div>
-							<div class="col-xs-10">
-								<div class="alert alert-warning">
-									<label><input type="checkbox" style="font-weight: normal;"  name="featured[<?php echo $y - 1; ?>][delete]" value="1"> Delete Feature</label>  |  Move Up  |  Move Down
+
+							
+							<div class="row">
+								<div class="col-xs-2">F<?php echo $y; ?> Heading</div>
+								<div class="col-xs-10">
+									<input type="hidden" name="featured[<?php echo $y - 1; ?>][id]" value="<?php if(isset($p['featured'][$y - 1]['id'])) { echo $p['featured'][$y - 1]['id']; } ?>" class="feature-id">
+									<input type="text" name="featured[<?php echo $y - 1; ?>][order]" value="<?php if(isset($p['featured'][$y - 1]['order'])) { echo $p['featured'][$y - 1]['order']; } else { echo $y; }?>" class="feature-order">
+									<input type="text" class="form-control" name="featured[<?php echo $y - 1; ?>][heading]" value="<?php if(isset($p['featured'][$y - 1]['heading'])) { echo htmlentities($p['featured'][$y - 1]['heading']); } ?>"></div>
+							</div>
+							<div class="row">
+								<div class="col-xs-2">F<?php echo $y; ?> URL</div>
+								<div class="col-xs-8"><input type="text" class="form-control" name="featured[<?php echo $y - 1; ?>][url]" value="<?php if(isset($p['featured'][$y - 1]['url'])) { echo $p['featured'][$y - 1]['url']; } ?>">
 								</div>
-								
+								<div class="col-xs-2">
+									<select id="" class="form-control" name="featured[<?php echo $y - 1; ?>][tab]">
+										<option value="parent" <?php if(isset($p['featured'][$y - 1]['tab']) && $p['featured'][$y - 1]['tab'] == "parent") { echo 
+										"selected"; } ?>>Parent</parent>
+									<option value="new" <?php if(isset($p['featured'][$y - 1]['tab']) && $p['featured'][$y - 1]['tab'] == "new") { echo 
+										"selected"; } ?>>New</parent>
+									</select>
+								</div>
 							</div>
+							<div class="row">
+								<div class="col-xs-2">F<?php echo $y; ?> Image</div>
+								<div class="col-xs-5"><input type="text" class="form-control" name="featured[<?php echo $y - 1; ?>][image]" value="<?php if(isset($p['featured'][$y - 1]['image'])) { echo $p['featured'][$y - 1]['image']; } ?>"></div>
+								<div class="col-xs-5"><input type="file" class="form-control" name="featured[<?php echo $y - 1; ?>][image]"></div>
+							</div>
+							<div class="row">
+								<div class="col-xs-2">F<?php echo $y; ?> Description</div>
+								<div class="col-xs-10"><textarea name="featured[<?php echo $y - 1; ?>][description]" id="" rows="5" class="form-control"><?php if(isset($p['featured'][$y - 1]['description'])) { echo htmlentities($p['featured'][$y - 1]['description']); } ?></textarea></div>
+							</div>
+							<div class="row">
+								<div class="col-xs-2"></div>
+								<div class="col-xs-10">
+									<div class="alert alert-warning">
+										<button type="button" class="btn btn-default btn-sm feature-delete" title="Delete"><i class="fa fa-trash"></i></button>
+										<button type="button" class="btn btn-default btn-sm feature-up <?php if($y == 1){ echo "disabled"; } ?>" title="Move up"><i class="fa fa-arrow-up"></i></button> 
+										<button type="button" class="btn btn-default btn-sm feature-down <?php if($y == $x){ echo "disabled"; } ?>" title="Move down"><i class="fa fa-arrow-down"></i></button>
+									</div>
+									
+								</div>
+							</div>
+							<br>
 						</div>
-						<br>
-		<?php				
+		<?php			
 					} ?>
 					</div>
 					<button type="button" class="btn btn-success" id="addFeature">+</button>
@@ -772,7 +664,9 @@
 
 			<tr>
 				<td colspan="2">
-					<div></div>
+					<div class="section-heading">
+						<h4>videos</h4>
+					</div>
 				</td>
 			</tr>
 
@@ -801,7 +695,13 @@
 					</div>
 				</td>
 			</tr>
-
+			<tr>
+				<td colspan="2">
+					<div class="section-heading">
+						<h4>embedded-promos</h4>
+					</div>
+				</td>
+			</tr>
 			<tr>
 				<td align="right"><strong>Pods</strong></td>
 				<td>
@@ -873,7 +773,13 @@
 					</div>
 				</td>
 			</tr>
-
+			<tr>
+				<td colspan="2">
+					<div class="section-heading">
+						<h4>Resources</h4>
+					</div>
+				</td>
+			</tr>
 			<tr>
 				<td align="right">
 					<strong>Resources/Support/Related</strong><br>

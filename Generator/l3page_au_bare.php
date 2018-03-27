@@ -8,7 +8,7 @@ $sql = "SELECT * FROM `webl3pages` p WHERE p.id = " . $_GET['id'];
 $r = $conn->query($sql);
 $p = $r->fetch_assoc();
 
-$sql = "SELECT * FROM `webl3featured` f WHERE f.l3_id = " . $_GET['id'] . " ORDER BY f.id";
+$sql = "SELECT * FROM `webl3featured` f WHERE f.l3_id = " . $_GET['id'] . " ORDER BY f.order,f.id";
 $r = $conn->query($sql);
 $x = 0;
 while($row = $r->fetch_assoc()){
@@ -77,205 +77,154 @@ foreach($sides as $s){
 }	?>
 
 
+<link rel="stylesheet" type="text/css" href="http://uat.thermofisher.com.au/css/level-page-updates.css">
+<!-- CONTENT BEGINS  -->
 
-<!-- #### PAGE CONTENT ####  -->
-<span id="version" data-type="Level 3" data-version="2" style="display: none;"></span>
-<br>
-<br>
-<table width="700" border="0" cellspacing="0" cellpadding="0" id="intro" class="table-hdi">
-    <tbody>
-        <tr>
-          <td width="230" valign="top">
-            <img src="<?php if(isset($p['main-image'])){ echo $p['main-image']; } else { echo "/Uploads/image/level-3-main.jpg"; } ?>" width="230" alt="" style="margin-bottom: 20px;" />
-          </td>
-          <td width="17">&nbsp;</td>
-          <td width="453">
-            <h2 style="padding-top: 0px; line-height: 110%"><?php echo $p['page-heading']; ?></h2>
-            <p><?php echo nl2br($p['description']); ?></p>
-            <br>
-          </td>
-        </tr>
-        
-    </tbody>
-</table>
-
-<?php if($p['popular-heading'] || $p['popular-1'] || $p['popular-2'] || $p['popular-3']) { ?>
-<br>
-<table width="700" border="0" cellspacing="0" cellpadding="0" bgcolor="#EEEEED" id="popular">
-    <tbody>
-        <tr>
-          <td width="21" height="46">&nbsp;</td>
-          <td height="46" colspan="3" valign="middle">
-            <h3><?php if(isset($p['popular-heading'])){ echo $p['popular-heading']; } else { echo "Popular XXXXXXXX products";} ?></h3>
-          </td>
-          <td height="46" colspan="3">&nbsp;</td>
-        </tr>
-        
-        <tr>        	
-          <td height="125">&nbsp;</td>
-<?php 	for($i = 1; $i < 4; $i++){ ?>          
-          <td width="208" align="center" valign="top">
-            <a href="<?php if(isset($p['popular-' . $i]['url'])){ echo $p['popular-' . $i]['url']; } else { echo "#";} ?>" <?php if(isset($p['popular-' . $i]['tab']) && $p['popular-' . $i]['tab'] == "new"){ echo "target='_blank'"; } ?> onClick="_gaq.push(['_trackEvent', 'Level 3 Page', 'Popular Product', '<?php if(isset($p['popular-' . $i]['text'])){ echo $p['popular-' . $i]['text']; } else { echo "Popular Product " . $i;} ?>']);">
-              <img src="<?php if(isset($p['popular-' . $i]['image']) && $p['popular-' . $i]['image'] != ""){ echo $p['popular-' . $i]['image']; } else { echo "/Uploads/image/popular-product.jpg";} ?>" width="208" height="125" alt="">
-            </a><br>
-            <br>
-            <a href="<?php if(isset($p['popular-' . $i]['url'])){ echo $p['popular-' . $i]['url']; } else { echo "#";} ?>" <?php if(isset($p['popular-' . $i]['tab']) && $p['popular-' . $i]['tab'] == "new"){ echo "target='_blank'"; } ?> onClick="_gaq.push(['_trackEvent', 'Level 3 Page', 'Popular Product', '<?php if(isset($p['popular-' . $i]['text'])){ echo $p['popular-' . $i]['text']; } else { echo "Popular Product " . $i;} ?>']);">
-            	<?php if(isset($p['popular-' . $i]['text'])){ echo $p['popular-' . $i]['text']; } else { echo "Popular Product " . $i;} ?>
-            </a>
-          </td>
-          <td width="17">&nbsp;</td>
-<?php 	} ?>          
-
-        <tr>
-            <td colspan="7">&nbsp;</td>            
-        </tr>
-    </tbody>
-</table>
-<?php }
-else{
-  //echo "<hr style=\"border: 0; height: 1px; background-color: #ddd;\">";
-} ?>
-
-<table width="700" border="0" cellspacing="0" cellpadding="0" id="featured" class="table-hdi-alternating">
-  <tbody>
+<div class="nav-width">
+  
+<table class="table-hdi">
     <tr>
-        <td colspan="5">
-          <h2><?php if(isset($p['featured-heading']) && $p['featured-heading'] != ""){ echo $p['featured-heading']; } else { echo "Featured XXXXXXXX products"; } ?></h2>
+        <td>
+            <img src="<?php if(isset($p['main-image'])){ echo $p['main-image']; } else { echo "http://via.placeholder.com/230x230"; } ?>" width="230" alt="<?php echo $p['page-heading']; ?>"/>
+        
+            <h1><?php echo $p['page-heading']; ?></h1>
+            <div>
+                <?php echo nl2br($p['description']); ?>
+            </div>
         </td>
     </tr>
+</table>
+
+
+<?php if($p['popular-heading'] || $p['popular-1'] || $p['popular-2'] || $p['popular-3']) { ?>
+
+<table class="table-featured-gateway">
+    <thead>
+        <tr>
+            <th colspan="3">
+                <h3><?php if(isset($p['popular-heading'])){ echo $p['popular-heading']; } else { echo "Popular XXXXXXXX products";} ?></h3>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+<?php   for($i = 1; $i < 4; $i++){ ?>        
+            <td>
+                <a href="<?php if(isset($p['popular-' . $i]['url'])){ echo $p['popular-' . $i]['url']; } else { echo "#";} ?>" <?php if(isset($p['popular-' . $i]['tab']) && $p['popular-' . $i]['tab'] == "new"){ echo "target='_blank'"; } ?> onclick="_gaq.push(['_trackEvent', 'Popular Product', 'Click', '<?php if(isset($p['popular-' . $i]['text'])){ echo $p['popular-' . $i]['text']; } else { echo "Popular Product " . $i;} ?>']);"><img src="<?php if(isset($p['popular-' . $i]['image']) && $p['popular-' . $i]['image'] != ""){ echo $p['popular-' . $i]['image']; } else { echo "http://via.placeholder.com/208x125";} ?>" width="208" height="125" alt="<?php if(isset($p['popular-' . $i]['text'])){ echo $p['popular-' . $i]['text']; } else { echo "Popular Product " . $i;} ?>"><br>
+                <?php if(isset($p['popular-' . $i]['text'])){ echo $p['popular-' . $i]['text']; } else { echo "Popular Product " . $i;} ?></a>
+            </td>
+<?php   } ?>            
+        </tr>        
+    </tbody>
+</table>
+
+<?php }
+else {
+    echo "<br>";
+} ?>
+
+<br>
+<h2><?php if(isset($p['featured-heading']) && $p['featured-heading'] != ""){ echo $p['featured-heading']; } else { echo "Featured XXXXXXXX products"; } ?></h2>
+
+
+<table class="table-hdi-alternating">
+  <tbody>
+<?php   $z = 1;
+        foreach($p['featured'] as $f){ ?>
     <tr>
-      <td colspan="5">&nbsp;</td>
-    </tr>
-<?php 	
-		$z = 1;
-		foreach($p['featured'] as $f){ ?>
-	
-	<tr>
-	<?php if($z % 2 != 0){ ?>	
-      <td width="230" valign="top">
-        <img src="<?php if(isset($f['image']) && $f['image'] != ""){ echo $f['image']; } else { echo "/Uploads/image/featured-product.jpg"; } ?>" width="230" height="160" style="border: 1px solid #d5d5d5" alt=""/>
-      </td>
-      <td width="17" valign="top">&nbsp;</td>
-      
-    <?php 	} ?>  
-      <td colspan="3" align="left">
-        <h3><a href="<?php if(isset($f['url']) && $f['url'] != ""){ echo $f['url']; } else { echo "#"; } ?>" <?php if(isset($f['url']) && $f['url'] != "" && $f['tab'] == "new"){ echo "target='_blank'"; } ?>><?php if(isset($f['image']) && $f['heading'] != ""){ echo $f['heading']; } else { echo "Featured Product Name"; } ?></a></h3>
-        <p><?php if(isset($f['description']) && $f['description'] != ""){ echo nl2br($f['description']); } else { echo "Featured Product description"; } ?></p>
-      </td>
-      <?php if($z % 2 == 0){ ?>	
-      <td width="17" valign="top">&nbsp;</td>
-      
-      <td width="230" valign="top">
-        <img src="<?php if(isset($f['image']) && $f['image'] != ""){ echo $f['image']; } else { echo "/Uploads/image/featured-product.jpg"; } ?>" width="230" height="160" style="border: 1px solid #d5d5d5" alt=""/>
-      </td>
-    <?php 	} ?>  
-    </tr>
-    
-    <tr>
-      <td height="46" colspan="5" valign="top">&nbsp;</td>
+<?php       if($z % 2 != 0){ ?>        
+        <td>
+            <img src="<?php if(isset($f['image']) && $f['image'] != ""){ echo $f['image']; } else { echo "http://via.placeholder.com/230x160"; } ?>" width="230" height="160" alt="<?php if(isset($f['heading']) && $f['heading'] != ""){ echo $f['heading']; } else { echo "Featured Product Name"; } ?>"/>
+        </td>
+<?php       } ?>      
+        <td colspan="3">
+            <h3><a href="<?php if(isset($f['url']) && $f['url'] != ""){ echo $f['url']; } else { echo "#"; } ?>" <?php if(isset($f['url']) && $f['url'] != "" && $f['tab'] == "new"){ echo "target='_blank'"; } ?>><?php if(isset($f['image']) && $f['heading'] != ""){ echo $f['heading']; } else { echo "Featured Product Name"; } ?></a></h3>
+            <?php if(isset($f['description']) && $f['description'] != ""){ echo nl2br($f['description']); } else { echo "Featured Product description"; } ?>
+        </td>
+<?php       if($z % 2 == 0){ ?>   
+        <td>
+            <img src="<?php if(isset($f['image']) && $f['image'] != ""){ echo $f['image']; } else { echo "http://via.placeholder.com/230x160"; } ?>" width="230" height="160" alt="<?php if(isset($f['heading']) && $f['heading'] != ""){ echo $f['heading']; } else { echo "Featured Product Name"; } ?>"/>
+        </td>
+<?php       } ?>
     </tr>
 
-			
-<?php	$z++;
-		} ?>    
-    
+<?php       $z++;
+        } ?>    
   </tbody>
 </table>
 
 <?php if(isset($p['videos']['heading']) || isset($p['videos']['left']) || isset($p['videos']['right'])){ ?>
-<br>
-<br>
-<table width="700" border="0" cellspacing="0" cellpadding="0" bgcolor="#ebf2fa" id="videos">
-  <tbody> 
+
+<table class="table-video">
+  <thead>
     <tr>
-      <td height="46">&nbsp;</td>
-      <td colspan="3">
-        <h2><?php if(isset($p['videos']['heading']) && $p['videos']['heading'] != ""){ echo $p['videos']['heading']; } else { echo "Featured XXXXXXXX videos"; } ?></h2>
-      </td>
-      <td>&nbsp;</td>
+      <th colspan="3"><h2><?php if(isset($p['videos']['heading']) && $p['videos']['heading'] != ""){ echo $p['videos']['heading']; } else { echo "Featured XXXXXXXX videos"; } ?></h2></th>
     </tr>
+  </thead>
+  <tbody>
     <tr>
-      <td width="21">&nbsp;</td>
-      <td width="319">
+      <td>
         <iframe width="319" height="195" src="<?php if(isset($p['videos']['left']) && $p['videos']['left'] != ""){ echo $p['videos']['left']; } else { echo "https://www.youtube.com/embed/3aofxoV0Afk"; } ?>" frameborder="0" allowfullscreen></iframe>
       </td>
-      <td>&nbsp;</td>
-      <td width="319">
+      <td>
         <iframe width="319" height="195" src="<?php if(isset($p['videos']['right']) && $p['videos']['right'] != ""){ echo $p['videos']['Right']; } else { echo "https://www.youtube.com/embed/3aofxoV0Afk"; } ?>" frameborder="0" allowfullscreen></iframe>
       </td>
-      <td width="21">&nbsp;</td>
-    </tr>
-    <tr>
-        <td height="32" colspan="5">&nbsp;</td>
     </tr>
   </tbody>
 </table>
+
 <?php }
 
 if(isset($p['pod-left']['url']) || isset($p['pod-left']['image']) || isset($p['pod-right']['url']) || isset($p['pod-right']['image'])){ ?>
-<br>
-<br>
-<table width="700" border="0" cellspacing="0" cellpadding="0" id="pods">
-  <tbody>    
-    <tr>
-        <td colspan="2" width="340">
-          <a href="<?php if(isset($p['pod-left']['url']) && $p['pod-left']['url'] != ""){ echo $p['pod-left']['url']; } else { echo "#"; } ?>" <?php if(isset($p['pod-left']['tab']) && $p['pod-left']['tab'] == "new"){ echo "target='_blank'"; } ?>  onClick="_gaq.push(['_trackEvent', 'Level 3 Page', 'Resource Pod Promo', '<?php if(isset($p['pod-left']['name'])){ echo $p['pod-left']['name']; } else { echo "Left";} ?>']);" >
-            <img src="<?php if(isset($p['pod-left']['image']) && $p['pod-left']['image'] != ""){ echo $p['pod-left']['image']; } else { echo "/Uploads/image/resource-pod-narrow.jpg"; } ?>" width="340" height="140" alt="">
-          </a>
-        </td>
-        <td>&nbsp;</td>
-        <td colspan="2" width="340" align="right">
-          <a href="<?php if(isset($p['pod-right']['url']) && $p['pod-right']['url'] != ""){ echo $p['pod-right']['url']; } else { echo "#"; } ?>" <?php if(isset($p['pod-right']['tab']) && $p['pod-right']['tab'] == "new"){ echo "target='_blank'"; } ?> onClick="_gaq.push(['_trackEvent', 'Level 3 Page', 'Resource Pod Promo', '<?php if(isset($p['pod-right']['name'])){ echo $p['pod-right']['name']; } else { echo "Right";} ?>']);" >
-            <img src="<?php if(isset($p['pod-right']['image']) && $p['pod-right']['image'] != ""){ echo $p['pod-right']['image']; } else { echo "/Uploads/image/resource-pod-narrow.jpg"; } ?>" width="340" height="140" alt="">
-          </a>
-        </td>
-    </tr>
-  </tbody>  
+
+<table class="table-embedded-promos">
+  <tr>
+      <td>
+        <a href="<?php if(isset($p['pod-left']['url']) && $p['pod-left']['url'] != ""){ echo $p['pod-left']['url']; } else { echo "#"; } ?>"  <?php if(isset($p['pod-left']['tab']) && $p['pod-left']['tab'] == "new"){ echo "target='_blank'"; } ?>  onclick="_gaq.push(['_trackEvent', 'Embedded Promo', 'Click', '<?php if(isset($p['pod-left']['name'])){ echo $p['pod-left']['name']; } else { echo "Left";} ?>']);"><img src="<?php if(isset($p['pod-left']['image']) && $p['pod-left']['image'] != ""){ echo $p['pod-left']['image']; } else { echo "/Uploads/image/resource-pod-narrow.jpg"; } ?>" width="340" height="140" alt="<?php if(isset($p['pod-left']['name'])){ echo $p['pod-left']['name']; } else { echo "Left";} ?>"></a>
+      </td>
+      <!-- <td width="20">&nbsp;</td> -->
+      <td>
+        <a href="<?php if(isset($p['pod-right']['url']) && $p['pod-right']['url'] != ""){ echo $p['pod-right']['url']; } else { echo "#"; } ?>"  <?php if(isset($p['pod-right']['tab']) && $p['pod-right']['tab'] == "new"){ echo "target='_blank'"; } ?>  onclick="_gaq.push(['_trackEvent', 'Embedded Promo', 'Click', '<?php if(isset($p['pod-right']['name'])){ echo $p['pod-right']['name']; } else { echo "right";} ?>']);"><img src="<?php if(isset($p['pod-right']['image']) && $p['pod-right']['image'] != ""){ echo $p['pod-right']['image']; } else { echo "/Uploads/image/resource-pod-narrow.jpg"; } ?>" width="340" height="140" alt="<?php if(isset($p['pod-right']['name'])){ echo $p['pod-right']['name']; } else { echo "Left";} ?>"></a>
+      </td>
+  </tr>
 </table>
+
 <?php }
 
 if(isset($p['resources-left']['heading']) || isset($p['resources-right']['heading'])){ ?>
-<br>
-<br>
-<table width="700" border="0" cellspacing="0" cellpadding="0" bgcolor="#EEEEED" id="resources">
-    <tbody>
-        <tr>
-          <td width="21">&nbsp;</td>
-<?php 	$sides = array("left","right");
-		foreach ($sides as $s){ 
-      
-			// text | url | tab | action | label | icon???   
 
-      if(isset($p['resources-' . $s]['heading'])){ ?>          
-          <td width="319" valign="top" <?php if(!isset($p['resources-left']) || !isset($p['resources-right'])){ echo "colspan='3' "; }  ?>>
-            <h2><?php if(isset($p['resources-' . $s]['heading']) && $p['resources-' . $s]['heading'] != ""){ echo $p['resources-' . $s]['heading']; } else { if($s == "left"){ echo "Resources"; } else { echo "Support"; } } ?></h2>
-
-<?php 	if(isset($p['resources-' . $s]['items']) && ($p['resources-' . $s]['items'][0] != "")){ ?>
-			<ul>
-<?php			foreach ($p['resources-' . $s]['items'] as $i){ 
-					$b = explode("|",$i); ?>
-				<li style="margin-bottom:10px;"><?php if(isset($b[5])){ echo "<i class='" . $b[5] . "'></i>&nbsp;&nbsp;"; } ?>
-					<a href="<?php echo $b[1]; ?>" <?php if($b[2] == "new"){ echo "target='_blank'"; } ?> <?php if(isset($b[3])){ echo "onClick=\"_gaq.push(['_trackEvent', 'Level 3 Page', '" . $b[3] . "', '" . $b[4] . "']);\""; } ?>><?php echo $b[0]; ?></a></li>
-<?php				
-				} ?>
-			</ul>
-<?php		} 
-
-       ?>
-			
-          </td>
-    <?php } ?>      
-          <td width="21">&nbsp;</td>
-<?php }
-      	 ?>          
-
-
-        </tr>
-        <tr>
-            <td height="18" colspan="5">&nbsp;</td>
-        </tr>
+<table class="table-resources">
+  <tbody>
+    <tr>
+<?php   $sides = array("left","right");
+        foreach ($sides as $s){ 
+        // text | url | tab | action | label | icon
+            if(isset($p['resources-' . $s]['heading'])){ ?>     
+        <td >
+          <h2><?php if(isset($p['resources-' . $s]['heading']) && $p['resources-' . $s]['heading'] != ""){ echo $p['resources-' . $s]['heading']; } else { if($s == "left"){ echo "Resources"; } else { echo "Support"; } } ?></h2>
+          <ul>
+<?php           foreach ($p['resources-' . $s]['items'] as $i){ 
+                    $b = explode("|",$i); ?>
+            <li><?php if(isset($b[5])){ echo "<i class='" . $b[5] . "'></i>&nbsp;&nbsp;"; } ?><a href="<?php echo $b[1]; ?>" <?php if($b[2] == "new"){ echo "target='_blank'"; } ?> <?php if(isset($b[3])){ echo "onClick=\"_gaq.push(['_trackEvent', 'Level 3 Page', '" . $b[3] . "', '" . $b[4] . "']);\""; } ?>><?php echo $b[0]; ?></a></li>
+<?php           } ?>          
+          </ul>
+        </td>
+<?php       }
+        } ?>        
+    </tr>
   </tbody>
 </table>
-<?php } ?>
 
-<!-- #### PAGE CONTENT ENDS ####  -->
+<?php 
+} ?>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", hideSide);
+function hideSide(){
+    $("#side").hide();
+}    
+</script>
+
+<!--  CONTENT ENDS -->

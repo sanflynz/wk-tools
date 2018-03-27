@@ -20,7 +20,7 @@ include ("l3page_au_bare.php");
 
 ?>
 
-
+<input type="hidden" id="country" value="<?=$p['country'];?>">
 
 
 <table width="700" border="0" cellspacing="0" cellpadding="0">
@@ -28,9 +28,9 @@ include ("l3page_au_bare.php");
         <tr valign="bottom">
             <td height="20">
             	<br><br><br><br>
-            	<a href="l3page_e.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce">Edit</a>
-            	<a href="l3page_i.php" class="btn btn-commerce">List</a>
-            	<a href="l3page_export.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce">Export</a>
+            	<a href="l3page_e.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce local">Edit</a>
+            	<a href="l3page_i.php" class="btn btn-commerce local">List</a>
+            	<a href="l3page_export.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce local">Export</a>
             </td>
         </tr>
   </tbody>

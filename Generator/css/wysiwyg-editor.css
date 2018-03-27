@@ -1,0 +1,79 @@
+div.wysiwyg-editor {
+	width: 100%;
+	height: auto;
+    min-height: 80px;
+	background-color: #FFFFFF;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif; 
+	color: #333;
+	font-size: 13px;
+	line-height: 22px;
+	padding: 2px;
+}
+
+.content-editor:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+
+.content-editor h1{
+	font-size: 28px;
+	line-height: 41px;
+	margin: 11px 0px 11px 0px;
+	padding: 0;
+}
+
+.content-editor h2{ 
+	font-size: 22px;
+	line-height: 30px;
+	margin: 11px 0px 11px 0px;
+	padding: 0;
+}		
+.content-editor h3{
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 30px;
+	margin: 0px;
+	padding: 0;
+}
+.content-editor h4, h5, h6 {
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 18px;
+	margin: 0px;
+	padding: 0;
+}
+
+.content-editor a:link, .content-editor a:active {
+	color: #1e8ae7;
+	text-decoration: none;
+}
+.content-editor a:visited {
+	color: #1e8ae7;
+	text-decoration: none;
+}
+.content-editor a:hover {
+	color: #333;
+	text-decoration: none;
+}
+
+table.wysiwyg-modal {
+	width: 100%;
+}
+table.wysiwyg-modal td {
+	padding-bottom: 5px;
+}
+table.wysiwyg-modal tr td:first-child {
+	width: 25%;
+	text-align: right; 
+	font-weight: 700; 
+	padding-right: 5px;
+}

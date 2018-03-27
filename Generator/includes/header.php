@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php
-	
+	define('HOME', "/WORK/wk-tools/Generator/");
+
 ?>
 <html lang="">
 	<head>
@@ -15,6 +16,9 @@
 		<link rel="stylesheet" href="../__resources/css/font-awesome.min.css">
 
 		<link rel="stylesheet" href="../__resources/css/pretty_file_upload.css">
+
+		<link rel="stylesheet" href="css/generator.css">
+		<link rel="stylesheet" href="css/wysiwyg-editor.css">
 
 		<link href='https://fonts.googleapis.com/css?family=Bitter:700' rel='stylesheet' type='text/css'>
 
@@ -54,8 +58,10 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">WEBPAGES <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="promopage_i.php">Promo Pages</a></li>
+								<li><a href="promopage_i.php">Promo (child) Pages</a></li>
+								<li><a href="genericpage_i.php">Generic (child) Pages</a></li>
 								<li><a href="l3page_i.php">Level 3 Pages &nbsp;&nbsp;<i class="fa fa-flask" style="color: #00FF00" title="EXPERIMENTAL"></i></a></li>
+								<li><a href="l2page_i.php">Level 1/2 Pages &nbsp;&nbsp;<i class="fa fa-flask" style="color: #00FF00" title="EXPERIMENTAL"></i></a></li>
 								<li><a href="promopods_e.php">Promo Pods &nbsp;&nbsp;<i class="fa fa-flask" style="color: #00FF00" title="EXPERIMENTAL"></i></a></li>
 							<!--	<li class="divider"></li>
 								<li><a href="plainpage_i.php">Plain Pages</a></li>
@@ -65,8 +71,8 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">TOOLS <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="requestlinkgen.php">Request Link Generator</a></li>
-								<li><a href="pdfcoverimage.php">PDF Cover Images</a></li>
+								<li><a href="requestlinkgen.php" target="_blank">Request Link Generator</a></li>
+								<!-- <li><a href="pdfcoverimage.php">PDF Cover Images</a></li> -->
 							</ul>
 						</li>
 					</ul>
@@ -110,3 +116,5 @@
 			</div>
 		</nav>
 		<div class="container">
+			
+		

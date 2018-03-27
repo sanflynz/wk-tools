@@ -3,7 +3,7 @@
 include("includes/db.php");
 include("includes/header_web_au.php"); 
 
-$sql = "SELECT * FROM `webpromopages` p WHERE p.id = " . $_GET['id'];
+$sql = "SELECT * FROM `pages` p WHERE p.id = " . $_GET['id'];
 $r = $conn->query($sql);
 $p = $r->fetch_assoc();
 
@@ -16,10 +16,11 @@ $p = $r->fetch_assoc();
 // 	$sURL = "http://www.thermofisher.com.au/search.aspx?search=";
 // }
 
-include ("promopage_au_bare.php");
+include ("l2page_au_bare.php");
 
 ?>
 
+<input type="hidden" id="country" value="<?=$p['country'];?>">
 
 
 
@@ -28,10 +29,9 @@ include ("promopage_au_bare.php");
         <tr valign="bottom">
             <td height="20">
             	<br><br><br><br>
-            	<a href="promopage_e.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce">Edit</a>
-            	<a href="promopage_i.php" class="btn btn-commerce">List</a>
-            	<a href="promopage_export.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce">Export</a>
-                <a href="genericpage_au_v.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce">View as generic child</a>
+            	<a href="l2page_e.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce local">Edit</a>
+            	<a href="l2page_i.php" class="btn btn-commerce local">List</a>
+            	<a href="l2page_export.php?id=<?php echo $_GET['id'];?>" class="btn btn-commerce local">Export</a>
             </td>
         </tr>
   </tbody>
