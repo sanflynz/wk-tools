@@ -85,7 +85,7 @@ Requests are sent to Salesforce via the leads module.  If no campaign is selecte
 				<option value="Sales Request" <?php if(isset($link) && $_POST['LeadType'] == "Sales Request"){ echo "selected"; }  ?>>Request Information</option>
 				<option value="Quote Request" <?php if(isset($link) && $_POST['LeadType'] == "Quote Request"){ echo "selected"; }  ?>>Request Quote</option>
 				<option value="Demo Request" <?php if(isset($link) && $_POST['LeadType'] == "Demo Request"){ echo "selected"; }  ?>>Request Demo</option>
-				<option value="Sample Request" <?php if(isset($link) && $_POST['LeadType'] == "Sample Request"){ echo "selected"; }  ?>>Request Demo</option>
+				<option value="Sample Request" <?php if(isset($link) && $_POST['LeadType'] == "Sample Request"){ echo "selected"; }  ?>>Request Sample</option>
 			</select>
 		</td>
 	</tr>

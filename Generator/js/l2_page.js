@@ -1,76 +1,137 @@
 console.log("Loaded L2 page js");
 
-function toggleFeatureArrows(table){
-	var fCount = table.find('tr').length;
+// function toggleFeatureArrows(table){
+// 	var fCount = table.find('tr').length;
 	
-	table.find('tr').each(function(i){
-		var x = i + 1;
-		if(x == 1){
-			$(this).find(".feature-up").addClass("disabled");
+// 	table.find('tr').each(function(i){
+// 		var x = i + 1;
+// 		if(x == 1){
+// 			$(this).find(".feature-up").addClass("disabled");
+// 		}
+// 		if(fCount > 1 && x > 1){
+// 			$(this).find(".feature-up").removeClass("disabled");
+// 		}
+// 		if(fCount > 1 && x < fCount){
+// 			$(this).find(".feature-down").removeClass("disabled");
+// 		}
+// 		if(x == fCount){
+// 			$(this).find(".feature-down").addClass("disabled");
+// 		}
+		
+// 	});
+// }
+// function reorderFeatures(table){
+// 	table.find('tr').each(function(i){
+// 		var x = i + 1;
+// 		var old = $(this).find('.category-list-order').val();
+// 		console.log('reordering: ' + old + ' to ' + x);
+// 		$(this).find(".category-list-order").val(x);
+// 	});
+// }
+// 
+function toggleSectionArrows(){
+	var fCount = $('#sections').find('.section').length;
+	
+	$('#sections').find('.section').each(function(i){
+		console.log(fCount + ":" + i);
+		//var x = i + 1;
+		if(i == 0){
+			$(this).find(".section-up").addClass("disabled");
 		}
-		if(fCount > 1 && x > 1){
-			$(this).find(".feature-up").removeClass("disabled");
+		if(fCount > 1 && i > 0){
+			$(this).find(".section-up").removeClass("disabled");
 		}
-		if(fCount > 1 && x < fCount){
-			$(this).find(".feature-down").removeClass("disabled");
+		if(fCount > 1){
+			console.log("removed disabled down");
+			$(this).find(".section-down").removeClass("disabled");
+			//$(this).find(".section-down").addClass("btn-danger");
 		}
-		if(x == fCount){
-			$(this).find(".feature-down").addClass("disabled");
+		if(i == (fCount - 1)){
+			$(this).find(".section-down").addClass("disabled");
 		}
 		
 	});
 }
-function reorderFeatures(table){
-	table.find('tr').each(function(i){
-		var x = i + 1;
-		var old = $(this).find('.category-list-order').val();
-		console.log('reordering: ' + old + ' to ' + x);
-		$(this).find(".category-list-order").val(x);
+function reorderSections(){
+	$('#sections').find('.section').each(function(i){
+		//console.log("reordering..." + i)
+		// var x = i + 1;
+		// var old = $(this).find('.category-list-order').val();
+		// console.log('reordering: ' + old + ' to ' + x);
+		$(this).find('.section-order').val(i);
 	});
 }
 
-
-$(".section").on("click",".feature-up", function(){
-	console.log("Clicked up!");
-  	var $current = $(this).closest('tr')
-  	var $previous = $current.prev('tr');
+// TODO:  Add scrolling: https://www.abeautifulsite.net/smoothly-scroll-to-an-element-without-a-jquery-plugin-2
+$("#sections").on("click",".section-up", function(){
+	console.log("Clicked section up!");
+  	var $current = $(this).closest('.section');
+  	var $previous = $current.prev('.section');
   	if($previous.length !== 0){
     	$current.insertBefore($previous);
     	
-    	var table = $(this).closest('.table');
-    	//reorderFeatures(table);
-    	toggleFeatureArrows(table);
+    	//var table = $(this).closest('.table');
+    	reorderSections();
+    	toggleSectionArrows();
   	}
   	return false;
 });
-
-$(".section").on("click",".feature-down", function(){
-	console.log("Clicked down!!");
-  	var $current = $(this).closest('tr')
-  	var $next = $current.next('tr');
+$("#sections").on("click",".section-down", function(){
+	console.log("Clicked section down!!");
+  	var $current = $(this).closest('.section');
+  	var $next = $current.next('.section');
   	if($next.length !== 0){
     	$current.insertAfter($next);
     	
-		var table = $(this).closest('.table');
-    	//reorderFeatures(table);
-    	toggleFeatureArrows(table);
+		//var table = $(this).closest('.table');
+    	reorderSections();
+    	toggleSectionArrows();
   	}
   	return false;
-});					
+});		
 
 
-$(".section").on("click", ".feature-delete", function(){
-	//console.log ("deleting stuff...");
-	if(confirm('Are you sure you want to delete this feature?')){
-		var $current = $(this).closest('tr')
-		var table = $(this).closest('.table');
+// $(".section").on("click",".feature-up", function(){
+// 	console.log("Clicked up!");
+//   	var $current = $(this).closest('tr')
+//   	var $previous = $current.prev('tr');
+//   	if($previous.length !== 0){
+//     	$current.insertBefore($previous);
+    	
+//     	var table = $(this).closest('.table');
+//     	//reorderFeatures(table);
+//     	toggleFeatureArrows(table);
+//   	}
+//   	return false;
+// });
 
-		$current.remove();
+// $(".section").on("click",".feature-down", function(){
+// 	console.log("Clicked down!!");
+//   	var $current = $(this).closest('tr')
+//   	var $next = $current.next('tr');
+//   	if($next.length !== 0){
+//     	$current.insertAfter($next);
+    	
+// 		var table = $(this).closest('.table');
+//     	//reorderFeatures(table);
+//     	toggleFeatureArrows(table);
+//   	}
+//   	return false;
+// });					
+
+
+// $(".section").on("click", ".feature-delete", function(){
+// 	//console.log ("deleting stuff...");
+// 	if(confirm('Are you sure you want to delete this feature?')){
+// 		var $current = $(this).closest('tr')
+// 		var table = $(this).closest('.table');
+
+// 		$current.remove();
 		
-    	//reorderFeatures(table);
-    	toggleFeatureArrows(table);
-	}			
-});
+//     	//reorderFeatures(table);
+//     	toggleFeatureArrows(table);
+// 	}			
+// });
 
 $("#add-category-list").click(function(){
 	console.log("adding list item");

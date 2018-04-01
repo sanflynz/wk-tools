@@ -50,7 +50,7 @@ foreach($sections as $s){
                 <tr>
                     <td class="table-mondrian-a-center">
                         <a href="<?php echo empty($s['content']['centre']['url']) ? "#" : $s['content']['centre']['url']; ?>" onclick="_gaq.push(['_trackEvent', 'Mondrian', 'Center Panel', '']);" >
-                            <img src="<?php echo empty($s['content']['centre']['image']) ? "http://via.placeholder.com/250x236" : $s['content']['centre']['image']; ?>" alt="" >
+                            <img src="<?php echo empty($s['content']['centre']['image']) ? "http://via.placeholder.com/254x236" : $s['content']['centre']['image']; ?>" alt="" >
                         </a>    
                     </td>
                     <td class="table-mondrian-navigation">
@@ -141,11 +141,13 @@ foreach($sections as $s){
         $cols = !empty($s['settings']['columns']) ? $s['settings']['columns'] : 2;
         ?>
   <table class="table-category-lists">
+<?php if(!empty($s['content']['heading'])){ ?>    
     <thead>
       <tr>
-        <th colspan="<?=$cols;?>"><h2><?php if(!empty($s['content']['heading'])){ echo $s['content']['heading']; } ?></h2></th>
+        <th colspan="<?=$cols;?>"><h2><?=$s['content']['heading']; ?></h2></th>
       </tr>
     </thead>
+<?php } ?>    
     <tbody>
   <?php   $i = 1;
     foreach($s['content']['items'] as $x){

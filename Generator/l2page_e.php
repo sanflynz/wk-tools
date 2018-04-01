@@ -222,6 +222,15 @@ else {
 			);
 			$p['type'] = $_GET['type'];
 		}
+		elseif(!empty($_GET['type']) && $_GET['type'] == "sub-category"){
+			$sections = array(
+				0 => array('type' => "hdi", 'settings' => array('type' => 'sub-category-default')),
+				1 => array('type' => 'featured-gateway'),
+				2 => array('type' => 'alternating-hdi'),
+				3 => array('type' => 'embedded-promos', 'settings' => array('width' => 'normal')),
+				4 => array('type' => 'resources')
+			);
+		}
 		else{
 			setFlash("danger", "You must select a page type");
 			$sections = array();
@@ -292,16 +301,21 @@ include("includes/header.php");
 	</div>
 </div>
 <br>
-
+<div id="sections">
 <?php
 	$i = 0;
+	$cSections = count($sections);
 	foreach($sections as $s){ ?>
 		<div class="section">
 			<div class="section-heading">
 				<h4><?=$s['type']; ?> </h4>
+				<div>
+					<button type="button" class="btn btn-default btn-sm section-up <?php if($i == 0){ echo 'disabled'; } ?>"><i class="fa fa-arrow-up"></i></button> 
+					<button type="button" class="btn btn-default btn-sm section-down <?php if($i == $cSections - 1){ echo 'disabled'; } ?>"><i class="fa fa-arrow-down"></i></button>
+				</div>
 			</div>
 			<input type="hidden" name="section[<?=$i; ?>][id]" class="section-id" value="<?php if(!empty($s['id'])){ echo $s['id']; } ?>">
-			<input type="hidden" name="section[<?=$i; ?>][s_order]" class="section-order" value="<?php echo !empty($s['s_order']) ? $s['s_order'] : $i; ?>">
+			<input type="text" name="section[<?=$i; ?>][s_order]" class="section-order" value="<?php echo !empty($s['s_order']) ? $s['s_order'] : $i; ?>">
 			<input type="hidden" name="section[<?=$i; ?>][type]" value="<?=$s['type']; ?>">
 				
 
@@ -502,7 +516,7 @@ include("includes/header.php");
 		<?php		} ?>
 				</table>
 	<?php		$i++;
-			}
+			} 
 
 			if($s['type'] == "category-lists"){ ?>
 				<input type="hidden" name="section[<?=$i; ?>][settings][columns]" value="<?php if(!empty($s['settings']['columns'])) { echo $s['settings']['columns']; } ?>">
@@ -565,6 +579,13 @@ include("includes/header.php");
 				
 	<?php		$i++;
 			} // end category-lists
+
+			if($s['type'] == "alternating-hdi"){ ?>
+
+	<?php 		$i++;
+			} // end alternating HDI
+
+			
 
 			if($s['type'] =="embedded-promos"){ ?>
 				<input type="hidden" name="section[<?=$i; ?>][settings][width]" value="<?php if(!empty($s['settings']['width'])) { echo $s['settings']['width']; } ?>"><table class="table table-edit-components">
@@ -648,7 +669,7 @@ include("includes/header.php");
 			echo "</div>";
 		} // end sections foreach
 ?>
-
+</div>
 <br>
 <input type="submit" value="Submit" class="btn btn-success">
 

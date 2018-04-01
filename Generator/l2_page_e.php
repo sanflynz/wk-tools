@@ -211,13 +211,14 @@ include("includes/header.php");
 	</div>
 </div>
 <br>
-
+<div class="sections">
 <?php
 	$i = 0;
 	foreach($sections as $s){ ?>
 		<div class="section">
 			<div class="section-heading">
 				<h4><?php echo $s['type']; ?> </h4>
+				
 			</div>
 			<input type="hidden" name="section[<?php echo $i; ?>][id]" class="section-id" value="<?php if(isset($s['id'])){ echo $s['id']; } ?>">
 			<input type="text" name="section[<?php echo $i; ?>][s_order]" class="section-order" value="<?php echo isset($s['s_order']) ? $s['s_order'] : $i; ?>">
@@ -487,7 +488,7 @@ include("includes/header.php");
 			echo "</div>";
 		} // end sections foreach
 ?>
-
+</div>
 <br>
 <input type="submit" value="Submit" class="btn btn-success">
 
