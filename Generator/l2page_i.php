@@ -1,6 +1,6 @@
 <?php
 	include("includes/db.php");
-	include("../__classes/pagination.php");
+	include("../__classes/Pagination.php");
 	include("includes/header.php");
 
 	$sql = "SELECT * FROM pages ORDER BY modified DESC";
@@ -21,14 +21,15 @@
 
 <div class="row">
 	<div class="col-xs-12">
-		<h1>Level 1/2 Pages</h1>
+		<h1>Level 1/2/3 Pages</h1>
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-8">
+	<div class="col-md-12">
 		<br>
 		<a href="l2page_e.php?type=storefront" class="btn btn-primary">New L1 Page</a>&nbsp;
 		<a href="l2page_e.php?type=category" class="btn btn-primary">New L2 Page</a>&nbsp;
+		<a href="l2page_e.php?type=sub-category" class="btn btn-primary">New L3 Page</a>&nbsp;
 		
 		<button type="button" class="btn btn-warning import-toggle">Import</button>
 		<!-- <button class="btn btn-warning import-toggle" type="button" data-type="old-storefront">Import old Storefront</button><button class="btn btn-warning import-toggle" type="button" data-type="old-category">Import old Category (L2)</button>  --><br>
@@ -40,22 +41,70 @@
 					<option value="">Select page type</option>
 					<option value="old-storefront">Old Storefront</option>
 					<option value="old-category">Old Category</option>
+					<option value="old-sub-category">Old Sub-category</option>
 				</select>
 				<br>
-				<div class="input-group">
-					<input name="url" type="text" class="form-control" placeholder="Page URL...">
-			      		<span class="input-group-btn">
-			        		<button class="btn btn-success" type="submit" name="import" value="true">Go!</button>
-			      	</span>
-			    </div>
+				
 			    <div class="import-settings" id="old-storefront-settings" style="display: none;">
-			    	<br>
 			    	<label>
 			    		# category-list rows <input name="cat-list-rows" type="text" class="form-control" style="width: 50px">
 			    	</label>
 			    </div>
+				
 			    <div class="import-settings" id="old-category-settings" style="display: none;">
 			    	old cateogory
+			    </div>
+				
+					 <div class="import-settings" id="old-sub-category-settings" style="display: none;">
+			    	<h4>Settings</h4>
+			    	<div class="row">
+			    		<div class="col-md-2">
+			    			<strong>HDI</strong>
+			    			<input type="text" name="settings[hdi]" class="form-control" id="" placeholder="0" value="0">
+			    		</div>
+			    		<div class="col-md-2">
+			    			<strong>Featured / Gateway</strong>
+							<input type="text" name="settings[featured-gateway]" class="form-control" placeholder="1" value="1">
+							
+			    		</div>
+			    		<div class="col-md-2">
+			    			<div class="form-group">
+							    <label for="">Alternating HDI</label>
+							    <input type="text" name="settings[alternating-hdi]" class="form-control" placeholder="3" value="3">
+							 </div>
+			    		</div>
+			    	
+			    		<div class="col-md-2">
+			    			<div class="form-group">
+							    <label for="">Videos</label>
+							    <input type="text" name="settings[videos]" class="form-control" id="" placeholder="4" value="4">
+							 </div>
+			    		</div>
+			    	
+			    		<div class="col-md-2">
+			    			<div class="form-group">
+							    <label for="">Embedded promos</label>
+							    <input type="text" name="settings[embedded-promos]" class="form-control" id="5" placeholder="5" value="5">
+							 </div>
+			    		</div>
+			    		<div class="col-md-2">
+			    			<div class="form-group">
+							    <label for="">Resources</label>
+							    <input type="text" name="settings[resources]" class="form-control" id="" placeholder="6" value="6">
+							 </div>
+			    		</div>
+			    	</div>
+			    	<div class="row">
+			    		<div class="col-md-12">(NA = not included, update following valued)</div>
+			    	</div>
+			    </div>
+				
+				
+					<div class="input-group" style="width: 60%">
+					<input name="url" type="text" class="form-control" placeholder="Page URL..." >
+			      		<span class="input-group-btn">
+			        		<button class="btn btn-success" type="submit" name="import" value="true">Go!</button>
+			      	</span>
 			    </div>
 			</form>
 		</div>

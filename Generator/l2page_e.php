@@ -53,27 +53,31 @@ if($_POST && !isset($_POST['import'])){
 		}
 
 		if($s['type'] == "hdi"){
-			$s['content']['copy'] = mysqli_real_escape_string($conn,$s['content']['copy']);
+			$s['content']['copy'] = str_replace("'","&apos;",$s['content']['copy']);
+			//$s['content']['copy'] = addslashes($s['content']['copy']);
 		}
 
 		$data['section'][$i]['id'] = $s['id'];
 		$data['section'][$i]['type'] = $s['type'];
-		if(!empty($s['settings'])){ $data['section'][$i]['settings'] = serialize($s['settings']); } else {
+		//if(!empty($s['settings'])){ $data['section'][$i]['settings'] = serialize($s['settings']); } else {
+		if(!empty($s['settings'])){ $data['section'][$i]['settings'] = json_encode($s['settings']); } else {
 			$data['section'][$i]['settings'] = "";
 		}
-		$data['section'][$i]['content'] = serialize($s['content']);
+		//$data['section'][$i]['content'] = serialize($s['content']);
+		$data['section'][$i]['content'] = json_encode($s['content']);
 		$data['section'][$i]['s_order'] = $s['s_order'];
 		$i++;
 
-
+		
 		
 		
 	}
 	
-	// print '<pre>'; 
-	// print_r($data);
-	// print '</pre>';
-	// exit();
+// 	print '<pre>'; 
+// 	//print_r($sections);
+// 	print_r($data);
+// 	print '</pre>';
+// 	exit();
 	
 	//echo"<br><hr>";
 	// page
@@ -153,8 +157,10 @@ else {
 	 	while($row = $r->fetch_assoc()){
 	 		$sections[$i]['id'] = $row['id'];
 	 		$sections[$i]['type'] = $row['type'];
-	 		$sections[$i]['settings'] = unserialize($row['settings']);
-	 		$sections[$i]['content'] = unserialize($row['content']);
+// 	 		$sections[$i]['settings'] = unserialize($row['settings']);
+// 	 		$sections[$i]['content'] = unserialize($row['content']);
+			$sections[$i]['settings'] = json_decode($row['settings'],true);
+	 		$sections[$i]['content'] = json_decode($row['content'],true);
 	 		$sections[$i]['s_order'] = $row['s_order'];	 		
 	 		$i++;
 	 	}
@@ -182,9 +188,17 @@ else {
 			);
 			
 		}
-		elseif($import['import-stype'] == "old-category"){
+		elseif($import['import-type'] == "old-category"){
 			include("includes/l2-import-old.php");
 			$p['type'] = "category";
+		}
+		elseif($import['import-type'] == "old-sub-category"){
+// 			print '<pre>'; 
+// 			print_r($import['settings']);
+// 			print '</pre>';
+			include("includes/import-old-sub-category.php");
+			$p['type'] = "sub-category";
+			$settings = $import['settings'];
 		}
 		
 		$data = import_page($import['url'], $settings);
@@ -193,9 +207,9 @@ else {
 
 		setFlash("info", "Page imported from:<br><a href='" . $import['url'] . "' target='_blank'>" . $import['url'] . "</a>");
 
-		// print '<pre>'; 
-		// print_r($data);
-		// print '</pre>';
+// 		print '<pre>'; 
+// 		print_r($data);
+// 		print '</pre>';
 	}
 
 	if(empty($_GET['id']) && empty($_POST['import'])){
@@ -230,6 +244,7 @@ else {
 				3 => array('type' => 'embedded-promos', 'settings' => array('width' => 'normal')),
 				4 => array('type' => 'resources')
 			);
+			$p['type'] = $_GET['type'];
 		}
 		else{
 			setFlash("danger", "You must select a page type");
@@ -260,7 +275,7 @@ include("includes/header.php");
 </style>
 <div class="row">
 	<div class="col-xs-12">
-		<h1>Level 1/2 page add/edit</h1>
+		<h1>Level 1/2/3 page add/edit</h1>
 		<br>
 		<div id="notifications">		
 			<?php flash(); 	?>	
@@ -311,11 +326,12 @@ include("includes/header.php");
 				<h4><?=$s['type']; ?> </h4>
 				<div>
 					<button type="button" class="btn btn-default btn-sm section-up <?php if($i == 0){ echo 'disabled'; } ?>"><i class="fa fa-arrow-up"></i></button> 
-					<button type="button" class="btn btn-default btn-sm section-down <?php if($i == $cSections - 1){ echo 'disabled'; } ?>"><i class="fa fa-arrow-down"></i></button>
+					<button type="button" class="btn btn-default btn-sm section-down <?php if($i == $cSections - 1){ echo 'disabled'; } ?>"><i class="fa fa-arrow-down"></i></button> 
+					<button type="button" class="btn btn-default btn-sm section-delete"><i class="fa fa-trash"></i></button> 
 				</div>
 			</div>
 			<input type="hidden" name="section[<?=$i; ?>][id]" class="section-id" value="<?php if(!empty($s['id'])){ echo $s['id']; } ?>">
-			<input type="text" name="section[<?=$i; ?>][s_order]" class="section-order" value="<?php echo !empty($s['s_order']) ? $s['s_order'] : $i; ?>">
+			<input type="hidden" name="section[<?=$i; ?>][s_order]" class="section-order" value="<?php echo !empty($s['s_order']) ? $s['s_order'] : $i; ?>">
 			<input type="hidden" name="section[<?=$i; ?>][type]" value="<?=$s['type']; ?>">
 				
 
@@ -453,6 +469,15 @@ include("includes/header.php");
 			if($s['type'] == "hdi"){ ?>
 					<input type="hidden" name="section[<?=$i; ?>][settings][type]" value="<?php if(!empty($s['settings']['type'])) { echo $s['settings']['type']; } ?>">
 					<table class="table table-edit-components">
+<?php			if(!empty($s['settings']['type']) && $s['settings']['type'] == "sub-category-default"){ ?>
+						<tr>
+							<td>Image</td>
+							<td>
+								<div class="input-group">
+									<span class="input-group-addon">Image</span>
+									<input type="text" name="section[<?php echo $i; ?>][content][image]" class="form-control image-upload" value="<?php if(isset($s['content']['image'])){ echo $s['content']['image']; } ?>"></div></td>
+						</tr>
+		<?php	}	?>
 						<tr>
 							<td>Heading</td>
 							<td><input type="text" name="section[<?php echo $i; ?>][content][heading]" class="form-control" value="<?php if(isset($s['content']['heading'])){ echo $s['content']['heading']; } ?>"></td>
@@ -581,7 +606,67 @@ include("includes/header.php");
 			} // end category-lists
 
 			if($s['type'] == "alternating-hdi"){ ?>
-
+				<table class="table table-edit-components">
+					<tr>
+						<td>Heading</td>
+						<td><input type="text" name="section[<?=$i;?>][content][heading]" class="form-control" value="<?php if(!empty($s['content']['heading'])){ echo $s['content']['heading']; } ?>"></td>
+					</tr>
+			<?php 	$count = (!empty($s['content']['items'])) ? count($s['content']['items']) : 1;
+					for($x = 1; $x <= $count; $x++){	?>	
+					<tr>
+						<td>
+							Item <?php echo $x; ?><br>
+							<button type="button" class="btn btn-default btn-sm feature-up <?php if($x == 1){ echo "disabled"; } ?>" title="Move up"><i class="fa fa-arrow-up"></i></button> 
+							<button type="button" class="btn btn-default btn-sm feature-down <?php if($x == $count){ echo "disabled"; } ?>" title="Move down"><i class="fa fa-arrow-down"></i></button> 
+							<button type="button" class="btn btn-default btn-sm feature-delete" title="Delete"><i class="fa fa-trash"></i></button>
+							
+						</td>
+						<td>	
+							<div class="row" >
+								<div class="col-md-6">
+									
+									<div class="input-group" style="margin-bottom: 5px; !important;">
+										<span class="input-group-addon">Heading</span>
+										<input type="text" name="section[<?=$i; ?>][content][items][<?=$x; ?>][heading]" class="form-control" value="<?php if(isset($s['content']['items'][$x]['heading'])) { echo htmlentities($s['content']['items'][$x]['heading']); } ?>">
+									</div>
+									
+									<div class="input-group" style="margin-bottom: 5px; !important;">
+										<span class="input-group-addon">Image</span>
+										<input type="text" name="section[<?=$i; ?>][content][items][<?=$x; ?>][image]" class="form-control" value="<?php if(isset($s['content']['items'][$x]['image'])) { echo $s['content']['items'][$x]['image']; } ?>">
+									</div>
+									
+									<div class="input-group" style="margin-bottom: 5px; !important;">
+										<span class="input-group-addon">URL</span>
+										<input type="text" name="section[<?=$i; ?>][content][items][<?=$x; ?>][url]" class="form-control" value="<?php if(isset($s['content']['items'][$x]['url'])) { echo $s['content']['items'][$x]['url']; } ?>">
+									</div>
+									
+									<div class="input-group" style="margin-bottom: 5px; !important;">
+										<span class="input-group-addon">tab</span>
+										<select name="section[<?=$i; ?>][content][items][<?=$x; ?>][tab]" id="" class="form-control">
+											<option value="parent" <?php if(isset($s['content']['items'][$x]['tab']) && $s['content']['items'][$x]['tab'] == "parent" ) { echo " selected"; } ?>>Parent</option>
+											<option value="new"<?php if(isset($s['content']['items'][$x]['tab']) && $s['content']['items'][$x]['tab'] == "new" ) { echo " selected"; } ?>>New</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<textarea name="section[<?=$i; ?>][content][items][<?=$x; ?>][copy]" id="" rows="7" class="form-control" placeholder="Copy..."><?php if(isset($s['content']['items'][$x]['copy'])) { echo htmlentities($s['content']['items'][$x]['copy']); } ?></textarea>
+								</div>
+							</div>					
+						</td>
+					</tr>
+				<?php
+					} ?>
+					
+							
+				</table>
+				<table class="table table-edit-components">
+					<tr>
+						<td></td>
+						<td>
+							<button id="add-alternating-hdi" type="button" class="btn btn-success btn-xs" style="margin-left: 15px;"><i class="fa fa-plus"></i></button>
+						</td>
+					</tr>
+				</table>
 	<?php 		$i++;
 			} // end alternating HDI
 

@@ -15,11 +15,21 @@ $sections = array();
 $i = 0;
 while($row = $r->fetch_assoc()){
   $sections[$i]['id'] = $row['id'];
-  if(!empty($row['settings'])){ $sections[$i]['settings'] = unserialize($row['settings']); }
+  //if(!empty($row['settings'])){ $sections[$i]['settings'] = unserialize($row['settings']); }
+	if(!empty($row['settings'])){ $sections[$i]['settings'] = json_decode($row['settings'],true); }
   $sections[$i]['type'] = $row['type'];
-  $sections[$i]['content'] = unserialize($row['content']);
+// 	print '<pre>'; 
+// 	echo $row['content'];
+// 	print '</pre>';
+	//$sections[$i]['content'] = unserialize($row['content']);
+	//$sections[$i]['content'] = unserialize(str_replace('\r\n', '\n', $row['content']));
+	$sections[$i]['content'] = json_decode($row['content'],true);
   $sections[$i]['s_order'] = $row['s_order'];     
   $i++;
+	
+// 	print '<pre>'; 
+// 	print_r(str_replace("\r\n", "\n", $row['content']));
+// 	print '</pre>';
 }
 // print '<pre>'; 
 // print_r($sections);
@@ -102,6 +112,9 @@ foreach($sections as $s){
   <table class="table-hdi">
     <tr>
       <td width="100%">
+		<?php if(!empty($s['settings']['type']) && $s['settings']['type'] == "sub-category-default"){ ?>
+					<img src="<?php echo empty($s['content']['image']) ? "http://via.placeholder.com/230x230" : $s['content']['image']; ?>" alt="">
+		<?php	}		?>
           <h1><?php if(!empty($s['content']['heading'])){ echo $s['content']['heading']; } ?></h1>
   <?php   if(!empty($s['content']['copy'])){ echo nl2br($s['content']['copy']); } ?>   
       </td>
@@ -112,7 +125,7 @@ foreach($sections as $s){
       // FEATURED GATEWAY
       if($s['type'] == 'featured-gateway'){
         if(!empty($s['content']['heading']) && !empty($s['content']['items'][0]['url'])){ ?>
-       ?>
+   
   <table class="table-featured-gateway">
     <thead>
       <tr>
@@ -171,6 +184,47 @@ foreach($sections as $s){
     
   </table>
 <?php }
+	
+			 // ALTERNATING HDI
+      if($s['type'] == "alternating-hdi"){ ?>
+<!-- 		I should put this in the thead -->
+	
+
+	<table class="table-hdi-alternating">
+	<?php if(!empty($s['content']['heading'])){ ?>	
+		<thead>
+			<tr>
+				<th colspan="4"><h2><?=$s['content']['heading'];?></h2></th>
+			</tr>
+		</thead>
+	<?php } ?>	
+		<tbody>
+	<?php   $z = 1;
+					foreach($s['content']['items'] as $f){ ?>
+			<tr>
+	<?php       if($z % 2 != 0){ ?>        
+					<td>
+							<img src="<?php if(isset($f['image']) && $f['image'] != ""){ echo $f['image']; } else { echo "http://via.placeholder.com/230x160"; } ?>" width="230" height="160" alt="<?php if(isset($f['heading']) && $f['heading'] != ""){ echo $f['heading']; } else { echo "Featured Product Name"; } ?>"/>
+					</td>
+	<?php       } ?>      
+					<td colspan="3">
+							<h3><a href="<?php if(isset($f['url']) && $f['url'] != ""){ echo $f['url']; } else { echo "#"; } ?>" <?php if(isset($f['url']) && $f['url'] != "" && $f['tab'] == "new"){ echo "target='_blank'"; } ?>><?php if(isset($f['image']) && $f['heading'] != ""){ echo $f['heading']; } else { echo "Featured Product Name"; } ?></a></h3>
+							<?php if(isset($f['copy']) && $f['copy'] != ""){ echo nl2br($f['copy']); } else { echo "Featured Product description"; } ?>
+					</td>
+	<?php       if($z % 2 == 0){ ?>   
+					<td>
+							<img src="<?php if(isset($f['image']) && $f['image'] != ""){ echo $f['image']; } else { echo "http://via.placeholder.com/230x160"; } ?>" width="230" height="160" alt="<?php if(isset($f['heading']) && $f['heading'] != ""){ echo $f['heading']; } else { echo "Featured Product Name"; } ?>"/>
+					</td>
+	<?php       } ?>
+			</tr>
+
+	<?php       $z++;
+					} ?>    
+		</tbody>
+	</table>		
+				
+				
+<?php	}
 
       // EMBEDDED PROMOS
       if($s['type'] == 'embedded-promos'){ 

@@ -1,7 +1,7 @@
 <?php
 	include("includes/db.php");
 	include("includes/sitefunctions.php");
-	include("../__classes/pagination.php");
+	include("../__classes/Pagination.php");
 	include("includes/header.php");
 
 	$sql = "SELECT * FROM webpromopages ORDER BY last_modified DESC";

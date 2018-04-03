@@ -1,6 +1,6 @@
 <?php
 	include("includes/db.php");
-	include("../__classes/pagination.php");
+	include("../__classes/Pagination.php");
 	include("includes/header.php");
 
 	$sql = "SELECT * FROM webl3pages ORDER BY last_modified DESC";
@@ -27,8 +27,8 @@
 <div class="row">
 	<div class="col-md-12">
 		<br>
-		<a href="l3page_e.php" class="btn btn-primary">New L3 Page</a>&nbsp;
-		<button class="btn btn-warning" type="button" id="import-old-toggle">Import from old style page</button> <br>
+		<a href="l2page_e.php?type=sub-category" class="btn btn-primary">New L3 Page</a>&nbsp;
+<!-- 		<button class="btn btn-warning" type="button" id="import-old-toggle">Import from old style page</button> <br> -->
 		<div id="import-old-container" style="display: none;">
 			
 			<form action="l3page_e.php?import=old" method="post" accept-charset="utf-8">

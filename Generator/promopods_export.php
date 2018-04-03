@@ -27,9 +27,9 @@ include("includes/header.php");
 <script>hljs.initHighlightingOnLoad();</script>
 
 <br>
-<a href="pages/promopods.html" download class="btn btn-success btn-xs" style="width: 80px;">Get File</a>&nbsp;&nbsp;
+<a href="pages/promopods.html" download class="btn btn-success btn-xs local" style="width: 80px;">Get File</a>&nbsp;&nbsp;
 <!--<button type="button" id="listImages" download class="btn btn-success btn-xs" style="width: 80px;" data-toggle="modal" data-target="#myModal">Images</button>&nbsp;&nbsp; -->
-<a href="promopods_e.php?title=<?php echo $_GET['title']; ?>" class="btn btn-primary btn-xs" style="width: 80px;">Edit</a>&nbsp;&nbsp;
+<a href="promopods_e.php?title=<?php echo $_GET['title']; ?>" class="btn btn-primary btn-xs local" style="width: 80px;">Edit</a>&nbsp;&nbsp;
 
 <br>
 <br>

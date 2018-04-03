@@ -13,7 +13,7 @@
 <script src="js/l2_page.js" ></script>
 <script>
 $(document).ready(function() {
-
+	
 	// FILE INPUT GROUPS
 	$(".file-toggle").click(function(){
 		$(this).closest('.file-group').find('.input-group').toggle();

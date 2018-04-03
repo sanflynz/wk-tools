@@ -20,6 +20,7 @@ include ("promopage_au_bare.php");
 
 ?>
 
+<input type="hidden" id="country" value="<?=$p['country'];?>">
 
 
 

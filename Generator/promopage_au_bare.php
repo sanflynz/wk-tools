@@ -23,26 +23,7 @@ elseif($p['country'] == "Australia"){
 
 ?>
 <style>
-	h1 {
-	font-family: Arial, Helvetica, sans-serif !important; 
-	line-height: 40px !important; 
-	font-size: 29px !important; 
-	color: #333 !important;
-	margin-top: 30px;
-	margin-bottom: 30px;
-}
-td {
-	font-size: 13px;
-}
-div.full-width {
-	width: 950px;
-}
-div.nav-width {
-	width: 700px;
-}
-.table th{
-	background-color: #ddd !important;
-}
+	
 .hdi {
 	/*margin-top: 30px;*/
 }
@@ -60,16 +41,11 @@ div.nav-width {
 	margin-right: 0px; 
 	box-sizing: content-box;
 	width: 69%;
-	font-size: 13px !important;
-	color: #616265 !important;
-	line-height: 22px !important;
 }
 
 .intro-copy {
 	margin-top: 30px;
-	font-size: 13px !important;
-	color: #616265 !important;
-	line-height: 22px !important;
+	
 }
 .features{
 	margin-top: 30px;
@@ -85,7 +61,6 @@ div.nav-width {
 	color:#616265; 
 	line-height:25px; 
 	list-style-type: disc !important;
-	font-size: 13px;
 }
 .promo-table{
 	margin-top: 30px;
@@ -112,14 +87,6 @@ div.nav-width {
 .resources ul > li {
 	box-sizing: content-box;
 	margin-bottom:10px;
-	font-size: 13px;
-}
-.resources h2 {
-	margin-top: 10px !important;
-	padding-top: 0px !important;
-	line-height: 100% !important;
-	font-size: 22px !important;
-	color: #333333 !important;
 }
 
 .terms-conditions {
@@ -133,11 +100,10 @@ div.nav-width {
 .more-content{
 	width: 100%;
 	margin-top: 30px;
-	font-size: 13px !important;
-	color: #616265 !important;
-	line-height: 22px !important;
 }
 </style>
+<link rel="stylesheet" type="text/css" href="http://uat.thermofisher.com.au/css/level-page-updates.css">
+
 
 <div class="full-width">
 	<div class="hdi">
