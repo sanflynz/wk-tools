@@ -30,6 +30,7 @@
 		<a href="l2page_e.php?type=storefront" class="btn btn-primary">New L1 Page</a>&nbsp;
 		<a href="l2page_e.php?type=category" class="btn btn-primary">New L2 Page</a>&nbsp;
 		<a href="l2page_e.php?type=sub-category" class="btn btn-primary">New L3 Page</a>&nbsp;
+		<a href="l2page_e.php?type=promo-child" class="btn btn-primary">New Promo Child</a>&nbsp;
 		
 		<button type="button" class="btn btn-warning import-toggle">Import</button>
 		<!-- <button class="btn btn-warning import-toggle" type="button" data-type="old-storefront">Import old Storefront</button><button class="btn btn-warning import-toggle" type="button" data-type="old-category">Import old Category (L2)</button>  --><br>
