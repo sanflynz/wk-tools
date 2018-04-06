@@ -28,9 +28,9 @@
 <form method="post" role="form" enctype="multipart/form-data">
 	<div class="row">
 		<div class="col-xs-6">
+			
 			<div class="file-group">
 				<div class="input-group">
-
 					<input type="text" name="heading" id="" value="somefile.jpg" class="form-control">
 					<div class="input-group-btn">
 						<button type="button" class="btn btn-primary file-toggle"><i class="fa fa-pencil" style="margin: 3px; 0px;"></i></button>
@@ -47,6 +47,8 @@
 			</div>
 			<br>
 			<br>
+			
+			
 			<div class="file-group">
 				<div class="input-group">
 

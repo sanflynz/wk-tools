@@ -21,8 +21,6 @@ while($row = $r->fetch_assoc()){
 // 	print '<pre>'; 
 // 	echo $row['content'];
 // 	print '</pre>';
-	//$sections[$i]['content'] = unserialize($row['content']);
-	//$sections[$i]['content'] = unserialize(str_replace('\r\n', '\n', $row['content']));
 	$sections[$i]['content'] = json_decode($row['content'],true);
   $sections[$i]['s_order'] = $row['s_order'];     
   $i++;
@@ -30,6 +28,15 @@ while($row = $r->fetch_assoc()){
 // 	print '<pre>'; 
 // 	print_r(str_replace("\r\n", "\n", $row['content']));
 // 	print '</pre>';
+}
+
+if($p['country'] == "New Zealand"){
+	$sURL = "http://www.thermofisher.co.nz/search.aspx?search=";
+	$gURL = "https://www.thermofisher.co.nz/godirect/main/productdetails.aspx?id=";
+}
+elseif($p['country'] == "Australia"){
+	$sURL = "http://www.thermofisher.com.au/search.aspx?search=";
+	$gURL = "https://www.thermofisher.com.au/godirect/main/productdetails.aspx?id=";
 }
 // print '<pre>'; 
 // print_r($sections);
@@ -41,7 +48,7 @@ while($row = $r->fetch_assoc()){
 <link rel="stylesheet" type="text/css" href="http://uat.thermofisher.com.au/css/level-page-updates.css">
 <!-- CONTENT BEGINS  -->
 
-<?php if($p['type'] == "storefront"){?>
+<?php if($p['type'] == "storefront" || $p['type'] == "promo-child"){?>
 <div class="full-width">
 <?php } else { ?>
 <div class="nav-width">
@@ -90,7 +97,7 @@ foreach($sections as $s){
   <table class="table-mondrian-f">
     <tr>
       <td style="width: 460px;">
-        <img src="<?php echo empty($s['content']['main-image']) ? "http://via.placeholder.com/454x258" : $s['content']['main-image']; ?>" alt="<?php if(!empty($s['content']['heading'])){ echo $s['content']['heading']; } ?>">
+        <img src="<?php echo empty($s['content']['image']) ? "http://via.placeholder.com/454x258" : $s['content']['image']; ?>" alt="<?php if(!empty($s['content']['heading'])){ echo $s['content']['heading']; } ?>">
       </td>
       <td class="table-mondrian-navigation">
         <ul>
@@ -112,11 +119,17 @@ foreach($sections as $s){
   <table class="table-hdi">
     <tr>
       <td width="100%">
-		<?php if(!empty($s['settings']['type']) && $s['settings']['type'] == "sub-category-default"){ ?>
+<?php	if(!empty($s['settings']['type']) && $s['settings']['type'] == "promo-child-default"){ ?>
+				 <h1><?php if(!empty($s['content']['heading'])){ echo $s['content']['heading']; } ?></h1>
+<?php	}			
+		 	if(!empty($s['settings']['type']) && ($s['settings']['type'] == "sub-category-default" || $s['settings']['type'] == "promo-child-default")){ ?>
 					<img src="<?php echo empty($s['content']['image']) ? "http://via.placeholder.com/230x230" : $s['content']['image']; ?>" alt="">
-		<?php	}		?>
+		<?php	}	
+					if($s['settings']['type'] != "promo-child-default"){?>
           <h1><?php if(!empty($s['content']['heading'])){ echo $s['content']['heading']; } ?></h1>
-  <?php   if(!empty($s['content']['copy'])){ echo nl2br($s['content']['copy']); } ?>   
+				
+  <?php 	}
+					if(!empty($s['content']['copy'])){ echo html_entity_decode($s['content']['copy']); } ?>   
       </td>
     </tr>
   </table>
@@ -225,6 +238,142 @@ foreach($sections as $s){
 				
 				
 <?php	}
+	
+	
+			if($s['type'] == "product-table"){ // PRODUCT TABLE ?>
+	<table class="table-product-table" style="width: 100%;">
+		<tr>
+			<td>
+<?php		if(!empty($s['content']['heading'])){ echo "<h3>" . $s['content']['heading'] . "</h3>"; }
+				echo "\t\t\t\t<table class=\"table table-bordered table-hover\">\n";
+				$rows = explode("\n", $s['content']['table']);
+				$r = 1;
+				foreach($rows as $row){
+					$cells = explode("\t", $row);
+					if($r == 1){
+
+						echo "\t\t\t\t\t<thead>\n";
+					}
+						echo "\t\t\t\t\t\t<tr>\n";
+						
+						$i = 0;
+						foreach($cells as $c){
+							$style = "";
+							
+							// does it have a width?
+							if(preg_match('/[0-9]+%/',$c,$w)){
+								$c = preg_replace('/\[([0-9]+%)\]/','',$c);
+								$style .= "width: " . $w[0] . "; ";
+							}
+							else{
+								if(preg_match('/unit/i', $c)){
+									$style .= "width: 10%;";
+								}
+								if(preg_match('/price/i', $c)){
+									$style .= "width: 12%;";
+								}								
+							}
+							
+							// Matching styles to columns...
+							if($r == 1){
+								$match = $c;
+								$h[$i] = $c;
+							}
+							else{
+								$match = $h[$i];
+							}
+							
+							// [text-center] [text-left] [text-right]
+							if(preg_match('/\[text-[a-zA-Z]+\]/',$match,$t)){
+								if($r == 1){
+									$c = preg_replace('/\[text-[a-zA-Z]+\]/','',$c);
+								}
+								if($t[0] == "[text-center]") { $style .= "text-align: center; "; }
+								if($t[0] == "[text-left]") { $style .= "text-align: left; "; }
+								if($t[0] == "[text-right]") { $style .= "text-align: right; "; }
+							}
+							else{
+								if(preg_match('/unit/i', $match)){
+									$style .= "text-align: center; ";
+								}
+								if(preg_match('/price/i', $match)){
+									$style .= "text-align: right; ";
+								}								
+							}
+							
+							// Item Code and Description links
+							if(preg_match('/item code/i', trim($match)) && $r != 1){
+								$c = "<a href=\"" . $sURL . $c . "#gsc.tab=0&gsc.q=" . trim($c) . "\" onClick=\"_gaq.push(['_trackEvent', 'Product Search Link', 'Item Code', '" . $c . "']);\">" . trim($c) . "</a>";
+							}
+							if(preg_match('/item code/i', trim($h[0])) && preg_match('/description/i', trim($match)) && $r != 1){
+								$c = "<a href=\"" . $sURL . $cells[0] . "#gsc.tab=0&gsc.q=" . trim($cells[0]) . "\" onClick=\"_gaq.push(['_trackEvent', 'Product Search Link', 'Item Code', '" . $cells[0] . "']);\">" . trim($c) . "</a>";
+							}
+							
+							// BUTTONS
+							if(preg_match('/\[btn-buy\]/',$c)){
+								if(!preg_match('/item code/i', trim($h[0]))){
+									$c = "Must have item code in column 1";
+								}
+								else{
+									$c = "<a href=\"" . $gURL . $cells[0] . "\" class=\"btn btn-commerce btn-mini\" target=\"_blank\" onClick=\"_gaq.push(['_trackEvent', 'Product Buy Link', 'Item Code', '" . trim($cells[0]) . "']);\">Login to buy</a>";
+									$style .= "width: 10%; text-align: center;";
+								}
+							}
+							if(preg_match('/\[btn=(.*)\]/',$c,$t)){
+								$l = explode("|",$t[1]);
+									if(!empty($l[2]) && $l[2] == "new"){ $tab = "target=\"_blank\""; } else { $tab = ""; }
+									$c = "<a href=\"" . $l[1] . "\" " . $tab . " class=\"btn btn-primary\">" . $l[0] . "</a>";
+							}
+							
+							// LINKS
+							if(preg_match('/\[link(.*)=(.*)\]/',$c,$t)){
+								if($t[1] == "-item"){
+									$c = "<a href=\"" . $sURL . $t[2] . "#gsc.tab=0&gsc.q=" . $t[2] . "\" onClick=\"_gaq.push(['_trackEvent', 'Product Search Link', 'Companion Item Code', '" . $t[2] . "']);\">" . $t[2] . "</a>";
+								}
+								elseif($t[1] == "-quote"){
+									$c = "<a href=\"" . $t[2] . "\">Request quote</a>";
+								}
+								elseif($t[1] == ""){
+									$l = explode("|",$t[2]);
+									if(!empty($l[2]) && $l[2] == "new"){ $tab = "target=\"_blank\""; } else { $tab = ""; }
+									$c = "<a href=\"" . $l[1] . "\" " . $tab . ">" . $l[0] . "</a>";
+								}
+							}
+							
+							
+							
+							if($style){
+								$style = "style=\"" . $style ."\"";
+							}
+							if($r == 1){
+								echo "\t\t\t\t\t\t\t<th " . $style . ">" . $c . "</th>\n";
+							}
+							else{
+								echo "\t\t\t\t\t\t\t<td " . $style . ">" . $c . "</td>\n";
+							}
+							
+							$i++;
+						}
+						
+						echo "\t\t\t\t\t\t</tr>\n";
+					if($r == 1){
+						echo "\t\t\t\t\t</thead>\n";
+					}	
+					$r++;
+					
+				}
+				echo "\t\t\t\t</table>\n";
+				
+				
+				
+				
+				?>				
+			</td>
+		</tr>
+	</table>
+				
+<?php	}
+	
 
       // EMBEDDED PROMOS
       if($s['type'] == 'embedded-promos'){ 
@@ -270,7 +419,29 @@ foreach($sections as $s){
     </tbody>
   </table>
 <?php   } 
-      }
+      }  // RESOURCES ENDS
+	
+	
+			if($s['type'] == "terms-conditions"){ ?>
+	<table class="table-promo-tandc">
+	<tr>
+		<td>
+			<h4>Terms & Conditions</h4>
+			<?=$s['content']; ?>
+		</td>
+	</tr>
+</table>			
+<?php	} // T AND C ENDS
+			
+			if($s['type'] == "custom"){ ?>
+	<table class="table-custom">
+	<tr>
+		<td>
+			<?=html_entity_decode($s['content']); ?>
+		</td>
+	</tr>
+</table>			
+<?php	} // T AND C ENDS
        ?>
 
 

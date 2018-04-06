@@ -39,3 +39,6 @@ Spec Table Builder/
 
 # ignore test files
 test*.html
+
+# ignore local Uploads files
+Uploads/*

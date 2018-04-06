@@ -42,6 +42,7 @@
 					<option value="old-storefront">Old Storefront</option>
 					<option value="old-category">Old Category</option>
 					<option value="old-sub-category">Old Sub-category</option>
+					<option value="old-items-list">Old Items List</option>
 				</select>
 				<br>
 				

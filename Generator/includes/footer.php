@@ -14,31 +14,31 @@
 <script>
 $(document).ready(function() {
 	
-	// FILE INPUT GROUPS
-	$(".file-toggle").click(function(){
-		$(this).closest('.file-group').find('.input-group').toggle();
-	});
+// 	// FILE INPUT GROUPS
+// 	$(".file-toggle").click(function(){
+// 		$(this).closest('.file-group').find('.input-group').toggle();
+// 	});
 
-	$('.file-cancel').click(function(){
-		console.log("emptying...");
-		$(this).closest('.file-group').find(':file').val('');
-		$(this).closest('.file-group').find('.file-text').val('');
-	});
+// 	$('.file-cancel').click(function(){
+// 		console.log("emptying...");
+// 		$(this).closest('.file-group').find(':file').val('');
+// 		$(this).closest('.file-group').find('.file-text').val('');
+// 	});
 
-	$('.file-group').on('change', (':file'), function(){
-		var target = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
-		$(this).closest('.file-group').find('.file-text',0).val(target);
-	});
+// 	$('.file-group').on('change', (':file'), function(){
+// 		var target = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
+// 		$(this).closest('.file-group').find('.file-text',0).val(target);
+// 	});
 
-	$('.file-dialog').click(function(){
-		//console.log("Check: " + $(this).closest('.file-group').find('.file-text',0).val("Stuff and things "));
-		var file = $(this).closest('.file-group').find(':file');
-		file.trigger("click", function(){
-			console.log("clicked!!");
+// 	$('.file-dialog').click(function(){
+// 		//console.log("Check: " + $(this).closest('.file-group').find('.file-text',0).val("Stuff and things "));
+// 		var file = $(this).closest('.file-group').find(':file');
+// 		file.trigger("click", function(){
+// 			console.log("clicked!!");
 			
-		});
-		//$("input").trigger("click");
-	});
+// 		});
+// 		//$("input").trigger("click");
+// 	});
 
 
 

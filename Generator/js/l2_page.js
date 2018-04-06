@@ -1,8 +1,30 @@
 $(document).ready(function() {
 	console.log("Loaded L2 page js");
+		
+// FILE INPUT GROUPS
+$("#sections").on("click",".file-toggle", function(){
+				$(this).closest('.file-group').find('.input-group').toggle();
+			});
+
+$("#sections").on("click",".file-cancel", function(){
+	$(this).closest('.file-group').find(':file').val('');
+	$(this).closest('.file-group').find('.file-text').val('');
+});
+
+$('#sections').on('change', (':file'), function(){
+	var target = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
+	$(this).closest('.file-group').find('.file-text',0).val(target);
+});
+
+$("#sections").on("click",".file-dialog", function(){
+	//console.log("Check: " + $(this).closest('.file-group').find('.file-text',0).val("Stuff and things "));
+	var file = $(this).closest('.file-group').find(':file');
+	file.trigger("click", function(){
+		console.log("clicked!!");
+	});
+	//$("input").trigger("click");
+});
 	
-	var addBtn = '<div class="input-group-btn"><button class="btn btn-success" type="button"><i class="fa fa-pencil"></i></button></div>';
-	$('.image-upload').after(addBtn);
 
 function toggleSectionArrows(){
 	var fCount = $('#sections').find('.section').length;
@@ -25,8 +47,32 @@ function toggleSectionArrows(){
 			$(this).find(".section-down").addClass("disabled");
 		}
 		
+		$(this).find('input').each(function(){ // re-index inputs/textareas
+			var oldName = $(this).attr('name');
+			if(oldName){
+				var newName = oldName.replace(/section\[[0-9]+\]/,"section["+i+"]");
+				$(this).attr('name',newName);
+			}				
+		});
+		$(this).find('textarea').each(function(){ // re-index inputs/textareas
+			var oldName = $(this).attr('name');
+			if(oldName){
+				var newName = oldName.replace(/section\[[0-9]+\]/,"section["+i+"]");
+				$(this).attr('name',newName);
+			}				
+		});
+		$(this).find('select').each(function(){ // re-index inputs/textareas
+			var oldName = $(this).attr('name');
+			if(oldName){
+				var newName = oldName.replace(/section\[[0-9]+\]/,"section["+i+"]");
+				$(this).attr('name',newName);
+			}				
+		});
+		
+		
 	});
 }
+	
 function reorderSections(){
 	$('#sections').find('.section').each(function(i){
 		$(this).find('.section-order').val(i);
@@ -78,14 +124,14 @@ $("#sections").on("click",".section-delete", function(){
 				type: 'post',
 				data: {'id': sectionID },
 				success: function(data, status) {
-					console.log("Delete data: " + data);
+					console.log("Delete success");
 					if(data == "success") {
 						$current.remove();
 					}
 				},
 				error: function(xhr, desc, err) {
 					console.log(xhr);
-					console.log("Details: " + desc + "\nError:" + err);
+					console.log("Error Details: " + desc + "\nError:" + err);
 				}
 			}); 
 			// if success remove current
@@ -107,28 +153,43 @@ function toggleFeatureArrows(table){
 	var fCount = table.find('tr').length;
 	
 	table.find('tr').each(function(i){
+		console.log("tr: " + i)
 		
-		var x = i + 1;
 		if(i == 1){
 			$(this).find(".feature-up").addClass("disabled");
-			
 		}
 		if(fCount > 2 && i > 1){
 			$(this).find(".feature-up").removeClass("disabled");
 		}
-		if(fCount > 2 && i < fCount){
+		if(fCount > 2 && i < fCount - 1){
 			$(this).find(".feature-down").removeClass("disabled");
 		}
 		if(i == fCount - 1){
 			$(this).find(".feature-down").addClass("disabled");
 		}
 		
+		var x = i - 1;
 		if(i > 0){  // rename the indexes for proper ordering?  Easier than PHP way?
 			$(this).find('input').each(function(){
 				var oldName = $(this).attr('name');
-				//console.log(oldName);
-				var newName = oldName.replace(/\[items\]\[[0-9]+\]/,"[items]["+i+"]");
-				$(this).attr('name',newName);
+				if(oldName){
+					var newName = oldName.replace(/\[items\]\[[0-9]+\]/,"[items]["+x+"]");
+					$(this).attr('name',newName);
+				}				
+			});
+			$(this).find('textarea').each(function(){
+				var oldName = $(this).attr('name');
+				if(oldName){
+					var newName = oldName.replace(/\[items\]\[[0-9]+\]/,"[items]["+x+"]");
+					$(this).attr('name',newName);
+				}				
+			});
+			$(this).find('select').each(function(){
+				var oldName = $(this).attr('name');
+				if(oldName){
+					var newName = oldName.replace(/\[items\]\[[0-9]+\]/,"[items]["+x+"]");
+					$(this).attr('name',newName);
+				}				
 			});
 		}
 		
@@ -187,6 +248,79 @@ $(".section").on("click", ".feature-delete", function(){
     	toggleFeatureArrows(table);
 	}			
 });
+	
+	
+$("#add-section").click(function(){
+	var sType = $('#section-to-add').val();
+	if(sType){
+		console.log("adding section " + sType);
+		
+		// count existing sections
+		var i = $("#sections").find(".section").length;
+		console.log("Existing Sections: " + i);
+		
+		var sctn = '<div class="section">' +
+						'<div class="section-heading">' +
+							'<h4>' + sType + '</h4>' +
+							'<div>' +
+								'<button type="button" class="btn btn-default btn-sm section-up"><i class="fa fa-arrow-up"></i></button> ' +
+								'<button type="button" class="btn btn-default btn-sm section-down"><i class="fa fa-arrow-down"></i></button> ' +
+								'<button type="button" class="btn btn-default btn-sm section-delete"><i class="fa fa-trash"></i></button> ' +
+							'</div>' +
+						'</div>' +
+						'<input type="hidden" name="section[' + i + '][id]" class="section-id" value="">' +
+						'<input type="hidden" name="section[' + i + '][s_order]" class="section-order" value="' + i + '">' +
+						'<input type="hidden" name="section[' + i + '][type]" value="' + sType + '">';
+							
+		
+		if(sType == "product-table"){		
+			
+			sctn += '<table class="table table-edit-components">' +
+					'<tr>' +
+						'<td>Heading<br>(optional)</td>' +
+						'<td><input type="text" name="section[' + i + '][content][heading]" class="form-control" value=""></td>' +
+					'</tr>' +
+					'<tr>' +
+						'<td>' +
+							'Table <br>' +
+							'<br>' +
+							'<button type="button" class="btn btn-default disabled"><i class="fa fa-info"></i></button>' +
+						'</td>' +
+						'<td>' +
+							'<textarea name="section[' + i + '][content][table]" rows="10" class="form-control"></textarea>' +								
+						'</td>' +
+					'</tr>' +
+				'</table>';
+		}
+		
+		if(sType == "custom"){
+			sctn += '<table class="table table-edit-components">' +
+					'<tr>' +
+						'<td>HTML</td>' +
+						'<td>' +
+							'<textarea name="section[' + i + '][content]" rows="10" class="form-control"></textarea>' +
+						'</td>' +
+					'</tr>' +
+			'</table>';
+		}
+		
+		sctn += '</div>';
+		
+		//console.log(sctn);
+		
+		$('#sections').append(sctn);
+
+// 	var table = $(this).closest('.table').prev('.table');
+		reorderSections();
+    toggleSectionArrows();		
+		
+	}
+	else{
+		console.log("no section type selected")
+	}
+	
+});	
+	
 
 $("#add-category-list").click(function(){
 	console.log("adding list item");
@@ -236,17 +370,17 @@ $("#add-category-list").click(function(){
 
 $("#add-alternating-hdi").click(function(){
 	//alert('Ready tomorrow!');
-	
+	console.log("Adding alternating hdi...");
 	var sN = $(this).closest('.section').find('.section-order').val();
-	var rN = $(this).closest('.table').prev('.table').find('tr').length;
+	var rN = $(this).closest('.table').prev('.table').find('tr').length - 1;
 	
-	console.log(sN + "," + rN);
+	console.log("Section: " + sN + ", row: " + rN);
 	
 	var row;
 	
 	row = '<tr>' + 
 			'<td>' +
-				'Item ' + rN + '<br>' +
+				'Item ' + (rN + 1) + '<br>' +
 				'<button type="button" class="btn btn-default btn-sm feature-up" title="Move up"><i class="fa fa-arrow-up"></i></button> ' +
 				'<button type="button" class="btn btn-default btn-sm feature-down" title="Move down"><i class="fa fa-arrow-down"></i></button> ' +
 				'<button type="button" class="btn btn-default btn-sm feature-delete" title="Delete"><i class="fa fa-trash"></i></button>' +
@@ -259,10 +393,25 @@ $("#add-alternating-hdi").click(function(){
 							'<span class="input-group-addon">Heading</span>' +
 							'<input type="text" name="section[' + sN + '][content][items][' + rN + '][heading]" class="form-control" value="">' +
 						'</div>' +
-						'<div class="input-group" style="margin-bottom: 5px; !important;">' +
-							'<span class="input-group-addon">Image</span>' + 
-							'<input type="text" name="section[' + sN + '][content][items][' + rN + '][image]" class="form-control" value="">' +
+		
+						'<div class="file-group">' +
+							'<div class="input-group" style="margin-bottom: 5px; !important;">' +
+								'<span class="input-group-addon">Image</span>' +
+								'<input type="text" name="section[' + sN + '][content][items][' + rN + '][image]" class="form-control" value="">' +
+								'<div class="input-group-btn">' + 
+									'<button type="button" class="btn btn-primary file-toggle"><i class="fa fa-pencil" style="margin: 3px; 0px;"></i></button>' +
+								'</div>' +
+							'</div>' +
+							'<div class="input-group" style="display: none">' +
+								'<input type="text" class="form-control file-text">' +
+								'<div class="input-group-btn">' +
+									'<button type="button" class="btn btn-primary file-dialog"><i class="fa fa-folder-open" style="margin: 3px; 0px;"></i></button>' +
+									'<button type="button" class="btn btn-danger file-toggle file-cancel"><i class="fa fa-ban" style="margin: 3px; 0px;"></i></button>' +
+								'</div>' +
+							'</div>' +
+							'<input type="file" name="section[' + sN + '][content][items][' + rN + '][image]" class="form-control" style="display: none;">' +
 						'</div>' +
+		
 						'<div class="input-group" style="margin-bottom: 5px; !important;">' +
 							'<span class="input-group-addon">URL</span>' +
 							'<input type="text" name="section[' + sN + '][content][items][' + rN + '][url]" class="form-control" value="">' + 
@@ -270,7 +419,7 @@ $("#add-alternating-hdi").click(function(){
 									
 						'<div class="input-group" style="margin-bottom: 5px; !important;">' +
 							'<span class="input-group-addon">tab</span>' +
-							'<select name="section['+ sN + '>][content][items][' + rN + '][tab]" id="" class="form-control">' +
+							'<select name="section['+ sN + '][content][items][' + rN + '][tab]" id="" class="form-control">' +
 								'<option value="parent">Parent</option>' +
 								'<option value="new">New</option>' +
 							'</select>' +

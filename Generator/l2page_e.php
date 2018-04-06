@@ -2,10 +2,17 @@
 
 include("includes/db.php");
 include("includes/sitefunctions.php");
+include('../__classes/UploadFile.php');
+
+//$images = "../../../Uploads/image/";
+$images = "../Uploads/image/";
+$imagesRelative = "/Uploads/image/";
 
 $error = FALSE;
 
 if($_POST && !isset($_POST['import'])){
+	
+	
 
 	$p = $_POST['page'];
 	$sections = $_POST['section'];
@@ -14,26 +21,77 @@ if($_POST && !isset($_POST['import'])){
 
 	// Page
 	$data['page'] = $_POST['page'];
-
-	// print '<pre>'; 
-	// print_r($_POST);
-	// print '</pre>';
+	
+// 	print '<pre>'; 
+// 	print_r($sections);
+// 	print '</pre>';
+	
+// 	print '<pre>'; 
+// 	print_r($_FILES);
+// 	print '</pre>';
 
 	// sections
 	$i = 0;
-	foreach($sections as $s){
+	foreach($sections as $k=>$s){		
 		
-
-		// dirty way of reordering the indexes after reordering??
-		if($s['type'] == 'category-lists'){
-			// need to reorder the index?
+		if($s['type'] == "mondrian-a"){
+			$panels = array('feature','centre','landscape');
+			foreach($panels as $panel){
+				//section-<>-content-<panel>-image
+				$img = array();
+				$img['name'] = $_FILES['section']['name'][$k]['content'][$panel]['image'];
+				$img['type'] = $_FILES['section']['type'][$k]['content'][$panel]['image'];
+				$img['tmp_name'] = $_FILES['section']['tmp_name'][$k]['content'][$panel]['image'];
+				$img['error'] = $_FILES['section']['error'][$k]['content'][$panel]['image'];
+				$img['size'] = $_FILES['section']['size'][$k]['content'][$panel]['image'];
+				
+				if(!empty($img) && $img['error'] != 4){
+					$up = new UploadFile($conn, $images);  // Can we put destination and file into this?
+					if($up->upload($img)){
+						unset($s['content']['image']);
+						$s['content'][$panel]['image'] = $imagesRelative . $img['name'];
+					}
+				}
+				
+			}
+		}
+		
+// 		if($s['type'] == "mondrian-f"){
+// 			//images
+// 		}
+		
+		if($s['type'] == "hdi" || $s['type'] == "mondrian-f"){
+			$img = array();
+			$img['name'] = $_FILES['section']['name'][$k]['content']['image'];
+			$img['type'] = $_FILES['section']['type'][$k]['content']['image'];
+			$img['tmp_name'] = $_FILES['section']['tmp_name'][$k]['content']['image'];
+			$img['error'] = $_FILES['section']['error'][$k]['content']['image'];
+			$img['size'] = $_FILES['section']['size'][$k]['content']['image'];
 			
+			if(!empty($img) && $img['error'] != 4){
+				$up = new UploadFile($conn, $images);  // Can we put destination and file into this?
+				if($up->upload($img)){
+					unset($s['content']['image']);
+					$s['content']['image'] = $imagesRelative . $img['name'];
+					//$s['content']['image']['new'] = $imagesRelative . $img['name'];
+				}
+			}
+			
+			if($s['type'] == "hdi"){
+				//$s['content']['copy'] = str_replace("'","&apos;",$s['content']['copy']);
+				$s['content']['copy'] = htmlentities($s['content']['copy']);
+				//echo htmlentities($s['content']['copy']);
+			}
+
+		}
+
+		// dirty way of reordering the indexes after reordering??  can i remove this now??  fixed w jq??
+		if($s['type'] == 'category-lists'){
+			// need to reorder the index?  
 			$content = $s['content']['items'];
 			unset($s['content']['items']);
-
 			$x = 1;
 			foreach($content as $c){
-
 				//$c['copy'] = mysqli_real_escape_string($conn,$c['copy']);
 				//echo $c['copy'];
 				$s['content']['items'][$x]['heading'] = $c['heading'];
@@ -43,19 +101,39 @@ if($_POST && !isset($_POST['import'])){
 				//$s['content']['items'][$x]['copy'] = mysqli_real_escape_string($conn,$s['content']['items'][$x]['copy']);
 				$x++;
 			}
-			// foreach($s['content']['items'] as $y){
-			// 	$y['copy'] = mysqli_real_escape_string($conn,$y['copy']);
-			// }
-			//$s['content']['items'] = $content;
-			// print '<pre>'; 
-			// print_r($s);
-			// print '</pre>';
+		}
+		
+		if($s['type'] == "alternating-hdi" || $s['type'] == "featured-gateway"){ // popular?
+			for($i = 0; $i < count($_FILES['section']['name'][$k]['content']['items']); $i++){
+				$img = array();
+				$img['name'] = $_FILES['section']['name'][$k]['content']['items'][$i]['image'];
+				$img['type'] = $_FILES['section']['type'][$k]['content']['items'][$i]['image'];
+				$img['tmp_name'] = $_FILES['section']['tmp_name'][$k]['content']['items'][$i]['image'];
+				$img['error'] = $_FILES['section']['error'][$k]['content']['items'][$i]['image'];
+				$img['size'] = $_FILES['section']['size'][$k]['content']['items'][$i]['image'];
+
+				if(!empty($img['name']) && $img['error'] != 4){
+					$up = new UploadFile($conn, $images);  // Can we put destination and file into this?
+					if($up->upload($img)){
+						unset($s['content']['items'][$i]['image']);
+						$s['content']['items'][$i]['image'] = $imagesRelative . $img['name'];
+						
+						//$s['content']['items'][$i]['image'] = "raaaa";
+					}
+					
+				}
+			}
+		}
+		
+		
+		if($s['type'] == "custom"){
+			$s['content'] = htmlentities($s['content']);
 		}
 
-		if($s['type'] == "hdi"){
-			$s['content']['copy'] = str_replace("'","&apos;",$s['content']['copy']);
-			//$s['content']['copy'] = addslashes($s['content']['copy']);
-		}
+// 		print '<pre>'; 
+// 		print_r($s['content']);
+// 		//print_r($data);
+// 		print '</pre>';
 
 		$data['section'][$i]['id'] = $s['id'];
 		$data['section'][$i]['type'] = $s['type'];
@@ -67,14 +145,13 @@ if($_POST && !isset($_POST['import'])){
 		$data['section'][$i]['content'] = json_encode($s['content']);
 		$data['section'][$i]['s_order'] = $s['s_order'];
 		$i++;
-
-		
-		
-		
 	}
 	
+	
+	
 // 	print '<pre>'; 
-// 	//print_r($sections);
+// 	print_r($sections);
+// 	echo "<hr>";
 // 	print_r($data);
 // 	print '</pre>';
 // 	exit();
@@ -170,6 +247,7 @@ else {
 	if(!empty($_POST['import'])){  // import stuff
 		$import = $_POST;
 		$settings = array();
+		
 		if($import['import-type'] == "old-storefront"){
 			include("includes/import-old-storefront.php");
 			$p['type'] = "storefront";
@@ -188,17 +266,22 @@ else {
 			);
 			
 		}
+		
 		elseif($import['import-type'] == "old-category"){
 			include("includes/l2-import-old.php");
 			$p['type'] = "category";
 		}
+		
 		elseif($import['import-type'] == "old-sub-category"){
-// 			print '<pre>'; 
-// 			print_r($import['settings']);
-// 			print '</pre>';
 			include("includes/import-old-sub-category.php");
 			$p['type'] = "sub-category";
 			$settings = $import['settings'];
+		}
+		
+		elseif($import['import-type'] == "old-items-list"){
+			$settings = array();
+			include("includes/import-old-items-list.php");
+			$p['type'] = "sub-category";
 		}
 		
 		$data = import_page($import['url'], $settings);
@@ -246,6 +329,14 @@ else {
 			);
 			$p['type'] = $_GET['type'];
 		}
+		elseif(!empty($_GET['type']) && $_GET['type'] == "promo-child"){
+			$sections = array(
+				0 => array('type' => "hdi", 'settings' => array('type' => 'promo-child-default')),
+				1 => array('type' => "product-table"),
+				2 => array('type' => "terms-conditions")
+			);
+			$p['type'] = $_GET['type'];
+		}
 		else{
 			setFlash("danger", "You must select a page type");
 			$sections = array();
@@ -263,9 +354,9 @@ else {
 
 include("includes/header.php");
 
-	// print '<pre>'; 
-	// print_r($data);
-	// print '</pre>';
+// 	print '<pre>'; 
+// 	print_r($data);
+// 	print '</pre>';
 
 ?>
 <style>
@@ -273,6 +364,70 @@ include("includes/header.php");
 		border-top: 0px !important;
 	}
 </style>
+
+<div id="wysiwyg-insert-link" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Insert link</h4>
+      </div>
+      <div class="modal-body">
+        <table class="wysiwyg-modal">
+          <tr>
+            <td>Text</td>
+            <td>
+              <input id="insert-link-text" class="form-control" value="">
+            </td>
+          </tr><tr>
+            <td>URL</td>
+            <td>
+              <input id="insert-link-url" class="form-control" value="">
+            </td>
+          </tr>
+          <tr>
+            <td>Target</td>
+            <td>
+              <select id="insert-link-target" class="form-control">
+                <option value="">Parent</option>
+                <option value="_blank">New tab</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Type</td>
+            <td>
+              <select id="insert-link-type" class="form-control">
+                <option value="">Plain link</option>
+                <option value="btn-primary">Primary button</option>
+                <option value="btn-featured">Featured button (red)</option>
+                <option value="btn-commerce">Commerce button (green)</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Size</td>
+            <td>
+              <select id="insert-link-size" class="form-control">
+                <option value="">Normal</option>
+                <option value=" btn-mini">Mini</option>
+                <option value=" btn-small">Small</option>
+                <option value=" btn-large">Large</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="insert-link-action" class="btn btn-success">Insert button</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="row">
 	<div class="col-xs-12">
 		<h1>Level 1/2/3 page add/edit</h1>
@@ -295,8 +450,8 @@ include("includes/header.php");
 				<td>
 					<select name="page[country]" id="" class="form-control" required autocomplete="foo">
 						<option></option>
-						<option value="Australia" <?php if(!empty($p['country']) == "Australia") {echo " selected"; } ?> >Australia</option>
-						<option value="New Zealand" <?php if(!empty($p['country']) == "New Zealand") {echo " selected"; } ?>>New Zealand</option>
+						<option value="Australia" <?php if(!empty($p['country']) && $p['country'] == "Australia") {echo " selected"; } ?> >Australia</option>
+						<option value="New Zealand" <?php if(!empty($p['country']) && $p['country'] == "New Zealand") {echo " selected"; } ?>>New Zealand</option>
 					</select>
 				</td>
 			</tr>
@@ -345,10 +500,23 @@ include("includes/header.php");
 							<td>
 								<div class="row">
 									<div class="col-md-6">
-										<div class="input-group">
-											<span class="input-group-addon"><?=$panel;?> Image</span>
-											<input type="text" name="section[<?=$i; ?>][content][<?=$panel;?>][image]" class="form-control" value="<?php if(!empty($s['content'][$panel]['image'])){ echo $s['content'][$panel]['image']; } ?>">
-										</div>
+										<div class="file-group">
+											<div class="input-group">
+												<span class="input-group-addon"><?=$panel;?> Image</span>
+												<input type="text" name="section[<?=$i; ?>][content][<?=$panel;?>][image]" class="form-control" value="<?php if(!empty($s['content'][$panel]['image'])){ echo $s['content'][$panel]['image']; } ?>">
+												<div class="input-group-btn">
+													<button type="button" class="btn btn-primary file-toggle file-dialog"><i class="fa fa-pencil" style="margin: 3px; 0px;"></i></button>
+												</div>
+											</div>
+											<div class="input-group" style="display: none">
+												<input type="text" class="form-control file-text">
+												<div class="input-group-btn">
+													<button type="button" class="btn btn-primary file-dialog"><i class="fa fa-folder-open" style="margin: 3px; 0px;"></i></button>
+													<button type="button" class="btn btn-danger file-toggle file-cancel"><i class="fa fa-ban" style="margin: 3px; 0px;"></i></button>
+												</div>
+											</div>
+											<input type="file" name="section[<?=$i; ?>][content][<?=$panel;?>][image]" class="form-control" style="display: none;">
+										</div>	
 										
 									</div>
 									<div class="col-md-6">
@@ -420,12 +588,26 @@ include("includes/header.php");
 							<td>Main image</td>
 							<td>
 								<div class="row">
-									<div class="col-md-6">
-										<input type="text" name="section[<?php echo $i; ?>][content][main-image]" id="" class="form-control" value="<?php if(isset($s['content']['main-image'])){ echo $s['content']['main-image']; } ?>">
+									<div class="col-md-12">
+										<div class="file-group">
+											<div class="input-group">
+												<span class="input-group-addon">Image</span>
+												<input type="text" name="section[<?=$i; ?>][content][image]" id="" class="form-control" value="<?php if(!empty($s['content']['image'])){ echo $s['content']['image']; } ?>">
+												<div class="input-group-btn">
+													<button type="button" class="btn btn-primary file-toggle file-dialog"><i class="fa fa-pencil" style="margin: 3px; 0px;"></i></button>
+												</div>
+											</div>
+											<div class="input-group" style="display: none">
+												<input type="text" class="form-control file-text">
+												<div class="input-group-btn">
+													<button type="button" class="btn btn-primary file-dialog"><i class="fa fa-folder-open" style="margin: 3px; 0px;"></i></button>
+													<button type="button" class="btn btn-danger file-toggle file-cancel"><i class="fa fa-ban" style="margin: 3px; 0px;"></i></button>
+												</div>
+											</div>
+											<input type="file" name="section[<?=$i; ?>][content][image]" class="form-control" style="display: none;">
+										</div>	
 									</div>
-									<div class="col-md-6">
-										<input type="file" name="section[<?php echo $i; ?>][content][main-image]" class="form-control" value="">
-									</div>
+									
 								</div>
 								
 							</td>
@@ -469,13 +651,28 @@ include("includes/header.php");
 			if($s['type'] == "hdi"){ ?>
 					<input type="hidden" name="section[<?=$i; ?>][settings][type]" value="<?php if(!empty($s['settings']['type'])) { echo $s['settings']['type']; } ?>">
 					<table class="table table-edit-components">
-<?php			if(!empty($s['settings']['type']) && $s['settings']['type'] == "sub-category-default"){ ?>
+<?php			if(!empty($s['settings']['type']) && ($s['settings']['type'] == "sub-category-default" || $s['settings']['type'] == "promo-child-default")){ ?>
 						<tr>
 							<td>Image</td>
 							<td>
-								<div class="input-group">
-									<span class="input-group-addon">Image</span>
-									<input type="text" name="section[<?php echo $i; ?>][content][image]" class="form-control image-upload" value="<?php if(isset($s['content']['image'])){ echo $s['content']['image']; } ?>"></div></td>
+								<div class="file-group">
+									<div class="input-group">
+										<span class="input-group-addon">Image</span>
+										<input type="text" name="section[<?=$i; ?>][content][image]" class="form-control image-upload" value="<?php if(!empty($s['content']['image'])){ echo $s['content']['image']; } ?>">
+										<div class="input-group-btn">
+											<button type="button" class="btn btn-primary file-toggle file-dialog"><i class="fa fa-pencil" style="margin: 3px; 0px;"></i></button>
+										</div>
+									</div>
+									<div class="input-group" style="display: none">
+										<input type="text" class="form-control file-text">
+										<div class="input-group-btn">
+											<button type="button" class="btn btn-primary file-dialog"><i class="fa fa-folder-open" style="margin: 3px; 0px;"></i></button>
+											<button type="button" class="btn btn-danger file-toggle file-cancel"><i class="fa fa-ban" style="margin: 3px; 0px;"></i></button>
+										</div>
+									</div>
+									<input type="file" name="section[<?=$i; ?>][content][image]" class="form-control" style="display: none;">
+								</div>	
+							</td>
 						</tr>
 		<?php	}	?>
 						<tr>
@@ -485,7 +682,41 @@ include("includes/header.php");
 						<tr>
 							<td>Copy</td>
 							<td>
-								<textarea name="section[<?php echo $i; ?>][content][copy]" rows="5" class="form-control"><?php if(isset($s['content']['copy'])){ echo htmlentities($s['content']['copy']); } ?></textarea>
+								<div class="wysiwyg-toolbar">
+									<div class="btn-group toolbar">
+										<button type="button" class="btn btn-default btn-sm tool" data-command="undo" title="Undo"><i class='fa fa-undo'></i></button>
+								</div>
+								<div class="btn-group toolbar">
+										<button type="button" class="btn btn-default btn-sm tool" data-command="bold" title="Bold"><i class='fa fa-bold'></i></button>
+										<button type="button" class="btn btn-default btn-sm tool" data-command="italic" title="Italic"><i class='fa fa-italic'></i></button>
+										<button type="button" class="btn btn-default btn-sm tool" data-command="underline" title="Underline"><i class='fa fa-underline'></i></button>
+										<button type="button" class="btn btn-default btn-sm tool" data-command="superscript" title="Superscript"><i class='fa fa-superscript'></i></button> 
+										<button type="button" class="btn btn-default btn-sm tool" data-command="subscript" title="Subscript"><i class='fa fa-subscript'></i></button>
+								</div>
+								<div class="btn-group toolbar">  	
+										<div class="btn-group">
+											<button type="button" class="btn btn-default btn-sm dropdown-toggle tool" data-toggle="dropdown">Headings <span class="caret"></span></button>
+											<ul class="dropdown-menu" role="menu">
+													<li><a href="#" data-command="h2" class="tool">H2</a></li>
+													<li><a href="#" data-command="h3" class="tool">H3</a></li>
+													<li><a href="#" data-command="h4" class="tool">H4</a></li>
+											</ul>
+										</div>
+								</div>
+								<div class="btn-group toolbar">
+										<button type="button" class="btn btn-default btn-sm tool" data-command="insert-link" title="Insert button"><i class="fa fa-link"></i></button>			
+										<button type="button" class="btn btn-default btn-sm tool" data-command="unlink" title="Unink"><i class='fa fa-unlink'></i></button>  	
+								</div>
+								<div class="btn-group toolbar">
+									<button type="button" class="btn btn-default btn-sm tool" data-command="insertUnorderedList" title="Bullet list"><i class='fa fa-list-ul'></i></button>
+									<button type="button" class="btn btn-default btn-sm tool" data-command="insertOrderedList" title="Numbered list"><i class='fa fa-list-ol'></i></button>
+								</div>
+								<div class="btn-group toobar">
+									<button type="button" class="btn btn-default btn-sm tool disabled" data-command="removeFormat" title="Clear formatting"><i class='fa fa-close'></i></button>
+								</div>
+								</div>
+								<div class="wysiwyg-editor" contenteditable><?php if(!empty($s['content']['copy'])){ echo html_entity_decode($s['content']['copy']); } ?></div>  <!-- data-editortarget="hdi"  -->
+								<textarea name="section[<?php echo $i; ?>][content][copy]" rows="5" class="form-control" style="display: none;"><?php if(!empty($s['content']['copy'])){ echo $s['content']['copy']; } ?></textarea>
 							</td>
 						</tr>
 					</table>
@@ -519,10 +750,23 @@ include("includes/header.php");
 							</div>
 							<div class="row">
 								<div class="col-xs-6">
-									<div class="input-group">
-										<span class="input-group-addon">Image <?=$x + 1;?></span>
-										<input type="text" name="section[<?=$i;?>][content][items][<?=$x;?>][image]" class="form-control" value="<?php if(!empty($s['content']['items'][$x]['image'])){ echo $s['content']['items'][$x]['image']; } ?>">
-									</div>
+									<div class="file-group">
+										<div class="input-group">
+											<span class="input-group-addon">Image <?=$x + 1;?></span>
+											<input type="text" name="section[<?=$i;?>][content][items][<?=$x;?>][image]" class="form-control" value="<?php if(!empty($s['content']['items'][$x]['image'])){ echo $s['content']['items'][$x]['image']; } ?>">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-primary file-toggle file-dialog"><i class="fa fa-pencil" style="margin: 3px; 0px;"></i></button>
+											</div>
+										</div>
+										<div class="input-group" style="display: none">
+											<input type="text" class="form-control file-text">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-primary file-dialog"><i class="fa fa-folder-open" style="margin: 3px; 0px;"></i></button>
+												<button type="button" class="btn btn-danger file-toggle file-cancel"><i class="fa fa-ban" style="margin: 3px; 0px;"></i></button>
+											</div>
+										</div>
+										<input type="file" name="section[<?=$i;?>][content][items][<?=$x;?>][image]" class="form-control" style="display: none;">
+									</div>	
 								</div>
 								<div class="col-xs-6">
 									<div class="input-group">
@@ -612,12 +856,12 @@ include("includes/header.php");
 						<td><input type="text" name="section[<?=$i;?>][content][heading]" class="form-control" value="<?php if(!empty($s['content']['heading'])){ echo $s['content']['heading']; } ?>"></td>
 					</tr>
 			<?php 	$count = (!empty($s['content']['items'])) ? count($s['content']['items']) : 1;
-					for($x = 1; $x <= $count; $x++){	?>	
+					for($x = 0; $x < $count; $x++){	?>	
 					<tr>
 						<td>
 							Item <?php echo $x; ?><br>
-							<button type="button" class="btn btn-default btn-sm feature-up <?php if($x == 1){ echo "disabled"; } ?>" title="Move up"><i class="fa fa-arrow-up"></i></button> 
-							<button type="button" class="btn btn-default btn-sm feature-down <?php if($x == $count){ echo "disabled"; } ?>" title="Move down"><i class="fa fa-arrow-down"></i></button> 
+							<button type="button" class="btn btn-default btn-sm feature-up <?php if($x == 0){ echo "disabled"; } ?>" title="Move up"><i class="fa fa-arrow-up"></i></button> 
+							<button type="button" class="btn btn-default btn-sm feature-down <?php if($x == $count -1){ echo "disabled"; } ?>" title="Move down"><i class="fa fa-arrow-down"></i></button> 
 							<button type="button" class="btn btn-default btn-sm feature-delete" title="Delete"><i class="fa fa-trash"></i></button>
 							
 						</td>
@@ -630,10 +874,23 @@ include("includes/header.php");
 										<input type="text" name="section[<?=$i; ?>][content][items][<?=$x; ?>][heading]" class="form-control" value="<?php if(isset($s['content']['items'][$x]['heading'])) { echo htmlentities($s['content']['items'][$x]['heading']); } ?>">
 									</div>
 									
-									<div class="input-group" style="margin-bottom: 5px; !important;">
-										<span class="input-group-addon">Image</span>
-										<input type="text" name="section[<?=$i; ?>][content][items][<?=$x; ?>][image]" class="form-control" value="<?php if(isset($s['content']['items'][$x]['image'])) { echo $s['content']['items'][$x]['image']; } ?>">
-									</div>
+									<div class="file-group">
+										<div class="input-group" style="margin-bottom: 5px; !important;">
+											<span class="input-group-addon">Image</span>
+											<input type="text" name="section[<?=$i; ?>][content][items][<?=$x; ?>][image]" class="form-control" value="<?php if(isset($s['content']['items'][$x]['image'])) { echo $s['content']['items'][$x]['image']; } ?>">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-primary file-toggle file-dialog"><i class="fa fa-pencil" style="margin: 3px; 0px;"></i></button>
+											</div>
+										</div>
+										<div class="input-group" style="display: none">
+											<input type="text" class="form-control file-text">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-primary file-dialog"><i class="fa fa-folder-open" style="margin: 3px; 0px;"></i></button>
+												<button type="button" class="btn btn-danger file-toggle file-cancel"><i class="fa fa-ban" style="margin: 3px; 0px;"></i></button>
+											</div>
+										</div>
+										<input type="file" name="section[<?=$i; ?>][content][items][<?=$x; ?>][image]" class="form-control" style="display: none;">
+									</div>	
 									
 									<div class="input-group" style="margin-bottom: 5px; !important;">
 										<span class="input-group-addon">URL</span>
@@ -669,6 +926,49 @@ include("includes/header.php");
 				</table>
 	<?php 		$i++;
 			} // end alternating HDI
+			
+			if($s['type'] == "product-table"){ ?>
+				<table class="table table-edit-components">
+					<tr>
+						<td>Heading<br>(optional)</td>
+						<td><input type="text" name="section[<?=$i; ?>][content][heading]" class="form-control" value="<?php if(!empty($s['content']['heading'])) { echo $s['content']['heading']; } ?>"></td>
+					</tr>
+					<tr>
+						<td>
+							Table <br>
+							<br>
+							<button type="button" class="btn btn-default disabled"><i class="fa fa-info"></i></button>
+						</td>
+						<td>
+							
+									<textarea name="section[<?=$i; ?>][content][table]" id="" rows="10" class="form-control"><?php if(!empty($s['content']['table'])) { echo $s['content']['table']; } ?></textarea>
+								
+						</td>
+					</tr>
+				</table>
+		<?php		
+				$i++;
+			} // END PRODUCT TABLE
+			
+			if($s['type'] == "terms-conditions"){ ?>
+				<table class="table table-edit-components">
+					<tr>
+						<td>
+							Copy 
+						</td>
+						<td>
+							<div class="row">
+								<div class="col-md-12">
+									<textarea name="section[<?=$i; ?>][content]" id="" rows="3" class="form-control"><?php if(!empty($s['content'])) { echo $s['content']; } else { echo "Offer valid [START DATE] to [END DATE] to customers in [COUNTRY] only. Discount is off list price only, no further discounts apply. All pricing excludes GST "; } ?></textarea>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+		<?php		
+				$i++;
+			} // END TERMS CONDITIONS
+													 
 
 			
 
@@ -750,10 +1050,35 @@ include("includes/header.php");
 				</table>
 	<?php		$i++;
 			}// end resources
+													 
+			if($s['type'] == "custom"){ ?>
+				<table class="table table-edit-components">
+					<tr>
+						<td>HTML</td>
+						<td>
+							<textarea name="section[<?=$i; ?>][content]" rows="10" class="form-control"><?php if(!empty($s['content'])){ echo $s['content']; } ?></textarea>
+						</td>
+					</tr>
+			</table>
+<?php		$i++;
+			}
 
 			echo "</div>";
 		} // end sections foreach
 ?>
+</div>
+<hr>
+<div class="input-group col-md-6">
+<select id="section-to-add" class="form-control">
+	<option value=""></option>
+	<option value="product-table">Product Table</option>
+	<option value="custom">Custom</option>
+</select>
+<div class="input-group-btn">
+	<button class="btn btn-warning" type="button" id="add-section">Add Section</button>	
+</div>
+	
+
 </div>
 <br>
 <input type="submit" value="Submit" class="btn btn-success">

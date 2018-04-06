@@ -130,12 +130,12 @@ function import_page($url, $settings){
 			$q = $c->find('table',$t);
 			$data['content']['heading'] = $q->find('h2', 0)->innertext;
 			$count = count($q->find('img'));
-			for($x = 1; $x <= $count; $x++){
-				$data['content']['items'][$x]['image'] = $q->find('img',$x-1)->src;
-				$data['content']['items'][$x]['heading'] = tidy(strip_tags($q->find('a',$x-1)->innertext),'<br>');
-				$data['content']['items'][$x]['url'] = tidy_links($q->find('a',$x-1)->href);
-				$data['content']['items'][$x]['tab'] = ($q->find('a',$x-1)->target == "_blank") ? "new" : "parent";
-				$data['content']['items'][$x]['copy'] = tidy($q->find('p',$x-1)->innertext);
+			for($x = 0; $x < $count; $x++){
+				$data['content']['items'][$x]['image'] = $q->find('img',$x)->src;
+				$data['content']['items'][$x]['heading'] = tidy(strip_tags($q->find('a',$x)->innertext),'<br>');
+				$data['content']['items'][$x]['url'] = tidy_links($q->find('a',$x)->href);
+				$data['content']['items'][$x]['tab'] = ($q->find('a',$x)->target == "_blank") ? "new" : "parent";
+				$data['content']['items'][$x]['copy'] = tidy($q->find('p',$x)->innertext);
 			}
 		}
 

@@ -17,21 +17,26 @@ $("textarea.wysiwyg-editor").each(function() {
   
 });
 
-$("div.wysiwyg-editor").focus(function(){
-  activeEditor = $(this).data("editortarget");
-  console.log("active editor: " + activeEditor);
+//$("div.wysiwyg-editor").focus(function(){
+$("#sections").on("focus","div.wysiwyg-editor", function(){
+  //activeEditor = $(this).data("editortarget");
+  activeEditor = $(this);
+  console.log("active editor: " + activeEditor.attr('name'));
 });
 
-$("div.wysiwyg-editor").mouseout(function(e){
+//$("div.wysiwyg-editor").mouseout(function(e){
+$("#sections").on("mouseout","div.wysiwyg-editor", function(e){
   if($(this).is(':focus')){
     // upadate the textarea
-    var target = $(this).data('editortarget');
-    $("#" + target).html($(this).html());
-  
+//     var target = $(this).data('editortarget');
+//     $("#" + target).html($(this).html());
+    var target = $(this).next('textarea');
+    target.html($(this).html());
     // get the caret position
     caretPos = 0;
     var sel, range;
-    var el = document.querySelector("div[data-editortarget=" + activeEditor + "]");
+    //var el = document.querySelector("div[data-editortarget=" + activeEditor + "]");
+    var el = activeEditor;
     sel = window.getSelection();
     if (sel.rangeCount) {
       range = sel.getRangeAt(0);
@@ -44,7 +49,9 @@ $("div.wysiwyg-editor").mouseout(function(e){
 });
 
 
-$('.toolbar .tool').click(function(e) {
+
+$("#sections").on("click",".toolbar .tool", function(e){
+
 
   var command = $(this).data('command');
    
@@ -60,10 +67,12 @@ $('.toolbar .tool').click(function(e) {
   if (command == 'insert-link') {
     command = 'insertHTML';
 
-    $("#wysiwyg-modals").load("Templates/modals/wysiwyg-insert-link.php", function(){
+    //$("#wysiwyg-modals").load("Templates/modals/wysiwyg-insert-link.php", function(){
 
       $("#wysiwyg-insert-link").modal('toggle');
-      $("#insert-link-action").click(function(){
+      $("#insert-link-action").unbind().click(function(){
+        
+       
         var text = $("#insert-link-text").val();
         var url = $("#insert-link-url").val();
         var target = $("#insert-link-target").val();
@@ -85,10 +94,17 @@ $('.toolbar .tool').click(function(e) {
             
         document.execCommand(command, false, html);
         console.log(html);
+        
+        var fields = ['text','url','target'];
+        fields.forEach(function(e){          
+          $("#insert-link-" + e).val("");
+        });
+        
+        
         $("#wysiwyg-insert-link").modal('toggle');
 
       });
-    });
+    //});
   }
    
   else document.execCommand($(this).data('command'), false, null);
@@ -97,7 +113,8 @@ $('.toolbar .tool').click(function(e) {
 
 
 // does this have to go last?
-$('div[contenteditable]').keydown(function(e) {
+//$('div[contenteditable]').keydown(function(e) {
+$("#sections").on("keydown","div[contenteditable]", function(e){
     // trap the return key being pressed
     if (e.keyCode === 13) {
       // insert 2 br tags (if only one br tag is inserted the cursor won't go to the next line)
