@@ -422,7 +422,7 @@ var __adobewebfontsappname__ = "muse";
                <img class="block ImageInclude" id="u2272_img" data-src="http://www.thermofisher.com.au/images/strep.jpg" src="http://www.thermofisher.com.au/images/blank.gif" alt="" data-width="137" data-height="193"/>
               </div>
               <div class="SSSlide invi clip_frame grpelem" id="u2174"><!-- image -->
-               <img class="block ImageInclude" id="u2174_img" data-src="/Uploads/image/Resources/Plant-Biology_image.jpg" src="http://www.thermofisher.com.au/images/blank.gif" alt="" data-width="137" data-height="193"/>
+               <img class="block ImageInclude" id="u2174_img" data-src="http://www.thermofisher.com.au/Uploads/image/Resources/Plant-Biology_image.jpg" src="http://www.thermofisher.com.au/images/blank.gif" alt="" data-width="137" data-height="193"/>
               </div>
               <div class="SSSlide invi clip_frame clearfix grpelem" id="u2202"><!-- image -->
                <div id="u2202_clip">
@@ -468,7 +468,7 @@ var __adobewebfontsappname__ = "muse";
               </div>
               <div class="SSSlideLink clip_frame clearfix grpelem" id="u2177"><!-- image -->
                <div id="u2177_clip">
-                <img class="position_content" id="u2177_img" src="/Uploads/image/Resources/Plant-Biology_Thumbnail.jpg" alt="" width="50" height="70"/>
+                <img class="position_content" id="u2177_img" src="http://www.thermofisher.com.au/Uploads/image/Resources/Plant-Biology_Thumbnail.jpg" alt="" width="50" height="70"/>
                </div>
               </div>
               <div class="SSSlideLink clip_frame clearfix grpelem" id="u2205"><!-- image -->

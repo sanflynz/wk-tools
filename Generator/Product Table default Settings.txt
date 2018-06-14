@@ -1,0 +1,39 @@
+Product Table default Settings
+
+Column Widths:
+Item Code: 10%; Price (any): 12%; Units/Size: 10%
+To specify width add [XX%] after heading name eg: Item Code[15%]
+
+Column Alignment:
+Units/Size: text-center; Price (any): text-right; All other fields: text-left;
+To specify alignment add [text-left], [text-right], or ['text-center'] after content eg: Volume[text-center]
+Note: Adding after heading name will act a a default for the ENTIRE column
+Note: American spelling for center (standard for HTML)
+
+Links:
+Item Code will always be converted into a search link for the country specified
+Description will be converted into a search link for the country specified when Item Code is in Column 1
+
+Special features:
+Add a "Buy now" commerce button - links to the item on GoDirect
+<Example>
+Ensure Item Code is in Column 1
+Cell text is just [btn-buy]
+
+Add a link to another item code in search (eg: companion product) 
+<example>
+Cell text is [link-item=ITEMCODE]
+
+Add a link to request a quote
+<example>
+Create link using Request Link Generator
+Cell text is [link-quote=URL]
+
+Add any link
+<example>
+Tab = parent or new
+Cell text is [link=TEXT|URL|TAB]
+
+Add a primary button (standard size)
+<example>
+Cell text is [btn=TEXT|URL|TAB]

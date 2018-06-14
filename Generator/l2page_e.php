@@ -4,8 +4,8 @@ include("includes/db.php");
 include("includes/sitefunctions.php");
 include('../__classes/UploadFile.php');
 
-//$images = "../../../Uploads/image/";
-$images = "../Uploads/image/";
+$images = "../../../Uploads/image/";
+//$images = "../Uploads/image/";
 $imagesRelative = "/Uploads/image/";
 
 $error = FALSE;

@@ -172,29 +172,29 @@
      <div class="gradient browser_width grpelem" id="u2675"><!-- group -->
       <div class="clearfix" id="u2675_align_to_page">
        <div class="clip_frame grpelem" id="u2431"><!-- image -->
-        <img class="block" id="u2431_img" src="images/au.png" alt="" width="24" height="18"/>
+        <img class="block" id="u2431_img" src="http://www.thermofisher.com.au/images/au.png" alt="" width="24" height="18"/>
        </div>
        <div class="clearfix grpelem" id="u2423-19"><!-- content -->
         <p><span id="u2423">&nbsp;Australia&nbsp;&nbsp;&nbsp; |&nbsp; </span>&nbsp; <a class="nonblock" href="/ContentAUS/Top-Menu/Footer/Terms-And-Conditions-Australia.html" target="_blank" title="Terms and Conditions">Terms and Conditions</a>&nbsp;&nbsp; |&nbsp;&nbsp; <a class="nonblock" href="/ContentAUS/Top-Menu/Footer/Privacy-Policy-Australia.html">Privacy Statement</a>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; <a class="nonblock" href="http://www.thermofisher.com/" target="_blank" title="Visit our Corporate Site&nbsp; ">Visit our corporate site</a><span title="Visit our Corporate Site&nbsp; ">&nbsp;</span>&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; <a class="nonblock" href="/ContentAUS/Top-Menu/About-Us/Careers/Careers.html">Careers At Thermo Fisher Scientific </a>&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; <span id="u2423-16">© Copyright 2015 Thermo Fisher Scientific Inc. All Rights Reserved.</span></p>
        </div>
       </div>
      </div>
-     <a class="nonblock nontext clip_frame grpelem" id="u2468" href="https://www.facebook.com/thermofisher" target="_blank" title="Facebook"><!-- image --><img class="block" id="u2468_img" src="images/facebook.png" alt="Facebook" width="32" height="32"/></a>
-     <a class="nonblock nontext clip_frame grpelem" id="u2473" href="https://twitter.com/servingscience" target="_blank" title="Twitter"><!-- image --><img class="block" id="u2473_img" src="images/twitter.png" alt="" width="32" height="32"/></a>
-     <a class="nonblock nontext clip_frame grpelem" id="u2478" href="http://www.linkedin.com/company/thermo-fisher-scientific-anz" target="_blank" title="Linked&#45;In"><!-- image --><img class="block" id="u2478_img" src="images/linkedin.png" alt="" width="32" height="32"/></a>
-     <a class="nonblock nontext clip_frame grpelem" id="u2483" href="https://www.youtube.com/user/thermoscientific2" target="_blank" title="You Tube"><!-- image --><img class="block" id="u2483_img" src="images/youtube-3-xl.png" alt="" width="32" height="32"/></a>
-     <a class="nonblock nontext clip_frame grpelem" id="u2495" href="http://acceleratingscience.com/" target="_blank" title="Accelerating Science Blog"><!-- image --><img class="block" id="u2495_img" src="images/blogger.png" alt="" width="32" height="32"/></a>
+     <a class="nonblock nontext clip_frame grpelem" id="u2468" href="https://www.facebook.com/thermofisher" target="_blank" title="Facebook"><!-- image --><img class="block" id="u2468_img" src="http://www.thermofisher.com.au/images/facebook.png" alt="Facebook" width="32" height="32"/></a>
+     <a class="nonblock nontext clip_frame grpelem" id="u2473" href="https://twitter.com/servingscience" target="_blank" title="Twitter"><!-- image --><img class="block" id="u2473_img" src="http://www.thermofisher.com.au/images/twitter.png" alt="" width="32" height="32"/></a>
+     <a class="nonblock nontext clip_frame grpelem" id="u2478" href="http://www.linkedin.com/company/thermo-fisher-scientific-anz" target="_blank" title="Linked&#45;In"><!-- image --><img class="block" id="u2478_img" src="http://www.thermofisher.com.au/images/linkedin.png" alt="" width="32" height="32"/></a>
+     <a class="nonblock nontext clip_frame grpelem" id="u2483" href="https://www.youtube.com/user/thermoscientific2" target="_blank" title="You Tube"><!-- image --><img class="block" id="u2483_img" src="http://www.thermofisher.com.au/images/youtube-3-xl.png" alt="" width="32" height="32"/></a>
+     <a class="nonblock nontext clip_frame grpelem" id="u2495" href="http://acceleratingscience.com/" target="_blank" title="Accelerating Science Blog"><!-- image --><img class="block" id="u2495_img" src="http://www.thermofisher.com.au/images/blogger.png" alt="" width="32" height="32"/></a>
     </div>
    </div>
   </div>
   <div class="preload_images">
-   <img class="preload" src="images/search-icon_rollover.png" alt=""/>
-   <img class="preload" src="images/sub-menu-arrow.png" alt=""/>
-   <img class="preload" src="images/u1688-17-r.png" alt=""/>
-   <img class="preload" src="images/u1688-17-m.png" alt=""/>
-   <img class="preload" src="images/u1688-17-fs.png" alt=""/>
-   <img class="preload" src="images/menu-arrow_right.png" alt=""/>
-   <img class="preload" src="images/menu-arrow.png" alt=""/>
+   <img class="preload" src="http://www.thermofisher.com.au/images/search-icon_rollover.png" alt=""/>
+   <img class="preload" src="http://www.thermofisher.com.au/images/sub-menu-arrow.png" alt=""/>
+   <img class="preload" src="http://www.thermofisher.com.au/images/u1688-17-r.png" alt=""/>
+   <img class="preload" src="http://www.thermofisher.com.au/images/u1688-17-m.png" alt=""/>
+   <img class="preload" src="http://www.thermofisher.com.au/images/u1688-17-fs.png" alt=""/>
+   <img class="preload" src="http://www.thermofisher.com.au/images/menu-arrow_right.png" alt=""/>
+   <img class="preload" src="http://www.thermofisher.com.au/images/menu-arrow.png" alt=""/>
   </div> 
     </div>    
   

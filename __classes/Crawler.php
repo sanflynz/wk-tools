@@ -1,10 +1,12 @@
 <?php
+	set_time_limit(0);
 	class Crawler {
 
 		public $url;
 		public $startUrl;
 		public $links;
 		public $obsoleteLinks; // array // urls etc that might be obsolote
+		public $baseURL;
 
 
 		// search depth (recursive)
@@ -54,12 +56,28 @@
 							'url' => $link->href,
 							'internal' => $this->isInternalLink($link->href),
 							'obsolete' => $this->badLinks($link->href),
-							'target' => $link->target
+							'target' => $link->target,
+							'http_status' => $this->http_status($link->href)
 
 				);
 			}
 			return $links;
 
+		}
+
+		function http_status($url){
+			if(substr($url,0,4) != "http"){
+				$domain = parse_url($this->startURL);
+				$url = "http://" . $domain['host'] . $url;
+			}
+			$handle = curl_init($url);
+			curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+
+			/* Get the HTML or whatever is linked in $url. */
+			$response = curl_exec($handle);
+
+			/* Check for 404 (file not found). */
+			return curl_getinfo($handle, CURLINFO_HTTP_CODE);
 		}
 
 		function badLinks($link){
@@ -89,20 +107,20 @@
 			$status = TRUE;
 			$arr = array();
 
-			if(!$this->html->find('meta[description]')){
+			if(!$this->html->find('meta[name=description]',0)){
 				$status = FALSE;
 				$arr['description'] = "";
 			}
 			else{
-				$arr['description'] = $this->html->find('meta[description]');
+				$arr['description'] = $this->html->find('meta[name=description]',0)->content;
 			}
 
-			if(!$this->html->find('meta[keywords]')){
+			if(!$this->html->find('meta[name=keywords]',0)){
 				$status = FALSE;
 				$arr['keywords'] = "";
 			}
 			else{
-				$arr['keywords'] = $this->html->find('meta[keywords]');
+				$arr['keywords'] = $this->html->find('meta[namekeywords]',0)->content;
 			}
 
 			if(!$this->html->find('h1')){
@@ -110,7 +128,7 @@
 				$arr['h1'] = "";
 			}
 			else{
-				$arr['h1'] = $this->html->find('h1');
+				$arr['h1'] = $this->html->find('h1',0)->innertext;
 			}
 
 			$title = $this->html->find('title',0);
