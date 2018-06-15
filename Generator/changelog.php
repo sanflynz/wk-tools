@@ -5,7 +5,23 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">TBC</h3>
+		<h3 class="panel-title">20180615</h3>
+	</div>
+	<div class="panel-body">
+		<li>Updated Promos (child) generator to updated template template</li>
+		<li>Updated Table Building in Promo (child) and Generic (L4) page
+			<ul>
+				<li>Using Table class for ease of reproducibility</li>
+				<li>Added [center], [left] and [right] alignment for columns</li>
+				<li>Updated code for buy button.  Now just add '[BUY]' to column, will take the item code from the 'Item Code' column automatically</li>
+			</ul>
+		</li>
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">Not datestamped</h3>
 	</div>
 	<div class="panel-body">
 		<li>Dependencies checked on index page</li>

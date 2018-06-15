@@ -42,3 +42,5 @@ test*.html
 
 # ignore local Uploads files
 Uploads/*
+Generator/genericpage_au_bare_backup.php
+Generator/promopage_au_bare_backup.php

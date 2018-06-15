@@ -154,13 +154,17 @@
 				<h4 style="margin:0">Items Instructions</h4>
 			</div>
 			<div class="modal-body">
-				Copy from a spreadsheet.  It will automatically recognise the tabs and new lines<br>
+				Copy from a spreadsheet.  It will automatically recognise cells and new rows<br>
 				<br>
 				If you want to link to the Search page on the Item Code and Description ensure the first two column headings are "Item Code" and "Description" exactly<br>
 				<br> 
-				Column Widths...  add eg: [25%] directly after the column heading name to widen eg: Item Code[25%]<br>
+				<strong>Column Widths...</strong>  add eg: [25%] directly after the column heading name to set eg: Item Code[25%]<br>
 				<br>
-				If you want to break out the table into groups:<br>
+				<strong>Column Alignment...</strong> add [center], [left], or [right], after the column heading name to align eg: Temp Range[center]<br>
+				<br>
+				<strong>'Login to buy' button...</strong> Add [BUY] to the last column in each row in your spreadsheet.  Leave the header row blank.  Requires 'Item Code' in at least one column.<br>
+				<br>
+				If you want to break out into multiple tables use Groups:<br>
 				Groups...<br>
 				[GROUP][HEADING]Heading/Title Here<br>
 				Table header row<br>

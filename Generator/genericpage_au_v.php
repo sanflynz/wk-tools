@@ -19,6 +19,8 @@ $p = $r->fetch_assoc();
 include ("genericpage_au_bare.php");
 
 ?>
+<input type="hidden" id="country" value="<?=$p['country'];?>">
+
 
 <table width="700" border="0" cellspacing="0" cellpadding="0">
     <tbody>
