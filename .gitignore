@@ -37,6 +37,9 @@ sitescan/
 # ignore files in Generator/pages directory and all subdirectories
 Spec Table Builder/
 
+# ignore files in Generator/pages directory and all subdirectories
+Planner/
+
 # ignore test files
 test*.html
 
