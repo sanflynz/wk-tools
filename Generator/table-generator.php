@@ -87,6 +87,8 @@ Column Alignment... add [center], [left], or [right], after the column heading n
 <br>
 'Login to buy' button... Add [BUY] to the last column in each row in your spreadsheet. Leave the header row blank. Requires 'Item Code' in at least one column. <br>
 <br>
+'Request quote' button... Add [REQUEST QUOTE] to the last column in each row in your spreadsheet. Leave the header row blank. Requires 'Item Code' in at least one column, Country and SFDC Campaign ID.  Button will be RED if these are missing <br>
+<br>
 If you want to break out into multiple tables use Groups:<br>
 Groups...<br>
 [GROUP][HEADING]Heading/Title Here<br>
