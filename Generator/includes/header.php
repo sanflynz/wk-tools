@@ -71,7 +71,8 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">TOOLS <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="requestlinkgen.php" target="_blank">Request Link Generator</a></li>
+								<li><a href="https://thermofisher.sharepoint.com/sites/collaboration/ANZMarketing/Pages/Dynamic-Request-Link-Generator.aspx" target="_blank">Request Link Generator</a></li>
+								<li><a href="table-generator.php" target="_blank">Table Generator</a></li>
 								<!-- <li><a href="pdfcoverimage.php">PDF Cover Images</a></li> -->
 							</ul>
 						</li>

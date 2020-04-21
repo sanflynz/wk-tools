@@ -5,6 +5,16 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
+		<h3 class="panel-title">20200421</h3>
+	</div>
+	<div class="panel-body">
+		<li>Added Table Generator (Tools tab)</li>
+		<li>Updated Table Class to include "[REQUEST QUOTE] functionality.  Requires Country & Campaign ID</li>
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
 		<h3 class="panel-title">20180615</h3>
 	</div>
 	<div class="panel-body">

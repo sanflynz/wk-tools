@@ -8,8 +8,8 @@ class TableBuilder{
 	public $sURL = "/search.aspx?search=";
 	public $gURL = "/godirect/main/productdetails.aspx?id=";
 
-
-	
+	public $country;
+	public $campaignid;	
 
 	private $column_widths = array();
 	private $column_alignments = array();
@@ -18,7 +18,7 @@ class TableBuilder{
 
 	public function __construct($items,$classes){
 		$this->items = $items;
-
+		
 		foreach($classes as $class){
 			$this->classes .= " $class";
 		}
@@ -157,6 +157,28 @@ class TableBuilder{
 				
 			}
 
+			if(preg_match('/\[REQUEST QUOTE\]/', $c) || preg_match('/REQUEST QUOTE./', $c)){
+				if($this->country == "Australia") { 
+					$qURL = "http://info.thermofisher.com.au/productrequest?sf.lt=Quote%20Request&sf.pn=" . $cells[$this->columns['item_code']] . "&sf.bu=SCI&sf.pt=Equipment&sf.cid=" . $this->campaignid;
+				}
+				else{
+					$qURL = "http://info.thermofisher.co.nz/productrequest?sf.lt=Quote%20Request&sf.pn=" . $cells[$this->columns['item_code']] . "&sf.bu=SCI&sf.pt=Equipment&sf.cid=" . $this->campaignid;
+				}
+				if($this->country == "" || $this->campaignid == ""){ $btnType = "btn-featured"; } else { $btnType = "btn-primary"; }
+				$c = "<a href=\"" . $qURL . "\" class=\"btn " . $btnType . " btn-mini\" target=\"_blank\" onClick=\"_gaq.push(['_trackEvent', 'Request quote', 'Item Code', '" . $cells[$this->columns['item_code']] . "']);\">Request quote</a>";
+				$style .= "text-align: center;";
+				
+			}
+
+			// if(preg_match_all('/\[QUOTE=(.*)\]/', $c, $qURL)){
+			// 	// echo "<pre>";
+			// 	// print_r($qURL);
+			// 	// echo "</pre>";
+			// 	$c = "<a href=\"" . $qURL[1][0] . "\">Request quote</a>";
+			// 	$style .= "text-align: center;";
+				
+			// }
+
 			$output .= "\t\t\t<td style=\"$style\">\n";
 
 			$output .= $c;
@@ -214,6 +236,8 @@ class TableBuilder{
 		}
 		
 		$output .= $this->endTable();
+
+		
 
 		return $output;
 
