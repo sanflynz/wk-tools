@@ -27,11 +27,15 @@
       imageExists(img_src, function(exists) {
         
         if(exists == false){
+          console.log("Can't find image " + img_src);
           
           if (img_src && !img_src.match(/^http([s]?):\/\/.*/)) {
             img.attr('src', baseURL + img_src);
             console.log(img.attr('src'));
           }
+        }
+        else{
+          console.log("Image Exists" . img_src);
         }
      
       });

@@ -63,6 +63,7 @@
 								<li><a href="l3page_i.php">Level 3 Pages &nbsp;&nbsp;<i class="fa fa-flask" style="color: #00FF00" title="EXPERIMENTAL"></i></a></li>
 								<li><a href="l2page_i.php">Level 1/2 Pages &nbsp;&nbsp;<i class="fa fa-flask" style="color: #00FF00" title="EXPERIMENTAL"></i></a></li>
 								<li><a href="promopods_e.php">Promo Pods &nbsp;&nbsp;<i class="fa fa-flask" style="color: #00FF00" title="EXPERIMENTAL"></i></a></li>
+								<li><a href="promopodsf_e.php">Promo Pods With Filters &nbsp;&nbsp;<i class="fa fa-flask" style="color: #FFA500" title="EXPERIMENTAL"></i></a></li>
 							<!--	<li class="divider"></li>
 								<li><a href="plainpage_i.php">Plain Pages</a></li>
 								<li><a href="plainpage_e.php">Add Plain Page</a></li> -->

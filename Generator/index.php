@@ -58,7 +58,34 @@ if($r2){
 	
 }
 else{
-	setFlash("danger", "Unable to create sections table: " . $conn->error . "<br><br>" . $sql);
+	setFlash("danger", "Unable to create sections table: " . $conn->error . "<br><br>" . $sql2);
+	$error = 1;
+}
+
+
+$sql3 = "CREATE TABLE IF NOT EXISTS `webpromopodsf` (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `offer` varchar(250) NOT NULL,
+		  `offer_detail` varchar(250) NOT NULL,
+		  `tagline` varchar(250) NOT NULL,
+		  `call_to_action` varchar(250) NOT NULL,
+		  `url` text NOT NULL,
+		  `image` text NOT NULL,
+		  `promo_name` varchar(250) NOT NULL,
+		  `item_name` varchar(250) NOT NULL,
+		  `filters` varchar(250) NOT NULL,
+		  `order` int(2) NOT NULL,
+		  PRIMARY KEY (`id`)
+		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+	// }
+	// 
+$r3 = $conn->query($sql3);
+if($r3){
+	setFlash("info", "checked webpromopagesf table");
+	
+}
+else{
+	setFlash("danger", "Unable to create webpromopagesf table: " . $conn->error . "<br><br>" . $sql3);
 	$error = 1;
 }
 

@@ -3,13 +3,13 @@
 include("includes/db.php");
 
 if(isset($_GET['action']) && $_GET['action'] == "truncate"){
-	$sql = "TRUNCATE webpromopods";
+	$sql = "TRUNCATE webpromopodsf";
 	$r = $conn->query($sql);
 	if($conn->error){
 		$error = "Unable to clear database";
 	}
 	else{
-		header("location: promopods_e.php");
+		header("location: promopodsf_e.php");
 	}
 }
 
@@ -24,9 +24,9 @@ if(isset($_GET['action']) && $_GET['action'] == "upload"){
 
 		$up = new UploadCsvMysql($conn);
 		//$up->uploadCreate($_GET['table']);
-		$cols = "`offer`,`offer_detail`,`tagline`,`call_to_action`,`url`,`image`,`promo_name`,`item_name`,`order`";
-		$up->upload("webpromopods",$cols);
-		header("location: promopods_e.php");
+		$cols = "`offer`,`offer_detail`,`tagline`,`call_to_action`,`url`,`image`,`promo_name`,`item_name`,`filters`,`order`";
+		$up->upload("webpromopodsf",$cols);
+		header("location: promopodsf_e.php");
 	}
 }
 
@@ -35,8 +35,8 @@ if(isset($_GET['action']) && $_GET['action'] == "download"){
 		$down = new DownloadCsvMysql($conn);
 		$down->filename = "promo_pods_" . strtolower(preg_replace("/\s+/", "_", $_GET['title'])) . "_" . $_GET['site'] . ".csv";
 
-		$cols = "offer,offer_detail,tagline,call_to_action,url,image,promo_name,item_name,order";
-		$down->download("webpromopods",$cols);
+		$cols = "offer,offer_detail,tagline,call_to_action,url,image,promo_name,item_name,filters,order";
+		$down->download("webpromopodsf",$cols);
 		
 }
 
@@ -45,9 +45,16 @@ if(isset($_POST['data'])){
 	// print '<pre>'; 
 	// print_r($_POST);
 	// print '</pre>';
-	$fieldNames = "offer,offer_detail,tagline,call_to_action,url,image,promo_name,item_name,order";
+	$fieldNames = "offer,offer_detail,tagline,call_to_action,url,image,promo_name,item_name,filters,order";
 	$fields = "";
 
+	print_r(explode("\n",$_POST['filters']));
+
+	// $filters = "";
+	// foreach(explode("\n",$_POST['filters']) as $f){
+	// 	$filters .= trim($f) . "|";
+	// }
+	// echo $filters;
 	foreach($_POST['data'] as $p){
 
 	$values = "";
@@ -60,12 +67,13 @@ if(isset($_POST['data'])){
 			}
 			$i++;
 		}
-		$sql = "UPDATE webpromopods SET $values WHERE id = " . $p['id'];
+		$sql = "UPDATE webpromopodsf SET $values WHERE id = " . $p['id'];
 		// echo $sql . "<br><br>";
 		$r = $conn->query($sql);
 		if($r){
+
 			// redirect
-			header("location: promopods_au_v.php?site=" . $_POST['country'] . "&title=" . rawurlencode($_POST['title']));
+			header("location: promopodsf_au_v.php?site=" . $_POST['country'] . "&title=" . rawurlencode($_POST['title']) . "&filters=" . rawurlencode($_POST['filters']));
 		}
 		else{
 			$error = "Unable to update promo page: " . $conn->error;
@@ -76,7 +84,7 @@ if(isset($_POST['data'])){
 
 
 
-$sql = "SELECT * FROM webpromopods";
+$sql = "SELECT * FROM webpromopodsf";
 $r = $conn->query($sql);
 
 // code here
@@ -89,7 +97,7 @@ include("includes/header.php"); ?>
 		<div class="modal-content">
 			<div class="modal-header">
 				<button class="close" data-dismiss="modal">&times;</button>
-				<h4>Promo Pods</h4>
+				<h4>Promo Pods with Filters</h4>
 			</div>
 			<div class="modal-body">
 				To start, download and complete the template. Do not add or delete columns.<br>
@@ -103,6 +111,11 @@ include("includes/header.php"); ?>
 				Image naming convention: promo_pod_<i>product_name</i>.jpg<br>
 				Should be uploaded to /Uploads/image on the website<br>
 				<br>
+				<strong>Filters</strong><br>
+				Filters are Case Sensitive. <br>
+				In your CSV file, you can have more than one filter, separate by a space.<br>
+				If you want a filter with more than one word, eg: "Lab Equipment", in the CSV put "LabEquipment" but in the Generator Filters List put "Lab Equipment"<br>
+				Filter name must be identical (except spaces) in the CSV file and the Filters List
 			</div>
 		</div>
 	</div>
@@ -111,20 +124,20 @@ include("includes/header.php"); ?>
 	
 <div class="row">
 	<div class="col-xs-12">
-		<h1>Promo Pods <i class="fa fa-flask" style="color: #00FF00;" title="EXPERIMENTAL"></i></h1>
+		<h1>Promo Pods with Filters<i class="fa fa-flask" style="color: #FFA500;" title="EXPERIMENTAL"></i></h1>
 	</div>
 </div>
 <div class="row">
 	<div class="col-xs-12">
 		<br>
-		<a href="promopods_e.php?action=truncate" class="btn btn-danger">Clear All</a>&nbsp;
+		<a href="promopodsf_e.php?action=truncate" class="btn btn-danger">Clear All</a>&nbsp;
 		<span class="btn btn-primary" id="upload-toggle" title="Import CSV"><i class="fa fa-file-excel-o"></i> <i class="fa fa-arrow-circle-o-up"></i></span>&nbsp;
 		<a href="<?php echo basename($_SERVER['REQUEST_URI']) . '&action=download'; ?>" class="btn btn-primary" title="Export CSV"><i class="fa fa-file-excel-o"></i> <i class="fa fa-arrow-circle-o-down"></i></a>&nbsp;
 		<a href="supplementary/promo_pods_template_anz.csv" target="_blank" class="btn btn-default" title="CSV template" style="width: 40px;"><i class="fa fa-file-excel-o"></i></a>&nbsp; 
 		<a href="" class="btn btn-default" style="width: 40px;" data-toggle="modal" data-target="#info-promopods"><i class="fa fa-info"></i></a><br>
 		<div id="uploadwindow" style="display: none;">
 			<p>
-				<form action="promopods_e.php?action=upload" method="post" enctype="multipart/form-data">
+				<form action="promopodsf_e.php?action=upload" method="post" enctype="multipart/form-data">
 					<input type="file" name="uploadfile" class="form-control">
 					<input type="submit" value="Upload" name="uploadcsv" class="btn btn-primary">
 				</form>
@@ -181,6 +194,13 @@ include("includes/header.php"); ?>
 		</td>
 	</tr>
 	<tr>
+		<td align="right"><strong>Filter List</strong></td>
+		<td>
+			<textarea name="filters" id="filters" cols="30" rows="3" class="form-control" style="width: 40%"><?php if(isset($_GET['filters'])){ echo $_GET['filters']; } ?></textarea>
+			<span style="font-style: italic; font-size: smaller">One filter per line, as per the button text.  Filter name in the CSV should be the same, but without spaces.  Case Sensitive</span>
+		</td>
+	</tr>
+	<tr>
 		<td colspan="2">
 			<table class="table table-hover">
 			<thead><tr>
@@ -192,6 +212,7 @@ include("includes/header.php"); ?>
 							<th>Image</th>
 							<th>Promo Name</th>
 							<th>Item Name</th>
+							<th>Filters</th>
 							<th>Order</th>
 						</tr></thead>
 <?php 	$i = 0;
@@ -225,7 +246,10 @@ include("includes/header.php"); ?>
 					<input type="text" class="form-control" name="data[<?php echo $i; ?>][item_name]" value="<?php echo $row['item_name']; ?>">
 				</td>
 				<td>
-					<input type="text" class="form-control" name="data[<?php echo $i; ?>][order]" value="<?php echo $row['order']; ?>" size="2">
+					<input type="text" class="form-control" name="data[<?php echo $i; ?>][filters]" value="<?php echo $row['filters']; ?>">
+				</td>
+				<td>
+					<input type="text" class="form-control" name="data[<?php echo $i; ?>][order]" value="<?php echo $row['order']; ?>" size="4">
 				</td>
 			</tr>
 <?php		$i++;
