@@ -5,6 +5,15 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
+		<h3 class="panel-title">20200205</h3>
+	</div>
+	<div class="panel-body">
+		<li>Added click tracking to Promo Pods Filter buttons</li>
+		
+	</div>
+</div>
+<div class="panel panel-default">
+	<div class="panel-heading">
 		<h3 class="panel-title">20200203</h3>
 	</div>
 	<div class="panel-body">

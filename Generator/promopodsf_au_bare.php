@@ -134,9 +134,9 @@ if(!isset($_GET['site'])){
 
 if(isset($_GET['filters']) && !empty($_GET['filters'])){
 	echo "<div class=\"promo-filter-container\" id=\"myBtnContainer\">\n";
-	echo "\t<button type=\"button\" class=\"btn btn-primary active\" data-filter=\"all\">All Promotions</button>&nbsp&nbsp;\n";
+	echo "\t<button type=\"button\" class=\"btn btn-primary active\" data-filter=\"all\" onClick=\"_gaq.push(['_trackEvent', 'Promo Filter', 'Click', 'All']);\">All Promotions</button>&nbsp&nbsp;\n";
 	foreach(explode("\n",$_GET['filters']) as $f){
-		echo "\t<button type=\"button\" class=\"btn btn-primary\" data-filter=\"" . str_replace(" ", "", trim($f)) . "\">$f</button>&nbsp&nbsp;\n";
+		echo "\t<button type=\"button\" class=\"btn btn-primary\" data-filter=\"" . str_replace(" ", "", trim($f)) . "\" onClick=\"_gaq.push(['_trackEvent', 'Promo Filter', 'Click', '" . trim($f) . "']);\">" . trim($f) . "</button>&nbsp&nbsp;\n";
 	}
 	echo "</div>\n\n";
 }
