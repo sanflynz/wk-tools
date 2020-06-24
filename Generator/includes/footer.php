@@ -11,8 +11,13 @@
 <script src="js/wysiwyg-toolbar.js" ></script>
 <!-- <script src="js/file-upload.js" ></script> -->
 <script src="js/l2_page.js" ></script>
+
+<script src="js/excel-bootstrap-table-filter-bundle.min"></script>
 <script>
 $(document).ready(function() {
+
+	$('.addTableFilters').excelTableFilter();
+
 	
 // 	// FILE INPUT GROUPS
 // 	$(".file-toggle").click(function(){

@@ -18,7 +18,7 @@ class TableBuilder{
 
 	public function __construct($items,$classes){
 		$this->items = $items;
-		
+
 		foreach($classes as $class){
 			$this->classes .= " $class";
 		}
@@ -181,7 +181,7 @@ class TableBuilder{
 
 			$output .= "\t\t\t<td style=\"$style\">\n";
 
-			$output .= $c;
+			$output .= "\t\t\t\t" . $c . "\n";
 
 			$output .= "\t\t\t</td>\n";
 
@@ -191,6 +191,8 @@ class TableBuilder{
 
 		return $output;
 	}
+
+	
 	
 	public function build(){
 
@@ -242,6 +244,43 @@ class TableBuilder{
 		return $output;
 
 
+	}
+
+
+	private function tableRowPlain($cells){
+		$i = 0;
+		$output = "\t\t<tr>\n";
+		foreach($cells as $c){
+			
+			$output .= "\t\t\t<td>\n";
+
+			$output .= "\t\t\t\t" . $c . "\n";
+
+			$output .= "\t\t\t</td>\n";
+
+			$i++;
+		}
+		$output .= "\t\t</tr>\n";
+		return $output;
+	}
+
+	public function buildPlain(){
+		$output = "";
+
+		$rows = explode("\n", $this->items);
+		
+		$output .= $this->startTable();
+		$output .= "\t<tbody>\n";
+
+		foreach($rows as $row){
+			$cells = explode("\t", $row);
+			$output .= $this->tableRowPlain($cells);
+			//$r++;
+		}
+
+		$output .= $this->endTable();		
+
+		return $output;
 	}
 
 }

@@ -17,6 +17,8 @@
 
 		<link rel="stylesheet" href="../__resources/css/pretty_file_upload.css">
 
+		<link rel="stylesheet" href="css/excel-bootstrap-table-filter-style">
+
 		<link rel="stylesheet" href="css/generator.css">
 		<link rel="stylesheet" href="css/wysiwyg-editor.css">
 
@@ -74,6 +76,9 @@
 							<ul class="dropdown-menu">
 								<li><a href="https://thermofisher.sharepoint.com/sites/collaboration/ANZMarketing/Pages/Dynamic-Request-Link-Generator.aspx" target="_blank">Request Link Generator</a></li>
 								<li><a href="table-generator.php" target="_blank">Table Generator</a></li>
+								<li><a href="table-generator-plain.php" target="_blank">Table Generator (plain)</a></li>
+								<li role="separator" class="divider"></li>
+								<li><a href="sitemap-translator.php">Sitemap Translator</a></li>
 								<!-- <li><a href="pdfcoverimage.php">PDF Cover Images</a></li> -->
 							</ul>
 						</li>
