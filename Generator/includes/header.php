@@ -57,7 +57,7 @@
 				<div class="collapse navbar-collapse navbar-ex1-collapse">
 					<ul class="nav navbar-nav">
 					
-						<li class="dropdown">
+						<!--<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">WEBPAGES <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<li><a href="promopage_i.php">Promo (child) Pages</a></li>
@@ -66,19 +66,20 @@
 								<li><a href="l2page_i.php">Level 1/2 Pages &nbsp;&nbsp;<i class="fa fa-flask" style="color: #00FF00" title="EXPERIMENTAL"></i></a></li>
 								<li><a href="promopods_e.php">Promo Pods &nbsp;&nbsp;<i class="fa fa-flask" style="color: #00FF00" title="EXPERIMENTAL"></i></a></li>
 								<li><a href="promopodsf_e.php">Promo Pods With Filters &nbsp;&nbsp;<i class="fa fa-flask" style="color: #FFA500" title="EXPERIMENTAL"></i></a></li>
-							<!--	<li class="divider"></li>
+								<li class="divider"></li>
 								<li><a href="plainpage_i.php">Plain Pages</a></li>
-								<li><a href="plainpage_e.php">Add Plain Page</a></li> -->
+								<li><a href="plainpage_e.php">Add Plain Page</a></li> 
 							</ul>
-						</li>
+						</li>-->
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">TOOLS <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="https://thermofisher.sharepoint.com/sites/collaboration/ANZMarketing/Pages/Dynamic-Request-Link-Generator.aspx" target="_blank">Request Link Generator</a></li>
-								<li><a href="table-generator.php" target="_blank">Table Generator</a></li>
+								<!-- <li><a href="https://thermofisher.sharepoint.com/sites/collaboration/ANZMarketing/Pages/Dynamic-Request-Link-Generator.aspx" target="_blank">Request Link Generator</a></li> -->
+								<!-- <li><a href="table-generator.php" target="_blank">Table Generator</a></li> -->
+								<li><a href="table-generator-promos.php" target="_blank">Promo Table Generator <i class="fa fa-star" style="color: #E71316" title="NEW"></i></a></li>
 								<li><a href="table-generator-plain.php" target="_blank">Table Generator (plain)</a></li>
 								<li role="separator" class="divider"></li>
-								<li><a href="sitemap-translator.php">Sitemap Translator</a></li>
+								<!-- <li><a href="sitemap-translator.php">Sitemap Translator</a></li> -->
 								<!-- <li><a href="pdfcoverimage.php">PDF Cover Images</a></li> -->
 							</ul>
 						</li>
