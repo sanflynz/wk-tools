@@ -94,8 +94,11 @@
 						if($c == "[BUY]" && $p['country'] == "New Zealand"){
 							$c = "<a href=\"https://www.thermofisher.co.nz/godirect/main/displaysearchitems.aspx?gsearch=" . $cells[0] ."\" target=\"_blank\">Buy on<br><span style=\"white-space: nowrap;\">GoDirect &rsaquo;</span></a>";
 						}
-						if($c == "[REQUEST QUOTE]"){
+						if($c == "[REQUEST QUOTE]" && $p['tabletype'] == "Promotion"){
 							$c = "<a href=\"https://www.thermofisher.com/au/en/home/global/forms/anz/request-information-promo-anz.html?C_Product_of_Interest1=" . $cells[0] . "\">Request <span style=\"white-space: nowrap;\">quote &rsaquo;</span></a>";
+						}
+						if($c == "[REQUEST QUOTE]" && $p['tabletype'] == "Clearance"){
+							$c = "<a href=\"https://www.thermofisher.com/au/en/home/global/forms/anz/request-information-clearance-anz.html?C_Product_of_Interest1=" . $cells[0] . "\">Request <span style=\"white-space: nowrap;\">quote &rsaquo;</span></a>";
 						}
 						if($c == "[QUOTE ANCHOR]"){
 							$c = "<a href=\"#requestquote\">Request <span style=\"white-space: nowrap;\">quote &rsaquo;</span></a>";
