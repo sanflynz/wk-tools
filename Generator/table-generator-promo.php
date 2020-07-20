@@ -265,8 +265,8 @@
 	<label for="tabletype" class="col-sm-1 control-label">Type</label>
     <div class="col-sm-3">
       <select name="tabletype" class="form-control" id="tabletype">
-      	<option value="Promotion">Promotion</option>
-      	<option value="Clearance">Clearance</option>
+      	<option value="Promotion" <?php if(isset($p) && $p['tabletype'] == "Promotion"){ echo " selected"; } ?>>Promotion</option>
+      	<option value="Clearance" <?php if(isset($p) && $p['tabletype'] == "Clearance"){ echo " selected"; } ?>>Clearance</option>
       </select>
     </div>
 </div>

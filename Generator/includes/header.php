@@ -76,7 +76,7 @@
 							<ul class="dropdown-menu">
 								<!-- <li><a href="https://thermofisher.sharepoint.com/sites/collaboration/ANZMarketing/Pages/Dynamic-Request-Link-Generator.aspx" target="_blank">Request Link Generator</a></li> -->
 								<!-- <li><a href="table-generator.php" target="_blank">Table Generator</a></li> -->
-								<li><a href="table-generator-promos.php" target="_blank">Promo Table Generator <i class="fa fa-star" style="color: #E71316" title="NEW"></i></a></li>
+								<li><a href="table-generator-promo.php">Promo Table Generator <i class="fa fa-star" style="color: #E71316" title="NEW"></i></a></li>
 								<li><a href="table-generator-plain.php" target="_blank">Table Generator (plain)</a></li>
 								<li role="separator" class="divider"></li>
 								<!-- <li><a href="sitemap-translator.php">Sitemap Translator</a></li> -->
