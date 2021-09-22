@@ -7,50 +7,66 @@
 		$p = $_POST;
 		$rows = explode("\n",$p['items']);
 
-		if($p['tabletype'] == "Clearance"){ $pricetype = "Clearance price"; }
-		if($p['tabletype'] == "Promotion"){ $pricetype = "Promo price"; }
-		if($p['tabletype'] == "Promotion EOFY"){ $pricetype = "Promo price"; }
+		$priceColAU = "";
+		$promoPriceColAU = "";
+		$priceColNZ = "";
+		$promoPriceColNZ = "";
+
+		if($p['tabletype'] == "No Promo Price"){ $pricetype = ""; }
 
 		//$standardCols = array("Masterpack SKU","Agile SKU","Description","Size","List Price","Promo Price","Action");
+		//$standardCols = array("Web SKU","Description","Size","List Price");
+		//$promoCols = array("Web SKU","Description","Size","List Price","Promo Price");
 
 		$i = 0; // ROW NUMBER
 		$n['items'] = array();
 		foreach($rows as $r){
 			$cells = explode("\t", $r);
 			
+			// HEADER ROW
+
 			$x = 0; // COLUMN NUMBER
-					
-			if($i == 0){	// HEADER ROW
+			if($i == 0){	
+				
 				$n['items'][$i][] = "Catalog number";
+
 				foreach($cells as $c){
 					$c = trim($c);
 					
-					if($c == "Masterpack SKU" ||  $c == "Agile SKU" || $c == "Promo Price"){
+					if($c == "Web SKU" || $c == "Promo Price"){
 						// DO NOTHING
 					}
 					elseif($c == "Description"){
 						$descCol = $x;
 						$n['items'][$i][] = $c;
 					}
-					elseif($c == "List Price"){
-						$priceCol = $x;
-						if($p['country'] == "Australia"){
-							$n['items'][$i][] = "Price (AUD)";
-						}
-						else{
-							$n['items'][$i][] = "Price (NZD)";
-						}
+					elseif($c == "List Price AU"){
+						$priceColAU = $x;
+						
+							$n['items'][$i][] = "List Price (AUD)";
+												
+					}
+					elseif($c == "List Price NZ"){
+						
+						$priceColNZ = $x;
+						
+							$n['items'][$i][] = "List Price (NZD)";			
+						
 						
 					}
-					elseif($c == "Action"){  
-						$n['items'][$i][] = "";
-					}
+					
+					// elseif($c == "Action"){  
+					// 	$n['items'][$i][] = "";
+					// }
 					else{
 						$n['items'][$i][] = $c;
 					}
 					
 					$x++;  // NEW COLUMN
 				}
+				// ACTION COLUMN
+				$n['items'][$i][] = "";
+
 				
 			}
 			else {	// ALL OTHER ROWS
@@ -58,56 +74,32 @@
 				foreach($cells as $c){
 					$c = trim($c);
 					if($x == 0){
-						if(!empty($cells[1])){
-							$n['items'][$i][] = "<a href=\"https://www.thermofisher.com/order/catalog/product/" . $cells[1] . "\">" . $cells[1] . "</a><br><span style=\"font-size: smaller\"><strong>GoDirect:</strong> " . $cells[0] . "</span>"; // LINK TO PDP
-						}
-						else{
-							$n['items'][$i][] = $cells[0] . "<br><span style=\"font-size: smaller\"><strong>GoDirect:</strong> " . $cells[0] . "</span>";  // LINK TO GO DIRECT
-						}
-					}
-					elseif($x == 1){ 
-						// SKIP
+						$n['items'][$i][] = "<a href=\"https://www.thermofisher.com/order/catalog/product/" . $cells[0] . "\">" . $cells[0] . "</a>"; // LINK TO PDP
+						// if(!empty($cells[0])){
+							
+						// }
+						// else{
+						// 	$n['items'][$i][] = $cells[0] . "<br><span style=\"font-size: smaller\"><strong>GoDirect:</strong> " . $cells[0] . "</span>";  // LINK TO GO DIRECT
+						// }
 					}
 					elseif($x == $descCol){
 						$c = str_replace("|","<br>",$c);
-						if(!empty($cells[1])){
-
-							$n['items'][$i][] = "<a href=\"https://www.thermofisher.com/order/catalog/product/" . $cells[1] . "\">" . $c . "</a>\n"; // LINK TO PDP
-						}
-						else{
-							$n['items'][$i][] = $c;  // LINK TO GO DIRECT
-						}
+						$n['items'][$i][] = "<a href=\"https://www.thermofisher.com/order/catalog/product/" . $cells[0] . "\">" . $c . "</a>\n"; // LINK TO PDP
+						
 					}
-					elseif($x == $priceCol){
+					elseif($x == $priceColAU){
 						// Generate the price/promo price
-						// what if request quote
-						$n['items'][$i][] = "<div class=\"price-group\">\n\t\t\t\t\t\t\t<div class=\"price price-list\">\n\t\t\t\t\t\t\t\t<span class=\"price-amount\">" . $cells[$priceCol] . "</span>\n\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t<div class=\"price price-web\">\n\t\t\t\t\t\t\t\t<span class=\"price-amount\">" . $pricetype . ": " . $cells[$priceCol+1] . "</span>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n";
+						$n['items'][$i][] = $cells[$priceColAU];
+						
 					}
-					elseif($x == ($priceCol + 1)){
-						// SKIP
-
+					elseif($x == $priceColNZ){
+						// Generate the price/promo price
+						$n['items'][$i][] = $cells[$priceColNZ];
+						
 					}
+					
 					else{
 						// ALL OTHER COLUMNS
-						if($c == "[BUY]" && $p['country'] == "Australia"){
-							$c = "<a href=\"https://www.thermofisher.com.au/godirect/main/displaysearchitems.aspx?gsearch=" . $cells[0] ."\" target=\"_blank\">Buy on<br><span style=\"white-space: nowrap;\">GoDirect &rsaquo;</span></a>";
-						}
-						if($c == "[BUY]" && $p['country'] == "New Zealand"){
-							$c = "<a href=\"https://www.thermofisher.co.nz/godirect/main/displaysearchitems.aspx?gsearch=" . $cells[0] ."\" target=\"_blank\">Buy on<br><span style=\"white-space: nowrap;\">GoDirect &rsaquo;</span></a>";
-						}
-						if($c == "[REQUEST QUOTE]" && $p['tabletype'] == "Promotion"){
-							$c = "<a href=\"https://www.thermofisher.com/au/en/home/global/forms/anz/request-information-promo-anz.html?C_Product_of_Interest1=" . $cells[0] . "\">Request <span style=\"white-space: nowrap;\">quote &rsaquo;</span></a>";
-						}
-						if($c == "[REQUEST QUOTE]" && $p['tabletype'] == "Promotion EOFY"){
-							$c = "<a href=\"https://www.thermofisher.com/au/en/home/global/forms/anz/eofy-2021-request-contact.html?C_Product_of_Interest1=" . $cells[0] . "\">Request <span style=\"white-space: nowrap;\">quote &rsaquo;</span></a>";
-						}
-						if($c == "[REQUEST QUOTE]" && $p['tabletype'] == "Clearance"){
-							$c = "<a href=\"https://www.thermofisher.com/au/en/home/global/forms/anz/request-information-clearance-anz.html?C_Product_of_Interest1=" . $cells[0] . "\">Request <span style=\"white-space: nowrap;\">quote &rsaquo;</span></a>";
-						}
-						if($c == "[QUOTE ANCHOR]"){
-							$c = "<a href=\"#requestquote\">Request <span style=\"white-space: nowrap;\">quote &rsaquo;</span></a>";
-						}
-
 						$n['items'][$i][] = $c;
 
 
@@ -116,10 +108,17 @@
 					$x++;  // NEW COLUMN
 
 				}
+				// ACTION COLUMN
+				$n['items'][$i][] = "<a href=\"https://www.thermofisher.com/order/catalog/product/" . $cells[0] . "\">Buy now &rsaquo;</a>\n"; // LINK TO PDP
 
 			}
 
 			$i++;  // NEW ROW
+
+
+			// echo "<pre>";
+			// echo print_r($n);
+			// echo "</pre>";
 
 
 			$content = "";
@@ -141,9 +140,6 @@
 								break;
 							case "Size":
 								$class = "table-list-size";	
-								break;
-							case "Price":
-								$class = "table-list-price";
 								break;
 							default:
 								$class = "";
@@ -248,7 +244,7 @@
 
 <div class="row">
 	<div class="col-xs-12">
-		<h1>Promo Table Generator</h1>
+		<h1>Table Generator V3</h1>
 		<br>
 <?php 	flash(); ?>		
 	</div>
@@ -259,7 +255,7 @@
 <div class="form-group">
 	<label for="country" class="col-sm-1 control-label">Country</label>
     <div class="col-sm-3">
-      <select name="country" class="form-control" id="Country">
+      <select name="country" class="form-control" id="Country" disabled>
       	<option value="Australia" <?php if(isset($p) && $p['country'] == "Australia"){ echo " selected"; } ?>>Australia</option>
       	<option value="New Zealand" <?php if(isset($p) && $p['country'] == "New Zealand"){ echo " selected"; } ?>>New Zealand</option>
       </select>
@@ -269,9 +265,7 @@
 	<label for="tabletype" class="col-sm-1 control-label">Type</label>
     <div class="col-sm-3">
       <select name="tabletype" class="form-control" id="tabletype">
-      	<option value="Promotion EOFY" <?php if(isset($p) && $p['tabletype'] == "Promotion EOFY"){ echo " selected"; } ?>>Promotion EOFY</option>
-      	<option value="Promotion" <?php if(isset($p) && $p['tabletype'] == "Promotion"){ echo ""; } ?>>Promotion</option>
-      	<option value="Clearance" <?php if(isset($p) && $p['tabletype'] == "Clearance"){ echo ""; } ?>>Clearance</option>
+      	<option value="No Promo Price" <?php if(isset($p) && $p['tabletype'] == "No Promo Price"){ echo " selected"; } ?>>No Promo Price</option>
       </select>
     </div>
 </div>
